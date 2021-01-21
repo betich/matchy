@@ -1,13 +1,15 @@
 {
   "name": "planty",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "web app thing",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "nodemon",
+    "setup": "npm i && cd frontend && npm i",
+    "server": "node app.js",
+    "dev": "nodemon",
     "frontend": "cd frontend && npm start",
-    "start": "concurrently --kill-others \"npm run server\" \"npm run frontend\""
+    "start": "concurrently --kill-others \"npm run dev\" \"npm run frontend\""
   },
   "repository": {
     "type": "git",
@@ -21,7 +23,10 @@
   "homepage": "https://github.com/betich/planty#readme",
   "dependencies": {
     "axios": "^0.21.1",
-    "express": "^4.17.1"
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "concurrently": "^5.3.0",

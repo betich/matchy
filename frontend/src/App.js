@@ -2,6 +2,8 @@ import axios from 'axios';
 import logo from './logo.svg';
 import './App.css';
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Button } from 'react-bootstrap';
 
 class Something extends React.Component {
   constructor(props) {
@@ -16,9 +18,7 @@ class Something extends React.Component {
   getBackend() {
     axios.get('/api')
       .then((res) => {
-        this.setState({ text: res.data });
-      }, (err) => {
-        console.error(err);
+        this.setState({ text: res.data.msg });
       })
   }
 
@@ -26,7 +26,7 @@ class Something extends React.Component {
     return (
       <>
         <pre>{this.state.text}</pre>
-        <input type="button" onClick={this.getBackend} value="Push Me!"></input>
+        <Button variant="outline-secondary" onClick={this.getBackend} type="submit">Push Me!</Button>
       </>
     )
   }
