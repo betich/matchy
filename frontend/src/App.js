@@ -1,9 +1,10 @@
 import axios from 'axios';
-import logo from './logo.svg';
 import './App.css';
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button } from 'react-bootstrap';
+import { Button, Navbar, Container } from 'react-bootstrap';
+
+import { FaGoogle, FaFacebookF, FaLine, FaApple } from 'react-icons/fa';
 
 class Something extends React.Component {
   constructor(props) {
@@ -26,19 +27,42 @@ class Something extends React.Component {
     return (
       <>
         <pre>{this.state.text}</pre>
-        <Button variant="outline-secondary" onClick={this.getBackend} type="submit">Push Me!</Button>
+        <Button variant="outline-danger" onClick={this.getBackend} type="submit">
+          <FaGoogle size={28} />
+        </Button>
+        <Button variant="outline-primary" onClick={this.getBackend} type="submit">
+          <FaFacebookF size={28} />
+        </Button>
+        <Button variant="outline-success" onClick={this.getBackend} type="submit">
+          <FaLine size={28} />
+        </Button>
+        <Button variant="outline-secondary" onClick={this.getBackend} type="submit">
+          <FaApple size={28} />
+        </Button>
       </>
     )
   }
+}
+
+const Nav = () => {
+  return (
+    <Navbar bg="dark" variant="dark">
+      <Container>
+        <Navbar.Brand href="#home">React Bootstrap</Navbar.Brand>
+      </Container>
+    </Navbar>
+  )
 }
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Something />
+        <Nav />
       </header>
+      <Container>
+        <Something />
+      </Container>
     </div>
   );
 }

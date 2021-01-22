@@ -24,5 +24,5 @@ app.get('/match', (req, res) => {
 const PORT = process.env.PORT || 3410;
 
 app.listen(PORT, () => {
-	console.info('\x1b[44m%s\x1b[0m', 'ready');
+	console.info('ready');
 });
