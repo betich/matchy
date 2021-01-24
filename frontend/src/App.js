@@ -2,7 +2,7 @@ import axios from 'axios';
 import './App.css';
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Navbar, Container } from 'react-bootstrap';
+import { Button, Navbar, Container, Nav} from 'react-bootstrap';
 
 import { FaGoogle, FaFacebookF, FaLine, FaApple } from 'react-icons/fa';
 
@@ -44,11 +44,17 @@ class Something extends React.Component {
   }
 }
 
-const Nav = () => {
+const NavigationBar = () => {
   return (
-    <Navbar bg="dark" variant="dark">
+    <Navbar bg="light" variant="light">
       <Container>
-        <Navbar.Brand href="#home">React Bootstrap</Navbar.Brand>
+        <Navbar.Brand href="#home">Planty</Navbar.Brand>
+        <Nav className="mx-auto">
+          <Nav.Link href="#home" className="mx-1">Home</Nav.Link>
+          <Nav.Link href="#service" className="mx-1">Service</Nav.Link>
+          <Nav.Link href="#matching"className="mx-1">Matching</Nav.Link>
+          <Nav.Link href="#more"className="mx-1">More</Nav.Link>
+        </Nav>
       </Container>
     </Navbar>
   )
@@ -58,7 +64,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Nav />
+        <NavigationBar />
       </header>
       <Container>
         <Something />
