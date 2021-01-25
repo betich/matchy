@@ -8,10 +8,10 @@ const projectSchema = new mongoose.Schema({
     name: { type: String, required: true },
     description: String,
     owner: {
-        type: mongoose.Schema.Types.ObjectId, ref: 'Manager'
+        type: mongoose.Schema.Types.ObjectId, ref: 'User'
     },
     workers: [
-        { type: mongoose.Schema.Types.ObjectId, ref: 'Worker' }
+        { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
     ],
     tags: [{ type: String }],
     questions: [{ type: String }]

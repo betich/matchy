@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const project = {
-    id: { type: mongoose.Schema.Types.ObjectId, ref: 'project' },
+    id: { type: mongoose.Schema.Types.ObjectId, ref: 'Project' },
     role: String
 };
 
@@ -19,11 +19,11 @@ const userSchema = new mongoose.Schema({
     },
     experiences: [{ type: Object }],
     login: {
-        basic: { password: String }
+        email: { login: String, password: String }
     },
     interests: [{ type: String }],
     currentProjects: [ project ],
-    pastProjects: [ project ],
+    pastProjects: [ project ]
 }, options);
 
 userSchema.virtual('fullName').get(function() {
