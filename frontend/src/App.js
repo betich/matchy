@@ -1,11 +1,11 @@
 import './App.css';
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import NavigationBar from './components/NavigationBar';
-import Home from './components/Home';
-import About from './components/About';
-import Project from './components/Projects';
-import Matching from './components/Matching';
+import NavigationBar from './Components/NavigationBar';
+import Home from './Components/Home';
+import About from './Components/About';
+import Project from './Components/Projects';
+import Matching from './Components/Matching';
 
 
 import { Switch , Route, BrowserRouter } from 'react-router-dom';
