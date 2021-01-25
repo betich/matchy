@@ -5,7 +5,7 @@ const Project = require('./models/projects');
 async function seedDB() {
     await User.deleteMany({});
     await Project.deleteMany({});
-
+    console.log("hkifjgmnifgjfijgdg");
     for(const seed of seeds) {
         let user = await User.create(seed);
         let project = await Project.create({
