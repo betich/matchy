@@ -5,8 +5,8 @@ const helmet = require("helmet");
 const path = require('path');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
-const User = require('./server/models/users');
-const Project = require('./server/models/projects');
+// const User = require('./server/models/users');
+// const Project = require('./server/models/projects');
 
 const seedDB = require('./server/seeds');
 const app = express();
@@ -39,6 +39,11 @@ app
 .use('/app/projects', Routes.projects);
 
 app.disable('x-powered-by');
+
+app.post('/projects/new', (req,res) => {
+    console.log(req.body);
+    res.json({id: '1'});
+})
 
 const PORT = process.env.PORT || 3410;
 
