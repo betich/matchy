@@ -5,7 +5,6 @@ const Project = require('./models/projects');
 async function seedDB() {
     await User.deleteMany({});
     await Project.deleteMany({});
-    console.log("hkifjgmnifgjfijgdg");
     for(const seed of seeds) {
         let user = await User.create(seed);
         let project = await Project.create({
@@ -18,7 +17,7 @@ async function seedDB() {
             tags: ['explicit'],
             questions: ['why?']
         });
-        user.currentProjects.push(project._id);
+        user.projects.push(project._id);
         user.save();
     }
 };

@@ -22,8 +22,8 @@ const userSchema = new mongoose.Schema({
         email: { login: String, password: String }
     },
     interests: [{ type: String }],
-    currentProjects: [ project ],
-    pastProjects: [ project ]
+    projects: [ project ],
+    archive: [ project ]
 }, options);
 
 userSchema.virtual('fullName').get(function() {

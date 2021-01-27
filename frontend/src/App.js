@@ -1,30 +1,35 @@
 import './App.css';
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import NavigationBar from './Components/NavigationBar';
-import Home from './Components/Home';
-import About from './Components/About';
-import Project from './Components/Projects';
-import Matching from './Components/Matching';
-
-
-import { Switch , Route, BrowserRouter } from 'react-router-dom';
+import { Container } from 'react-bootstrap';
+import { Switch , Route, BrowserRouter as Router } from 'react-router-dom';
+const NavigationBar = React.lazy(() => import('./Components/Partials/NavigationBar'));
+const Home = React.lazy(() => import('./Components/Routes/Home'));
+const About = React.lazy(() => import('./Components/Routes/About'));
+const Projects = React.lazy(() => import('./Components/Routes/Projects'));
+const Matching = React.lazy(() => import('./Components/Routes/Matching'));
+const Users = React.lazy(() => import('./Components/Routes/Users'));
 
 function App() {
   return (
-    <BrowserRouter>
+    <React.Suspense fallback={<span>Loading...</span>}>
+      <Router>
       <div className="App">
         <header className="App-header">
           <NavigationBar />
         </header>
-        <Switch>
-          <Route path="/" exact component={ Home } />
-          <Route path="/about" exact component={ About } />
-          <Route path="/matching" exact component={ Matching } />
-          <Route path="/projects" component = { Project } />
-        </Switch>
+        <Container>
+          <Switch>
+            <Route path="/" exact component={Home} />
+            <Route path="/about" exact component={About} />
+            <Route path="/match" exact component={Matching} />
+            <Route path="/users" component={Users} />
+            <Route path="/projects" component={Projects} />
+          </Switch>
+        </Container>
       </div>
-    </BrowserRouter>
+      </Router>
+    </React.Suspense>
   );
 }
 

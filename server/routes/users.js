@@ -22,8 +22,8 @@ router
     newUser.username = body.username;
     newUser.name = { first: body.firstname, last: body.lastname};
     newUser.birthday = { day: body.bDay, month: body.bMonth, year: body.bYear};
-    body.experiences.forEach((tag) => newUser.experiences.push(tag));
-    body.interests.forEach((q) => newUser.push(q));
+    body.experiences.forEach((exp) => newUser.experiences.push(exp));
+    body.interests.forEach((e) => newUser.push(e));
     newUser.login.email = { login: body.email, password: body.pasword }
 
     User.create(newUser, (err, User) => {

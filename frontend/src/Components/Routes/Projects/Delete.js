@@ -1,13 +1,13 @@
 import React from 'react'
 
-const Home = () => {
+const Delete = () => {
     return (
         <div className="mt-3 ml-3">
             <h1>
-                Welcome to our proundly presented project
+                Delete
             </h1>
         </div>
     )
 }
 
-export default Home;
+export default Delete;

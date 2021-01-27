@@ -40,11 +40,6 @@ app
 
 app.disable('x-powered-by');
 
-app.post('/projects/new', (req,res) => {
-    console.log(req.body);
-    res.json({id: '1'});
-})
-
 const PORT = process.env.PORT || 3410;
 
 app.listen(PORT, () => {

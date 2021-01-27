@@ -1,9 +1,10 @@
 import axios from 'axios';
-import React, { Component } from 'react';
-import { Container, Form, Button } from 'react-bootstrap';
-import TagLists from './TagLists';
+import React from 'react';
+import { Form, Button } from 'react-bootstrap';
 
-class Tag extends Component {
+const TagLists = ['Foodtech','Proptech','Fashion','Edtech','Healthtech','Beautytech','Insurtech','Logistic','Cleantech','Traveltech'];
+
+class Tag extends React.Component {
     constructor(props) {
         super(props);
 
@@ -32,7 +33,7 @@ class Tag extends Component {
     }
 }
 
-class Create extends Component {
+class Create extends React.Component {
     constructor(props) {
         super(props);
 
@@ -64,8 +65,6 @@ class Create extends Component {
             Tags: this.state.tags
         }
 
-        console.log(obj);
-
         try {
             const response = await axios.post('/projects/new', {
                 'Content-Type': 'application/json',
@@ -79,6 +78,7 @@ class Create extends Component {
             console.log(e);
         }
     }
+    
     handleChange(e) {
         switch (e.target.id) {
             case 'formProjectName':
@@ -100,7 +100,7 @@ class Create extends Component {
         });
 
         return (
-            <Container className="mt-3">
+            <>
                 <h1>Create Form</h1>
                 <Form noValidate onSubmit={this.handleSubmit}>
                     <Form.Group controlId="formProjectName">
@@ -122,7 +122,7 @@ class Create extends Component {
                         Create
                     </Button>
                 </Form>
-            </Container>
+            </>
         );
     }
 }

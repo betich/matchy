@@ -11,9 +11,7 @@ const About = () => {
         .then(res => {
             setState(res.data);
         })
-    };
-
-    
+    };    
 
     return (
     <>
