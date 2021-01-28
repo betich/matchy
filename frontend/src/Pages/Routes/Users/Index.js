@@ -1,10 +1,10 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import Index from './Users/Index';
-import Create from './Users/Create';
-import Edit from './Users/Edit';
-import View from './Users/View';
-import Delete from './Users/Delete';
+import Index from './Home';
+import Create from './Create';
+import Edit from './Edit';
+import View from './View';
+import Delete from './Delete';
 
 const Users = () => {
     return (
