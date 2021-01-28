@@ -18,14 +18,4 @@ const Users = () => {
     );
 }
 
-/*
-const Users = () => {
-    return (
-        <Switch>
-            <Route exact path="/users" component={Index} />
-        </Switch>
-        );
-}
-*/
-
 export default Users;

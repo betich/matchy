@@ -9,23 +9,24 @@ const About = () => {
     const getBackend = () => {
         axios.get('/app/users')
         .then(res => {
-            setState(res.data);
+            setState(JSON.stringify(res.data));
         })
-    };    
+    };
+
 
     return (
     <>
         <pre>{State}</pre>
-        <Button variant="outline-danger" onClick={getBackend} type="submit">
+        <Button variant="outline-danger" onClick={getBackend}>
         <FaGoogle size={28} />
         </Button>
-        <Button variant="outline-primary" onClick={getBackend} type="submit">
+        <Button variant="outline-primary" onClick={getBackend}>
         <FaFacebookF size={28} />
         </Button>
-        <Button variant="outline-success" onClick={getBackend} type="submit">
+        <Button variant="outline-success" onClick={getBackend}>
         <FaLine size={28} />
         </Button>
-        <Button variant="outline-secondary" onClick={getBackend} type="submit">
+        <Button variant="outline-secondary" onClick={getBackend}>
         <FaApple size={28} />
         </Button>
     </>
