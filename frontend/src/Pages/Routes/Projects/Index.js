@@ -1,10 +1,10 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import Index from './Projects/Index';
-import Create from './Projects/Create';
-import Edit from './Projects/Edit';
-import View from './Projects/View';
-import Delete from './Projects/Delete';
+import Index from './Home';
+import Create from './Create';
+import Edit from './Edit';
+import View from './View';
+import Delete from './Delete';
 
 const Projects = () => {
     return (

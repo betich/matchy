@@ -7,7 +7,7 @@ const About = () => {
     const [State, setState] = useState('');
 
     const getBackend = () => {
-        axios.get('/api')
+        axios.get('/app/users')
         .then(res => {
             setState(res.data);
         })

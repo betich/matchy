@@ -2,7 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import { Form, Button } from 'react-bootstrap';
 
-const TagLists = ['Foodtech','Proptech','Fashion','Edtech','Healthtech','Beautytech','Insurtech','Logistic','Cleantech','Traveltech'];
+const TagLists = ['Transportation', 'Tourism', 'Technology', 'Supplier', 'Subscription', 'Store', 'Sports', 'Software', 'Pet', 'Organization', 'Logistics', 'Insurance', 'Health', 'Games', 'Food', 'Fintech', 'Farm', 'Environment', 'Entertainment', 'Education', 'eCommerce', 'Delivery', 'Dealer', 'Construction', 'Cafe', 'Beauty', 'Audit', 'Art', 'Animal', 'AI', 'Agency'];
 
 class Tag extends React.Component {
     constructor(props) {
@@ -54,7 +54,6 @@ class Create extends React.Component {
         let newTags = checked ?
             tags.concat(tag) : tags.slice(0, idx).concat(tags.slice(idx+1, tags.length));
         this.setState({ tags: newTags });
-        console.log(newTags);
     }
 
     async handleSubmit(e) {
@@ -102,7 +101,7 @@ class Create extends React.Component {
         return (
             <>
                 <h1>Create Form</h1>
-                <Form noValidate onSubmit={this.handleSubmit}>
+                <Form onSubmit={this.handleSubmit}>
                     <Form.Group controlId="formProjectName">
                         <Form.Label>Project name</Form.Label>
                         <Form.Control onChange={this.handleChange} required type="ProjectName" placeholder="Example project" />

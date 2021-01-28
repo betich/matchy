@@ -1,5 +1,5 @@
-import React from 'react'
-import { Card, Container } from 'react-bootstrap'
+import React from 'react';
+import { Card, Container } from 'react-bootstrap';
 
 const View = (props) => {
 
@@ -7,8 +7,8 @@ const View = (props) => {
         return (
             <Container className="mt-3">
                 <Card
-                    bg="info"
-                    text="white"
+                    bg="white"
+                    text="black"
                     style={{ width: '18rem' }}
                     className="mb-2"
                 >
@@ -28,8 +28,8 @@ const View = (props) => {
     return (
         <Container className="mt-3">
             <Card
-                bg="info"
-                text="white"
+                bg="white"
+                text="black"
                 style={{ width: '18rem' }}
                 className="mb-2"
             >
