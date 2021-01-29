@@ -2,6 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import { Container, Form, Button, ButtonGroup } from 'react-bootstrap';
 import Tag from '../../../Components/Tag';
+import { Interests } from '../../../Services/Mock';
 
 class Create extends React.Component {
     constructor(props) {
@@ -53,7 +54,7 @@ class Create extends React.Component {
         axios.post('/app/users', this.state)
         .then((response) => {
             if (response.status === 200) {
-                this.props.history.push(`/users/${response.data.id}`);
+                this.props.history.push(`/users/${response.data._id}`);
             }
         }, (err) => {
             console.log(err);
@@ -66,10 +67,10 @@ class Create extends React.Component {
                 this.setState({ username: e.target.value });
                 break;
             case 'formUserFirstName':
-                this.setState({ name: {first: e.target.value, last: this.state.name.last} });
+                this.setState({name: { ...this.state.name, first: e.target.value}});
                 break;
             case 'formUserLastName':
-                this.setState({ name: {last: e.target.value, first: this.state.name.first}});
+                this.setState({name: { ...this.state.name, last: e.target.value}});
                 break;
             case 'formUserEmail':
                 this.setState({ email: e.target.value });
@@ -83,8 +84,7 @@ class Create extends React.Component {
     }
 
     render() {
-        const ExpTags = ['a', 'b'];
-        const IntTags = ['c', 'd'];
+        const ExpTags = ['a', 'b', 'c', 'd'];
 
         const ExperienceTags = ExpTags.map((item, i) => {
             return (
@@ -92,7 +92,7 @@ class Create extends React.Component {
             )
         });
 
-        const InterestTags = IntTags.map((item, i) => {
+        const InterestTags = Interests.map((item, i) => {
             return (
                 <Tag change={this.tagChange} type="interests" name={item} key={i} />
             )

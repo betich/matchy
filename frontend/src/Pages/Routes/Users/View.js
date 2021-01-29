@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Card } from 'react-bootstrap';
+import { Card, Button } from 'react-bootstrap';
 import Loading from '../../../Components/Loading';
 
 const ViewUser = (props) => {
     const [User, setUser] = useState({});
+    const [loaded, setLoad] = useState(false); 
 
     useEffect(() => {
         axios
@@ -13,12 +14,13 @@ const ViewUser = (props) => {
         .then((user) => {
             setUser(user);
         })
-        .catch((err) => console.error(err));
-    });
+        .then(() => setLoad(true))
+        .catch((err) => console.error("oh no", err));
+    }, [props.match.params.id]);
 
     return (
         <>
-        { User ? (<Loading />) : (
+        { !loaded ? (<Loading />) : (
             <>
                 <Card
                     bg="white"
@@ -28,10 +30,10 @@ const ViewUser = (props) => {
                     >
                     <Card.Header>{User.name.first + ' ' + User.name.last}</Card.Header>
                     <Card.Body>
-                    <Card.Title>{User.username}</Card.Title>
-                    <Card.Text>
-                        interests: {User.interests.join(', ')}
-                    </Card.Text>
+                        <Card.Title>{User.username}</Card.Title>
+                        <Card.Text>
+                            interests: {User.interests.map((elem, i) => <Button key={i} variant="outline-danger">{elem}</Button>)}
+                        </Card.Text>
                     </Card.Body>
                 </Card>
             </>

@@ -6,10 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "setup": "npm i && cd frontend && npm i",
-    "server": "node app.js",
-    "dev": "nodemon",
+    "server": "nodemon",
     "frontend": "cd frontend && npm start",
-    "start": "concurrently --kill-others \"npm run dev\" \"npm run frontend\""
+    "start": "concurrently --kill-others \"node app.js\" \"npm run frontend\""
   },
   "repository": {
     "type": "git",

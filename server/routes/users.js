@@ -68,7 +68,7 @@ router
             res.send(err);
         } else {
             console.info(`User ${User.username} has been created`);
-            res.send('success');
+            res.json(User);
         }
     });
 })

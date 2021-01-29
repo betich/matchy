@@ -2,8 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import { Form, Button } from 'react-bootstrap';
 import Tag from '../../../Components/Tag';
-
-const TagLists = ['Transportation', 'Tourism', 'Technology', 'Supplier', 'Subscription', 'Store', 'Sports', 'Software', 'Pet', 'Organization', 'Logistics', 'Insurance', 'Health', 'Games', 'Food', 'Fintech', 'Farm', 'Environment', 'Entertainment', 'Education', 'eCommerce', 'Delivery', 'Dealer', 'Construction', 'Cafe', 'Beauty', 'Audit', 'Art', 'Animal', 'AI', 'Agency'];
+import { ProjectTags as TagsList } from '../../../Services/Mock';
 
 class Create extends React.Component {
     constructor(props) {
@@ -64,7 +63,7 @@ class Create extends React.Component {
     }
 
     render() {
-        const TagButtons = TagLists.map((item, i) => {
+        const TagButtons = TagsList.map((item, i) => {
             return (
                 <Tag change={this.tagChange} name={item} key={i} />
             )
