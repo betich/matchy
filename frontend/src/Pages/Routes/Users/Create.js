@@ -1,39 +1,9 @@
 import axios from 'axios';
-import React, { Component } from 'react';
-import { Container, Form, Button, ToggleButton, ButtonGroup } from 'react-bootstrap';
+import React from 'react';
+import { Container, Form, Button, ButtonGroup } from 'react-bootstrap';
+import Tag from '../../../Components/Tag';
 
-class Tag extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            clicked: false
-        }
-        this.handleChange = this.handleChange.bind(this);
-    }
-
-    handleChange(e) {
-        this.setState({clicked: !this.state.clicked}, () => {
-            this.props.change(e.target.name, this.props.name, this.state.clicked);
-        });
-    }
-
-    render() {
-        return (
-            <ToggleButton className="m-1"
-                type="checkbox"
-                variant={(!this.state.clicked) ? "outline-danger" : "danger"}
-                onChange={this.handleChange}
-                value={this.props.name}
-                name={this.props.type}
-            >
-                {this.props.name}
-            </ToggleButton>
-        );
-    }
-}
-
-class Create extends Component {
+class Create extends React.Component {
     constructor(props) {
         super(props);
 
@@ -55,15 +25,15 @@ class Create extends Component {
         }
     }
 
-    tagChange(name, tag, checked) {
+    tagChange (type, name, checked) {
         let newTags;
         const modifyTags = (tags) => {
-            let idx = tags.findIndex((e) => e === tag);
+            let idx = tags.findIndex((e) => e === name);
             return checked ?
-                tags.concat(tag) : tags.slice(0, idx).concat(tags.slice(idx+1, tags.length));
+                tags.concat(name) : tags.slice(0, idx).concat(tags.slice(idx+1, tags.length));
         };
 
-        switch (name) {
+        switch (type) {
             case 'experiences':
                 newTags = modifyTags(this.state.experiences);
                 this.setState({ experiences: newTags });
@@ -156,7 +126,6 @@ class Create extends Component {
                         <Form.Label>Last Name</Form.Label>
                         <Form.Control required onChange={this.handleChange} placeholder="Last" />
                     </Form.Group>
-
                     
                     <Form.Group className="mb-3" controlId="formExperiences">
                         <Form.Label>Experiences:</Form.Label>

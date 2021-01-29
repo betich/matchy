@@ -1,37 +1,9 @@
 import axios from 'axios';
 import React from 'react';
 import { Form, Button } from 'react-bootstrap';
+import Tag from '../../../Components/Tag';
 
 const TagLists = ['Transportation', 'Tourism', 'Technology', 'Supplier', 'Subscription', 'Store', 'Sports', 'Software', 'Pet', 'Organization', 'Logistics', 'Insurance', 'Health', 'Games', 'Food', 'Fintech', 'Farm', 'Environment', 'Entertainment', 'Education', 'eCommerce', 'Delivery', 'Dealer', 'Construction', 'Cafe', 'Beauty', 'Audit', 'Art', 'Animal', 'AI', 'Agency'];
-
-class Tag extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            toggle: false
-        }
-        this.handleClick = this.handleClick.bind(this);
-    }
-
-    handleClick() {
-        this.setState({toggle: !this.state.toggle}, () => {
-            this.props.change(this.props.name, this.state.toggle);
-        });
-    }
-
-    render() {
-        return (
-            <Button className="m-1"
-                variant={(!this.state.toggle) ? "outline-danger" : "danger"}
-                onClick={this.handleClick}
-                id={this.props.name}
-            >
-                {this.props.name}
-            </Button>
-        );
-    }
-}
 
 class Create extends React.Component {
     constructor(props) {
