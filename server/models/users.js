@@ -11,7 +11,7 @@ const options = {
 
 const userSchema = new mongoose.Schema({
     username: { type: String, required: true },
-    name: { first: String, last: String },
+    fullname: String,
     birthday: {
         day: { type: Number, required: true },
         month: { type: Number, required: true },

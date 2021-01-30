@@ -8,7 +8,7 @@ async function seedDB() {
     for(const seed of seeds) {
         let user = await User.create(seed);
         let project = await Project.create({
-            name: `planty_${seed.name.first}`,
+            name: `planty_${seed.fullname}`,
             description: 'yes.',
             owner: '600d9f30619919499828bc49',
             workers: [
@@ -25,7 +25,7 @@ async function seedDB() {
 const seeds = [
     {
         username: 'betichx',
-        name: { first: 'thee', last: 'pnt' },
+        fullname: '',
         birthday: {
             day: 9,
             month: 11,

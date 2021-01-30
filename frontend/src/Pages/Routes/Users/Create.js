@@ -15,7 +15,7 @@ class Create extends React.Component {
             username: '',
             email: '',
             password: '',
-            name: { first: '', last: ''},
+            fullname: '',
             birthday: {
                 day: 1,
                 month: 1,
@@ -66,11 +66,8 @@ class Create extends React.Component {
             case 'formUserName':
                 this.setState({ username: e.target.value });
                 break;
-            case 'formUserFirstName':
-                this.setState({name: { ...this.state.name, first: e.target.value}});
-                break;
-            case 'formUserLastName':
-                this.setState({name: { ...this.state.name, last: e.target.value}});
+            case 'formUserFullName':
+                this.setState({ fullname: e.target.value });
                 break;
             case 'formUserEmail':
                 this.setState({ email: e.target.value });
@@ -117,16 +114,11 @@ class Create extends React.Component {
                         <Form.Control required onChange={this.handleChange} type="password" placeholder="Password" />
                     </Form.Group>
 
-                    <Form.Group controlId="formUserFirstName">
-                        <Form.Label>First Name</Form.Label>
-                        <Form.Control required onChange={this.handleChange} placeholder="First" />
+                    <Form.Group controlId="formUserFullName">
+                        <Form.Label>Full name</Form.Label>
+                        <Form.Control required onChange={this.handleChange} placeholder="Full Name" />
                     </Form.Group>
 
-                    <Form.Group controlId="formUserLastName">
-                        <Form.Label>Last Name</Form.Label>
-                        <Form.Control required onChange={this.handleChange} placeholder="Last" />
-                    </Form.Group>
-                    
                     <Form.Group className="mb-3" controlId="formExperiences">
                         <Form.Label>Experiences:</Form.Label>
                         <ButtonGroup toggle>
