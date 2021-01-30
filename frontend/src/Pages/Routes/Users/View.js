@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Card, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import Loading from '../../../Components/Loading';
 
 const ViewUser = (props) => {
@@ -22,6 +23,7 @@ const ViewUser = (props) => {
         <>
         { !loaded ? (<Loading />) : (
             <>
+                <Link to="/users">Back</Link>
                 <Card
                     bg="white"
                     text="black"
