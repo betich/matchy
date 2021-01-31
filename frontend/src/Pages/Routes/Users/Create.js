@@ -1,8 +1,128 @@
 import axios from 'axios';
-import React from 'react';
-import { Container, Form, Button, ButtonGroup } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Container, Form, Button, ButtonGroup, Col } from 'react-bootstrap';
+import { FaWindowClose } from "react-icons/fa";
 import Tag from '../../../Components/Tag';
 import { Interests } from '../../../Services/Mock';
+
+const ExperienceField = (props) => {
+    const [field, setField] = useState({ uID: props.uID });
+    const [type, setType] = useState(props.type);
+    const [value, setValue] = useState(props.value);
+
+    const typeChange = (e) => setType(e.target.value);
+
+    const valueChange = (e) => setValue(e.target.value);
+
+    useEffect(() => {
+        setField({ type: type, value: value, uID: props.uID });
+    }, [type, value, props.uID])
+
+    useEffect(() => {
+        let handleChange = props.handleFieldChange;
+        handleChange(field);
+    }, [props.handleFieldChange, field])
+
+    const sendDelete = (e) => {
+        e.preventDefault();
+        props.handleDelete(field);
+    }
+
+    return (
+        <Form.Row>
+            <Col>
+                <Form.Control
+                    as="select"
+                    defaultValue={props.type}
+                    onChange={typeChange}
+                >
+                    <option>Middle-School</option>
+                    <option>High-School</option>
+                    <option>College</option>
+                </Form.Control>
+            </Col>
+            <Col>
+                <Form.Control
+                    required
+                    value={value}
+                    onChange={valueChange}
+                />
+            </Col>
+            <Col>
+                <Button variant="danger" onClick={sendDelete}>
+                    <FaWindowClose size={16} />
+                </Button>
+            </Col>
+        </Form.Row>
+    );
+}
+
+class ExperienceGroup extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            fields: [
+                { type: 'highschool', value: 'Triam Udom Suksa', uID: 1 }
+            ],
+            IDCount: 1
+        }
+
+        this.handleAdd = this.handleAdd.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
+        this.handleFieldChange = this.handleFieldChange.bind(this);
+    }
+
+    handleAdd(e) {
+        e.preventDefault();
+        let newUID = this.state.IDCount + 1;
+        let newFields = [...this.state.fields].concat({type: 'highschool', value: '', uID: newUID});
+        
+        this.setState({ fields: newFields, IDCount: newUID });
+    }
+    
+    handleDelete(field) {
+        let newFields = [...this.state.fields];
+        for (let i = 0; i < newFields.length; i++) {
+            if (field["uID"] === this.state.fields[i]["uID"]) {
+                newFields = newFields.slice(0, i).concat(newFields.slice(i+1, newFields.length));
+            }
+        }
+
+        this.setState({ fields: newFields });
+    }
+
+    handleFieldChange(field) {
+        let newFields = [...this.state.fields];
+        
+        for (let i in newFields) {
+            if (field["uID"] === this.state.fields[i]["uID"]) {
+                newFields[i] = field;
+            }
+        }
+
+        this.setState({ fields: newFields });
+    }
+    
+    render() {
+        let fieldElems = this.state.fields.map((field) => {
+            return <ExperienceField
+                key={field.uID}
+                uID={field.uID}
+                type={field.type}
+                value={field.value}
+                handleFieldChange={this.handleFieldChange}    
+                handleDelete={this.handleDelete}
+            />;
+        });
+        return (
+            <>
+                <Button variant="danger" onClick={this.handleAdd}>Add</Button>
+                {fieldElems}
+            </>
+        );
+    }
+}
 
 class Create extends React.Component {
     constructor(props) {
@@ -21,7 +141,7 @@ class Create extends React.Component {
                 month: 1,
                 year: 2000
             },
-            experiences: [],
+            experiences: {},
             interests: []
         }
     }
@@ -46,6 +166,12 @@ class Create extends React.Component {
             default:
                 console.log('unknown tag element selected');
         }
+    }
+
+    setInfo (type, fields) {
+        let res = {};
+        res["experiences"][type] = fields;
+        this.setState(res);
     }
 
     async handleSubmit(e) {
@@ -81,14 +207,6 @@ class Create extends React.Component {
     }
 
     render() {
-        const ExpTags = ['a', 'b', 'c', 'd'];
-
-        const ExperienceTags = ExpTags.map((item, i) => {
-            return (
-                <Tag change={this.tagChange} type="experiences" name={item} key={i} />
-            )
-        });
-
         const InterestTags = Interests.map((item, i) => {
             return (
                 <Tag change={this.tagChange} type="interests" name={item} key={i} />
@@ -119,11 +237,14 @@ class Create extends React.Component {
                         <Form.Control required onChange={this.handleChange} placeholder="Full Name" />
                     </Form.Group>
 
-                    <Form.Group className="mb-3" controlId="formExperiences">
-                        <Form.Label>Experiences:</Form.Label>
-                        <ButtonGroup toggle>
-                            {ExperienceTags}
-                        </ButtonGroup>
+                    <Form.Group className="mb-3" controlId="education">
+                        <Form.Label for="education">Education:</Form.Label>
+                        <ExperienceGroup setInfo={this.setInfo} type="education" />
+                    </Form.Group>
+
+                    <Form.Group classname="mb-3" controlId="work">
+                        <Form.Label for="work">Work:</Form.Label>
+                        <ExperienceGroup setInfo={this.setInfo} type="work" />
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formInterests">
