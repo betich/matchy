@@ -2,6 +2,5 @@ const ProjectTags = ['Transportation', 'Tourism', 'Technology', 'Supplier', 'Sub
 const Interests = ['Website Design', 'Video Editing', 'Photography', 'Audio Engineering', 'E-Sports'];
 
 const EducationOptions = ['Middle School', 'High School', 'University', 'College'];
-const WorkOptions = ['NASA', 'BGKJSFK']
 
-export { ProjectTags, Interests, EducationOptions, WorkOptions }; 
+export { ProjectTags, Interests, EducationOptions }; 
