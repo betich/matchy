@@ -1,6 +1,7 @@
 const express = require('express');
 const Project = require('../models/projects');
 const router = express.Router();
+const filterFalsy = require('../helpers/filterFalsy');
 
 router
 .get('/', (req, res) => {
@@ -16,14 +17,9 @@ router
 })
 
 .post('/', (req, res) => {
-    let body = req.body;
-    let newProject = {};
-    newProject.name = body.name;
-    newProject.description = body.description;
-    body.tags.forEach((tag) => newProject.tags.push(tag));
-    body.questions.forEach((q) => newProject.questions.push(q));
+    let newProject = req.body;
 
-    Project.create(newProject, (err, project) => {
+    Project.create(filterFalsy(newProject), (err, project) => {
         if (err) {
             console.error(err);
             res.send(err);
@@ -35,13 +31,14 @@ router
 })
 
 .get('/:id', (req, res) => {
-    Project.findById(req.params.id)/*.populate(owner).populate(workers)*/.exec((err, foundProject) => {
+    Project.findById(req.params.id)/*.populate("owner").populate("workers")*/.exec((err, foundProject) => {
         if (err) {
             console.log(err);
             res.send(err);
         } else if (!foundProject) {
             res.send('unable to find a project with that id');
         } else {
+            // add user object to to project
             res.json({project: foundProject});
         }
     });
