@@ -25,7 +25,7 @@ mongoose.connect(process.env.DATABASEURL || "mongodb://localhost:27017/planty",
 	console.error(err.message);
 });
 
-seedDB(); // set up DB
+// seedDB(); // set up DB
 
 app.use(cors());
 app.use(bodyParser.json()); // parse requests of content-type - application/json

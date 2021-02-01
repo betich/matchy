@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Form, Button, ButtonGroup, Col } from 'react-bootstrap';
 import { FaWindowClose } from "react-icons/fa";
 import Tag from '../../../Components/Tag';
-import { Interests } from '../../../Services/Mock';
+import { Interests, EducationOptions, WorkOptions } from '../../../Services/Mock';
 
 const ExperienceField = (props) => {
     const [field, setField] = useState({ uID: props.uID });
@@ -28,25 +28,31 @@ const ExperienceField = (props) => {
         props.handleDelete(field);
     }
 
+    const selectOptions = props.selectOptions.map((option, i) => <option key={i}>{option}</option>);
+
     return (
         <Form.Row>
             <Col>
-                <Form.Control
-                    as="select"
-                    defaultValue={props.type}
-                    onChange={typeChange}
-                >
-                    <option>Middle-School</option>
-                    <option>High-School</option>
-                    <option>College</option>
-                </Form.Control>
+                <Form.Group>
+                    <Form.Control
+                        as="select"
+                        defaultValue={props.type}
+                        onChange={typeChange}
+                    >
+                        {selectOptions}
+                    </Form.Control>
+                </Form.Group>
             </Col>
             <Col>
-                <Form.Control
-                    required
-                    value={value}
-                    onChange={valueChange}
-                />
+                <Form.Group>
+                    <Form.Control
+                        required
+                        as="input"
+                        value={value}
+                        onChange={valueChange}
+                        placeholder="Experience field"
+                    />
+                </Form.Group>
             </Col>
             <Col>
                 <Button variant="danger" onClick={sendDelete}>
@@ -76,7 +82,7 @@ class ExperienceGroup extends React.Component {
     handleAdd(e) {
         e.preventDefault();
         let newUID = this.state.IDCount + 1;
-        let newFields = [...this.state.fields].concat({type: 'highschool', value: '', uID: newUID});
+        let newFields = [...this.state.fields].concat({type: this.props.selectOptions[0], value: '', uID: newUID});
         
         this.setState({ fields: newFields, IDCount: newUID });
     }
@@ -113,6 +119,7 @@ class ExperienceGroup extends React.Component {
                 value={field.value}
                 handleFieldChange={this.handleFieldChange}    
                 handleDelete={this.handleDelete}
+                selectOptions={this.props.selectOptions}
             />;
         });
         return (
@@ -155,10 +162,6 @@ class Create extends React.Component {
         };
 
         switch (type) {
-            case 'experiences':
-                newTags = modifyTags(this.state.experiences);
-                this.setState({ experiences: newTags });
-                break;
             case 'interests':
                 newTags = modifyTags(this.state.interests);
                 this.setState({ interests: newTags });
@@ -189,16 +192,16 @@ class Create extends React.Component {
 
     handleChange(e) {
         switch (e.target.id) {
-            case 'formUserName':
+            case 'username':
                 this.setState({ username: e.target.value });
                 break;
-            case 'formUserFullName':
+            case 'fullname':
                 this.setState({ fullname: e.target.value });
                 break;
-            case 'formUserEmail':
+            case 'email':
                 this.setState({ email: e.target.value });
                 break;
-            case 'formUserPassword':
+            case 'password':
                 this.setState({ password: e.target.value });
                 break;
             default:
@@ -217,37 +220,37 @@ class Create extends React.Component {
             <Container className="mt-3">
                 <h1>Create User</h1>
                 <Form onSubmit={this.handleSubmit}>
-                    <Form.Group controlId="formUserName">
+                    <Form.Group controlId="username">
                         <Form.Label>Username</Form.Label>
-                        <Form.Control required onChange={this.handleChange} placeholder="Username" />
+                        <Form.Control required name="user[username]" onChange={this.handleChange} placeholder="Username" />
                     </Form.Group>
                     
-                    <Form.Group controlId="formUserEmail">
+                    <Form.Group controlId="email">
                         <Form.Label>Email</Form.Label>
-                        <Form.Control required onChange={this.handleChange} type="email" placeholder="Email" />
+                        <Form.Control required name="user[email]" onChange={this.handleChange} type="email" placeholder="Email" />
                     </Form.Group>
 
-                    <Form.Group controlId="formUserPassword">
+                    <Form.Group controlId="password">
                         <Form.Label>Password</Form.Label>
-                        <Form.Control required onChange={this.handleChange} type="password" placeholder="Password" />
+                        <Form.Control required name="user[password]" onChange={this.handleChange} type="password" placeholder="Password" />
                     </Form.Group>
 
-                    <Form.Group controlId="formUserFullName">
+                    <Form.Group controlId="fullname">
                         <Form.Label>Full name</Form.Label>
-                        <Form.Control required onChange={this.handleChange} placeholder="Full Name" />
+                        <Form.Control required name="user[fullname]" onChange={this.handleChange} placeholder="Full Name" />
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="education">
-                        <Form.Label for="education">Education:</Form.Label>
-                        <ExperienceGroup setInfo={this.setInfo} type="education" />
+                        <Form.Label>Education:</Form.Label>
+                        <ExperienceGroup setInfo={this.setInfo} selectOptions={EducationOptions} type="education" />
                     </Form.Group>
 
-                    <Form.Group classname="mb-3" controlId="work">
-                        <Form.Label for="work">Work:</Form.Label>
-                        <ExperienceGroup setInfo={this.setInfo} type="work" />
+                    <Form.Group className="mb-3" controlId="work">
+                        <Form.Label>Work:</Form.Label>
+                        <ExperienceGroup setInfo={this.setInfo} selectOptions={WorkOptions} type="work" />
                     </Form.Group>
 
-                    <Form.Group className="mb-3" controlId="formInterests">
+                    <Form.Group className="mb-3" controlId="interests">
                         <Form.Label>Interests:</Form.Label>
                         <ButtonGroup toggle>
                             {InterestTags}
