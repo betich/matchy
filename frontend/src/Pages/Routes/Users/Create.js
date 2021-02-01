@@ -23,15 +23,15 @@ class Create extends React.Component {
         this.tagChange = this.tagChange.bind(this);
     }
 
-    tagChange (type, name, checked) {
+    tagChange (name, label, checked) {
         let newTags;
         const modifyTags = (tags) => {
-            let idx = tags.findIndex((e) => e === name);
+            let idx = tags.findIndex((e) => e === label);
             return checked ?
-                tags.concat(name) : tags.slice(0, idx).concat(tags.slice(idx+1, tags.length));
+                tags.concat(label) : tags.slice(0, idx).concat(tags.slice(idx+1, tags.length));
         };
 
-        switch (type) {
+        switch (name) {
             case 'interests':
                 newTags = modifyTags(this.state.interests);
                 this.setState({ interests: newTags });
@@ -71,7 +71,7 @@ class Create extends React.Component {
     render() {
         const InterestTags = Interests.map((item, i) => {
             return (
-                <Tag change={this.tagChange} type="interests" name={item} key={i} />
+                <Tag onChange={this.tagChange} name="interests" label={item} key={i} />
             )
         });
 

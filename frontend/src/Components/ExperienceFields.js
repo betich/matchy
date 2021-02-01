@@ -3,7 +3,7 @@ import { Form, Button, Col } from 'react-bootstrap';
 import { FaWindowClose } from "react-icons/fa";
 
 
-/*
+/* ==============================================================
     <ExperienceGroup onChange={} type=input[, select] options=[options] />
 
     onChange(fields) {
@@ -12,7 +12,7 @@ import { FaWindowClose } from "react-icons/fa";
             value: String
         }
     }
-*/
+=================================================================== */
 
 const ExperienceInput = (props) => {
     return (
