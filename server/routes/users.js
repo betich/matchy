@@ -25,6 +25,20 @@ router
     }
 })
 
+.post('/', (req, res) => {
+    let newUser = req.body;
+
+    User.create(filterFalsy(newUser), (err, User) => {
+        if (err) {
+            console.error(err);
+            res.send(err);
+        } else {
+            console.info(`User ${User.username} has been created`);
+            res.json(User);
+        }
+    });
+})
+
 .get('/:id', (req, res) => {
     try {
         User.findById(req.params.id).populate("projects").populate("archive").exec((err, foundUser) => {
@@ -44,20 +58,6 @@ router
         res.status(404);
         res.send(err);
     }
-})
-
-.post('/', (req, res) => {
-    let newUser = req.body;
-
-    User.create(filterFalsy(newUser), (err, User) => {
-        if (err) {
-            console.error(err);
-            res.send(err);
-        } else {
-            console.info(`User ${User.username} has been created`);
-            res.json(User);
-        }
-    });
 })
 
 module.exports = router;

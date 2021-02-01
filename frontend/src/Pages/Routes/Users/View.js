@@ -30,7 +30,7 @@ const ViewUser = (props) => {
                     style={{ width: '18rem' }}
                     className="mb-2"
                     >
-                    <Card.Header>{User.name.first + ' ' + User.name.last}</Card.Header>
+                    <Card.Header>{User.fullname}</Card.Header>
                     <Card.Body>
                         <Card.Title>{User.username}</Card.Title>
                         <Card.Text>
