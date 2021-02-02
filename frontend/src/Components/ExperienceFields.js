@@ -129,9 +129,7 @@ class ExperienceGroup extends React.Component {
         super(props);
 
         this.state = {
-            fields: [
-                { title: 'Planty', value: '', uID: 1 }
-            ],
+            fields: [],
             IDCount: 1
         }
 
@@ -142,7 +140,8 @@ class ExperienceGroup extends React.Component {
 
     handleAdd(e) {
         let newUID = this.state.IDCount + 1;
-        let newFields = [...this.state.fields].concat({title: 'Planty', value: '', uID: newUID});
+        let placeholder = this.props.options ? this.props.options[0] : 'Planty';
+        let newFields = [...this.state.fields].concat({title: placeholder, value: '', uID: newUID});
         
         this.setState({ fields: newFields, IDCount: newUID }, () => {
             this.props.onChange(this.props.name, this.state.fields);

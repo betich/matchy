@@ -68,7 +68,7 @@ class Create extends React.Component {
                 <Form onSubmit={this.handleSubmit} noValidate>
                     <Form.Group controlId="username">
                         <Form.Label>Username</Form.Label>
-                        <Form.Control required name="username" placeholder="Username" />
+                        <Form.Control required autoFocus name="username" placeholder="Username" />
                     </Form.Group>
                     
                     <Form.Group controlId="email">
