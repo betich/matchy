@@ -3,6 +3,7 @@ import React from 'react';
 import { Container, Form, Button, ButtonGroup } from 'react-bootstrap';
 import Tag from '../../../Components/Tag';
 import ExperienceGroup from '../../../Components/ExperienceFields';
+import DatePicker from '../../../Components/DatePicker';
 import { Interests, EducationOptions } from '../../../Services/Mock';
 
 class Create extends React.Component {
@@ -10,17 +11,14 @@ class Create extends React.Component {
         super(props);
 
         this.state = {
-            birthday: {
-                day: 1,
-                month: 1,
-                year: 2000
-            },
+            birthday: {},
             experiences: {},
             interests: []
         }
         this.setInfo = this.setInfo.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.tagChange = this.tagChange.bind(this);
+        this.handleBirthday = this.handleBirthday.bind(this);
     }
 
     tagChange (name, label, checked) {
@@ -52,7 +50,6 @@ class Create extends React.Component {
         data.append('experiences', this.state.experiences);
         data.append('interests', this.state.interests);
 
-        console.log(data.get('birthday'));
         // console.log('d', e.target.elements.user, e.target.elements.user["username"])
         // console.log('f', e.target.user.value, e.target.user["username"].value)
 
@@ -68,6 +65,10 @@ class Create extends React.Component {
         */
     }
 
+    handleBirthday(date) {
+        this.setState({ birthday: date });
+    }
+
     render() {
         const InterestTags = Interests.map((item, i) => {
             return (
@@ -78,7 +79,7 @@ class Create extends React.Component {
         return (
             <Container className="mt-3">
                 <h1>Create User</h1>
-                <Form onSubmit={this.handleSubmit}>
+                <Form onSubmit={this.handleSubmit} noValidate>
                     <Form.Group controlId="username">
                         <Form.Label>Username</Form.Label>
                         <Form.Control required name="username" placeholder="Username" />
@@ -107,6 +108,11 @@ class Create extends React.Component {
                     <Form.Group className="mb-3" controlId="work">
                         <Form.Label>Work:</Form.Label>
                         <ExperienceGroup type="input" name="work" onChange={this.setInfo} />
+                    </Form.Group>
+
+                    <Form.Group controlId="birthday">
+                        <Form.Label>Birthday</Form.Label>
+                        <DatePicker onChange={this.handleBirthday} />
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="interests">
