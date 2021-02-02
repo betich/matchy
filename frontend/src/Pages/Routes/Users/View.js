@@ -16,12 +16,16 @@ const ViewUser = (props) => {
             setUser(user);
         })
         .then(() => setLoad(true))
-        .catch((err) => console.error("oh no", err));
+        .catch((err) => {
+            console.error("oh no", err);
+            setLoad(true);
+        });
     }, [props.match.params.id]);
 
     return (
         <>
-        { !loaded ? (<Loading />) : (
+        { !loaded ? (<Loading />) : 
+            (Object.keys(User).length === 0 && User.constructor === Object) ? (<span>Can't find the User lol</span>) : (
             <>
                 <Link to="/users">Back</Link>
                 <Card
@@ -39,7 +43,8 @@ const ViewUser = (props) => {
                     </Card.Body>
                 </Card>
             </>
-        )}
+            )
+        }
         </>
     );
 }

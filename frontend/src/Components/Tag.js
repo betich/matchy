@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, ButtonGroup } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 /* ==============================================================
     <Tags onChange={} group=String tags=Array />
@@ -64,7 +64,7 @@ class Tags extends React.Component {
         });
 
         return (
-            <ButtonGroup toggle>{TagButtons}</ButtonGroup>
+            <>{TagButtons}</>
         );
     }
 }

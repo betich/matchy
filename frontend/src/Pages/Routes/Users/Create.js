@@ -11,8 +11,12 @@ class Create extends React.Component {
         super(props);
 
         this.state = {
-            birthday: {},
-            experiences: {},
+            birthday: {
+                day: '2',
+                month: '1',
+                year: '2001'
+            },
+            experiences: { education: {}, work: {} },
             interests: []
         }
         this.setInfo = this.setInfo.bind(this);
@@ -38,23 +42,28 @@ class Create extends React.Component {
     handleSubmit(e) {
         e.preventDefault();
         const data = new FormData(e.target);
-        data.append('birthday', this.state.birthday);
-        data.append('experiences', this.state.experiences);
-        data.append('interests', this.state.interests);
 
-        // console.log('d', e.target.elements.user, e.target.elements.user["username"])
-        // console.log('f', e.target.user.value, e.target.user["username"].value)
+        for ( let i = 0; i < this.state.interests.length; i++ ) {
+            data.append('interests[]', this.state.interests[i]);
+        }
 
-        /*
-        axios.post('/app/users', this.state)
+        Object.keys(this.state.birthday).forEach(key => data.append(`birthday[${key}]`, this.state.birthday[key]));
+        Object.keys(this.state.experiences).forEach(key => data.append(`experiences[${key}]`, this.state.experiences[key]));
+
+        const options = {
+            headers: {'Content-Type': 'multipart/form-data' }
+        };
+
+        axios.post('/app/users', data, options)
         .then((response) => {
             if (response.status === 200) {
                 this.props.history.push(`/users/${response.data._id}`);
+            } else {
+                this.props.history.push('/users');
             }
         }, (err) => {
             console.log(err);
         });
-        */
     }
 
     handleBirthday(date) {
@@ -107,7 +116,7 @@ class Create extends React.Component {
 
                     <Form.Group controlId="birthday">
                         <Form.Label>Birthday</Form.Label>
-                        <DatePicker onChange={this.handleBirthday} />
+                        <DatePicker onChange={this.handleBirthday} day={this.state.birthday.day} month={this.state.birthday.month} year={this.state.birthday.year} />
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="interests">
