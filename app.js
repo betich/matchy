@@ -5,8 +5,7 @@ const helmet = require("helmet");
 const path = require('path');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
-// const User = require('./server/models/users');
-// const Project = require('./server/models/projects');
+require('dotenv/config');
 
 const seedDB = require('./server/seeds');
 const app = express();
