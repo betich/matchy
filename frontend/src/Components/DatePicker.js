@@ -50,9 +50,9 @@ class DatePicker extends React.Component {
     render() {
         return (
             <>
-                <Form.Control required onChange={this.inputChange} data-format="day" placeholder="Password" />
-                <Form.Control required onChange={this.inputChange} data-format="month" placeholder="Password" />
-                <Form.Control required onChange={this.inputChange} data-format="year" placeholder="Password" />
+                <Form.Control required onChange={this.inputChange} data-format="day" placeholder="Day" />
+                <Form.Control required onChange={this.inputChange} data-format="month" placeholder="Month" />
+                <Form.Control required onChange={this.inputChange} data-format="year" placeholder="Year" />
             </>
         );
     }
