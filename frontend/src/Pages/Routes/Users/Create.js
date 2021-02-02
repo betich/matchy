@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React from 'react';
-import { Container, Form, Button, ButtonGroup } from 'react-bootstrap';
-import Tag from '../../../Components/Tag';
+import { Container, Form, Button } from 'react-bootstrap';
+import Tags from '../../../Components/Tag';
 import ExperienceGroup from '../../../Components/ExperienceFields';
 import DatePicker from '../../../Components/DatePicker';
 import { Interests, EducationOptions } from '../../../Services/Mock';
@@ -21,21 +21,13 @@ class Create extends React.Component {
         this.handleBirthday = this.handleBirthday.bind(this);
     }
 
-    tagChange (name, label, checked) {
-        let newTags;
-        const modifyTags = (tags) => {
-            let idx = tags.findIndex((e) => e === label);
-            return checked ?
-                tags.concat(label) : tags.slice(0, idx).concat(tags.slice(idx+1, tags.length));
-        };
-
-        switch (name) {
+    tagChange(group, tags) {
+        switch (group) {
             case 'interests':
-                newTags = modifyTags(this.state.interests);
-                this.setState({ interests: newTags });
+                this.setState({ interests: tags })
                 break;
             default:
-                console.log('unknown tag element selected');
+                console.error('unknown tag group');
         }
     }
 
@@ -70,12 +62,6 @@ class Create extends React.Component {
     }
 
     render() {
-        const InterestTags = Interests.map((item, i) => {
-            return (
-                <Tag onChange={this.tagChange} name="interests" label={item} key={i} />
-            )
-        });
-
         return (
             <Container className="mt-3">
                 <h1>Create User</h1>
@@ -117,9 +103,7 @@ class Create extends React.Component {
 
                     <Form.Group className="mb-3" controlId="interests">
                         <Form.Label>Interests:</Form.Label>
-                        <ButtonGroup toggle>
-                            {InterestTags}
-                        </ButtonGroup>
+                        <Tags onChange={this.tagChange} tags={Interests} group="interests" />
                     </Form.Group>
 
                     <Button variant="info" type="submit">

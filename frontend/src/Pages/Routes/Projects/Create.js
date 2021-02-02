@@ -1,22 +1,18 @@
 import axios from "axios";
 import React from "react";
+import Tags from '../../../Components/Tag';
 import { Form, Button } from "react-bootstrap";
 import { ProjectTags as TagsList } from "../../../Services/Mock";
-
-const CheckBox = (props) => {
-    return (
-        <div style={props.style}>
-            <label>{props.children}</label>
-            <input type="checkbox" name={props.name} />
-        </div>
-    );
-};
 
 class Create extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            tags: []
+        }
 
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.tagChange = this.tagChange.bind(this);
     }
 
     async handleSubmit(e) {
@@ -25,12 +21,8 @@ class Create extends React.Component {
         console.log(data);
         const name = data.get('projectName');
         const description = data.get('projectDescription');
-        let tags = [];
-        data.forEach((key,value) => {
-            if (key === 'on') {
-                tags.push(value);
-            }
-        })
+        const tags = this.state.tags;
+        
         let obj = {
             Name: name,
             Description: description,
@@ -51,19 +43,17 @@ class Create extends React.Component {
         }
     }
 
-    render() {
-        const TagButtons = TagsList.map((item, i) => {
-            return (
-                <CheckBox
-                    name={item}
-                    key={i}
-                    style={{ display: "inline-block", padding: "5px" }}
-                >
-                    {item}
-                </CheckBox>
-            );
-        });
+    tagChange(group, tags) {
+        switch (group) {
+            case 'projectTags':
+                this.setState({ tags: tags })
+                break;
+            default:
+                console.error('unknown tag group');
+        }
+    }
 
+    render() {
         return (
             <>
                 <h1>Create Form</h1>
@@ -88,7 +78,7 @@ class Create extends React.Component {
 
                     <Form.Group className="mb-3">
                         <Form.Label>Tags:</Form.Label>
-                        <div>{TagButtons}</div>
+                        <Tags onChange={this.tagChange} tags={TagsList} group="projectTags" />
                     </Form.Group>
 
                     <Button variant="primary" type="submit">

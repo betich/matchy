@@ -28,7 +28,7 @@ class DatePicker extends React.Component {
     }
 
     inputChange(e) {
-        switch (e.target.id) {
+        switch (e.target.dataset.format) {
             case('day'):
                 this.setState({ day: e.target.value }, this.sendData());   
                 break;
@@ -50,9 +50,9 @@ class DatePicker extends React.Component {
     render() {
         return (
             <>
-                <Form.Control required onChange={this.inputChange} id="day" placeholder="Password" />
-                <Form.Control required onChange={this.inputChange} id="month" placeholder="Password" />
-                <Form.Control required onChange={this.inputChange} id="year" placeholder="Password" />
+                <Form.Control required onChange={this.inputChange} data-format="day" placeholder="Password" />
+                <Form.Control required onChange={this.inputChange} data-format="month" placeholder="Password" />
+                <Form.Control required onChange={this.inputChange} data-format="year" placeholder="Password" />
             </>
         );
     }
