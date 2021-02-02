@@ -53,6 +53,7 @@ class ExperienceField extends React.Component {
         this.titleChange = this.titleChange.bind(this);
         this.valueChange = this.valueChange.bind(this);
         this.sendDelete = this.sendDelete.bind(this);
+        this.onKeyDown = this.onKeyDown.bind(this);
     }
 
     titleChange(e) {
@@ -70,6 +71,19 @@ class ExperienceField extends React.Component {
     sendDelete(e) {
         e.preventDefault();
         this.props.handleDelete(this.state);
+    }
+
+    onKeyDown(e) {
+        if (e.keyCode === 9) this.props.addField(); // Tab
+    }
+
+    componentDidMount() {
+        this.expField.focus();
+        this.expField.addEventListener('keydown', this.onKeyDown, false);
+    }
+
+    componentWillUnmount() {
+        this.expField.removeEventListener('keydown', this.onKeyDown, false);
     }
     
     render() {
@@ -92,6 +106,7 @@ class ExperienceField extends React.Component {
                     <Form.Group>
                         <Form.Control
                             required
+                            ref={elem => this.expField = elem}
                             as="input"
                             value={this.state.value}
                             onChange={this.valueChange}
@@ -126,7 +141,6 @@ class ExperienceGroup extends React.Component {
     }
 
     handleAdd(e) {
-        e.preventDefault();
         let newUID = this.state.IDCount + 1;
         let newFields = [...this.state.fields].concat({title: 'Planty', value: '', uID: newUID});
         
@@ -173,6 +187,7 @@ class ExperienceGroup extends React.Component {
                 handleDelete={this.handleDelete}
                 options={this.props.options}
                 type={this.props.type}
+                addField={this.handleAdd}
             />;
         });
         return (

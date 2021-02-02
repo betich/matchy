@@ -53,9 +53,7 @@ class Tags extends React.Component {
         
         newTags =  modifyTags(this.state.tags);
         this.setState({ tags: newTags }, () => {
-            this.props.onChange(this.props.group, this.state.tags);
-            console.log(this.state.tags);
-        })
+            this.props.onChange(this.props.group, this.state.tags);        })
     }
 
     render() {

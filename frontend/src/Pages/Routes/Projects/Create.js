@@ -34,7 +34,6 @@ class Create extends React.Component {
                 "Content-Type": "application/json",
                 body: obj,
             });
-            console.log(response);
             if (response.status === 200) {
                 this.props.history.push(`/projects/view/${response.data.id}`);
             }
