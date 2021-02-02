@@ -3,6 +3,7 @@ import React from "react";
 import Tags from '../../../Components/Tag';
 import { Form, Button } from "react-bootstrap";
 import { ProjectTags as TagsList } from "../../../Services/Mock";
+import validate from "../../../Services/Validate";
 
 class Create extends React.Component {
     constructor(props) {
@@ -18,16 +19,19 @@ class Create extends React.Component {
     async handleSubmit(e) {
         e.preventDefault();
         const data = new FormData(e.target);
-        console.log(data);
         const name = data.get('projectName');
         const description = data.get('projectDescription');
         const tags = this.state.tags;
         
         let obj = {
-            Name: name,
-            Description: description,
-            Tags: tags,
+            name: name,
+            description: description,
+            tags: tags,
         };
+
+        const invalidData = validate(obj);
+
+        console.log(invalidData);
 
         try {
             const response = await axios.post("/projects/new", {
