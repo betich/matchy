@@ -2,9 +2,11 @@ import axios from 'axios';
 import React from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
 import Tags from '../../../Components/Tag';
-import ExperienceGroup from '../../../Components/ExperienceFields';
+import ExperienceGroup from '../../../Components/ExpandableFields';
 import DatePicker from '../../../Components/DatePicker';
 import { Interests, EducationOptions } from '../../../Services/Mock';
+import validate from "../../../Services/Validate";
+import Error from "../../../Components/Error";
 
 class Create extends React.Component {
     constructor(props) {
@@ -17,7 +19,8 @@ class Create extends React.Component {
                 year: '2001'
             },
             experiences: { education: {}, work: {} },
-            interests: []
+            interests: [],
+            errors: {}
         }
         this.setInfo = this.setInfo.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -39,7 +42,7 @@ class Create extends React.Component {
         this.setState({ experiences: { ...this.state.experiences, [type]: fields } });
     }
 
-    handleSubmit(e) {
+    async handleSubmit(e) {
         e.preventDefault();
         const data = new FormData(e.target);
 
@@ -48,22 +51,26 @@ class Create extends React.Component {
         }
 
         Object.keys(this.state.birthday).forEach(key => data.append(`birthday[${key}]`, this.state.birthday[key]));
-        Object.keys(this.state.experiences).forEach(key => data.append(`experiences[${key}]`, this.state.experiences[key]));
+        Object.keys(this.state.experiences).forEach(key => data.append(`experiences[${key}]`, JSON.stringify(this.state.experiences[key])));
 
-        const options = {
-            headers: {'Content-Type': 'multipart/form-data' }
-        };
-
-        axios.post('/app/users', data, options)
-        .then((response) => {
-            if (response.status === 200) {
-                this.props.history.push(`/users/${response.data._id}`);
-            } else {
-                this.props.history.push('/users');
-            }
-        }, (err) => {
-            console.log(err);
-        });
+        const { valid, invalidData } = validate(data);
+        
+        if (valid) {
+            const options = {
+                headers: {'Content-Type': 'multipart/form-data' }
+            };
+            
+            axios.post('/app/users', data, options)
+            .then((response) => {
+                if (response.status === 200) {
+                    this.props.history.push(`/users/${response.data._id}`);
+                }
+            }, (err) => {
+                console.error(err);
+            });
+        } else {
+            this.setState({ errors: invalidData });
+        }
     }
 
     handleBirthday(date) {
@@ -123,6 +130,8 @@ class Create extends React.Component {
                         <Form.Label>Interests:</Form.Label>
                         <Tags onChange={this.tagChange} tags={Interests} group="interests" />
                     </Form.Group>
+
+                    <Error errors={this.state.errors} />
 
                     <Button variant="info" type="submit">
                         Create

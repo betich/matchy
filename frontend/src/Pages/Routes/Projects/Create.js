@@ -4,12 +4,15 @@ import Tags from '../../../Components/Tag';
 import { Form, Button } from "react-bootstrap";
 import { ProjectTags as TagsList } from "../../../Services/Mock";
 import validate from "../../../Services/Validate";
+import Error from "../../../Components/Error";
 
 class Create extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            tags: []
+            tags: [],
+            questions: [],
+            errors: {}
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -18,31 +21,30 @@ class Create extends React.Component {
 
     async handleSubmit(e) {
         e.preventDefault();
+        this.setState({ errors: {}});
         const data = new FormData(e.target);
-        const name = data.get('projectName');
-        const description = data.get('projectDescription');
-        const tags = this.state.tags;
+
+        for ( let i = 0; i < this.state.tags.length; i++ ) {
+            data.append('tags[]', this.state.tags[i]);
+        }
+
+        const { valid, invalidData } = validate(data);
         
-        let obj = {
-            name: name,
-            description: description,
-            tags: tags,
-        };
-
-        const invalidData = validate(obj);
-
-        console.log(invalidData);
-
-        try {
-            const response = await axios.post("/projects/new", {
-                "Content-Type": "application/json",
-                body: obj,
+        if (valid) {
+            const options = {
+                headers: {'Content-Type': 'multipart/form-data' }
+            };
+            
+            axios.post('/app/projects', data, options)
+            .then((response) => {
+                if (response.status === 200) {
+                    this.props.history.push(`/projects/${response.data._id}`);
+                }
+            }, (err) => {
+                console.error(err);
             });
-            if (response.status === 200) {
-                this.props.history.push(`/projects/view/${response.data.id}`);
-            }
-        } catch (e) {
-            console.log(e);
+        } else {
+            this.setState({ errors: invalidData });
         }
     }
 
@@ -59,12 +61,12 @@ class Create extends React.Component {
     render() {
         return (
             <>
-                <h1>Create Form</h1>
+                <h1>Create a Project</h1>
                 <Form onSubmit={this.handleSubmit}>
                     <Form.Group>
                         <Form.Label>Project name</Form.Label>
                         <Form.Control
-                            name="projectName"
+                            name="projectname"
                             required
                             type="text"
                             placeholder="Example project"
@@ -74,7 +76,7 @@ class Create extends React.Component {
                     <Form.Group>
                         <Form.Label>Description</Form.Label>
                         <Form.Control
-                            name="projectDescription"
+                            name="description"
                             placeholder="Description"
                         />
                     </Form.Group>
@@ -83,6 +85,8 @@ class Create extends React.Component {
                         <Form.Label>Tags:</Form.Label>
                         <Tags onChange={this.tagChange} tags={TagsList} group="projectTags" />
                     </Form.Group>
+
+                    <Error errors={this.state.errors} />
 
                     <Button variant="primary" type="submit">
                         Create

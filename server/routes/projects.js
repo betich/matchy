@@ -1,6 +1,8 @@
 const express = require('express');
 const Project = require('../models/projects');
 const router = express.Router();
+const multer = require('multer');
+const upload = multer();
 const filterFalsy = require('../helpers/filterFalsy');
 
 router
@@ -11,21 +13,24 @@ router
             res.send(err);
         }
         else {
-            res.json({projects: allProjects});
+            res.json({ projects: allProjects });
         }
     });
 })
 
-.post('/', (req, res) => {
-    let newProject = req.body;
+.post('/', upload.none(), (req, res) => {
+    let newProject = Object.assign({}, req.body);
+    newProject.name = req.body.projectname;
+    delete newProject["projectname"];
 
     Project.create(filterFalsy(newProject), (err, project) => {
         if (err) {
             console.error(err);
+            res.status(404);
             res.send(err);
         } else {
             console.info(`${project.name} has been created`);
-            res.send('success');
+            res.json(project);
         }
     });
 })

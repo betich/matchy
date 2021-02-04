@@ -2,11 +2,12 @@ import React from 'react';
 import { Form, Button, Col } from 'react-bootstrap';
 import { FaWindowClose } from "react-icons/fa";
 
-
 /* ==============================================================
-    <ExperienceGroup onChange={} type=input[, select] options=[options] />
+    <InputFieldGroup name=String onChange={} type=input[, select] options=[options] />
 
-    onChange(fields) {
+    onChange(name, fields) {
+        this.setState({ experiences: { ...this.state.experiences, [type]: fields } });
+        
         fields = {
             title: String,
             value: String
@@ -14,7 +15,7 @@ import { FaWindowClose } from "react-icons/fa";
     }
 =================================================================== */
 
-const ExperienceInput = (props) => {
+const InputField = (props) => {
     return (
         <Form.Control
             required
@@ -27,7 +28,7 @@ const ExperienceInput = (props) => {
     );
 }
 
-const ExperienceSelect = (props) => {
+const SelectField = (props) => {
     return (
         <>
             <Form.Control
@@ -40,7 +41,7 @@ const ExperienceSelect = (props) => {
     );
 }
 
-class ExperienceField extends React.Component {
+class InputGroup extends React.Component {
     constructor(props) {
         super(props);
 
@@ -97,8 +98,8 @@ class ExperienceField extends React.Component {
                 <Col>
                     <Form.Group>
                     { (this.props.type === 'select')
-                        ? <ExperienceSelect onChange={this.titleChange} options={options} />
-                        : <ExperienceInput value={this.state.title} onChange={this.titleChange} />
+                        ? <SelectField onChange={this.titleChange} options={options} />
+                        : <InputField value={this.state.title} onChange={this.titleChange} />
                     }
                     </Form.Group>
                 </Col>
@@ -124,7 +125,7 @@ class ExperienceField extends React.Component {
     }
 }
 
-class ExperienceGroup extends React.Component {
+class InputFieldGroup extends React.Component {
     constructor(props) {
         super(props);
 
@@ -177,7 +178,7 @@ class ExperienceGroup extends React.Component {
     
     render() {
         let fieldElems = this.state.fields.map((field) => {
-            return <ExperienceField
+            return <InputGroup
                 key={field.uID}
                 uID={field.uID}
                 title={field.title}
@@ -198,4 +199,4 @@ class ExperienceGroup extends React.Component {
     }
 }
 
-export default ExperienceGroup;
+export default InputFieldGroup;
