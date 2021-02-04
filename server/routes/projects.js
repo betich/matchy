@@ -7,15 +7,24 @@ const filterFalsy = require('../helpers/filterFalsy');
 
 router
 .get('/', (req, res) => {
-    Project.find({})/*.populate(owner).populate(workers)*/.exec((err, allProjects) => {
-        if (err) {
-            console.error(err);
-            res.send(err);
-        }
-        else {
-            res.json({ projects: allProjects });
-        }
-    });
+    try {
+        Project.find({}).populate("owner").populate("workers").exec((err, allProjects) => {
+            if (err) {
+                console.error(err);
+                res.status(404);
+                res.send(err);
+            } else if (!allProjects) {
+                res.status(404);
+                res.send('unable to find projects');
+            } else {
+                res.status(200);
+                res.json(allProjects);
+            }
+        })
+    } catch (err) {
+        res.status(404);
+        res.send(err);
+    }
 })
 
 .post('/', upload.none(), (req, res) => {
@@ -36,17 +45,24 @@ router
 })
 
 .get('/:id', (req, res) => {
-    Project.findById(req.params.id)/*.populate("owner").populate("workers")*/.exec((err, foundProject) => {
-        if (err) {
-            console.log(err);
-            res.send(err);
-        } else if (!foundProject) {
-            res.send('unable to find a project with that id');
-        } else {
-            // add user object to to project
-            res.json({project: foundProject});
-        }
-    });
+    try {
+        Project.findById(req.params.id).populate("owner").populate("workers").exec((err, foundProject) => {
+            if (err) {
+                console.error(err);
+                res.status(404);
+                res.send(err);
+            } else if (!foundProject) {
+                res.status(404);
+                res.send('unable to find a project with that id');
+            } else {
+                res.status(200);
+                res.json(foundProject);
+            }
+        });
+    } catch (err) {
+        res.status(404);
+        res.send(err);
+    }
 })
 
 module.exports = router;

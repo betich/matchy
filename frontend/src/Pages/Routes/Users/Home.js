@@ -50,8 +50,8 @@ const Index = (props) => {
                     Delete
                 </Button>
             </Link>
-            <div id="userLinks">
-                <h4>User Links</h4>
+            <div id="projectLinks">
+                <h4>Project Links</h4>
                 {UserLinks}
             </div>
         </>

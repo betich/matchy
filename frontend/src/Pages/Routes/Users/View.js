@@ -4,7 +4,7 @@ import { Card, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Loading from '../../../Components/Loading';
 
-const ViewUser = (props) => {
+const View = (props) => {
     const [User, setUser] = useState({});
     const [loaded, setLoad] = useState(false); 
 
@@ -34,7 +34,7 @@ const ViewUser = (props) => {
                     style={{ width: '18rem' }}
                     className="mb-2"
                     >
-                    <Card.Header>{User.fullname}</Card.Header>
+                    <Card.Header>User</Card.Header>
                     <Card.Body>
                         <Card.Title>{User.username}</Card.Title>
                         <Card.Text>
@@ -50,4 +50,4 @@ const ViewUser = (props) => {
     );
 }
 
-export default ViewUser;
+export default View;

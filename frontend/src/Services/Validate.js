@@ -17,7 +17,7 @@ const validate = (formData) => {
         if (keyMatch && keyMatch[1] && keyMatch[2]) {
             // Object
             formObj[keyMatch[1]] = formObj[keyMatch[1]] ? formObj[keyMatch[1]] : {};
-            formObj[keyMatch[1]][keyMatch[2]] = isJson(value) ? JSON.parse(value) : value; // If JSON.parse works assign in
+            formObj[keyMatch[1]][keyMatch[2]] = isJson(value) ? JSON.parse(value) : value; // If JSON.parse works assign value
         } else if (keyMatch && keyMatch[1]) {
             // Array
             formObj[keyMatch[1]] = formObj[keyMatch[1]] ? formObj[keyMatch[1]] : [];
