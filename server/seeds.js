@@ -41,7 +41,7 @@ const seeds = [
     },
     {
         username: 'betichx2',
-        name: { first: 'thee2', last: 'pnt' },
+        fullname: 'thee2 pnt',
         birthday: {
             day: 1,
             month: 11,

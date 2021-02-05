@@ -33,7 +33,7 @@ return (
 const Index = (props) => {
     const [Users, setUsers] = useState([]);
     const [loaded, setLoad] = useState(false);
-    let UserCardList = Users.map((e) => <UserCard url={e._id} name={e.username} key={e._id} fullname={e.name.first + " " + e.name.last}/>);
+    let UserCardList = Users.map((e) => <UserCard url={e._id} name={e.username} key={e._id} fullname={e.fullname}/>);
 
     useEffect(() => {
         axios
