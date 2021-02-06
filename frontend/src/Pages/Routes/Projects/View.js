@@ -43,7 +43,7 @@ const DeleteSection = (props) => {
             <Button onClick={handleClick} disabled={disable}>Delete</Button>
             {show ? (
                 <div>
-                    <Form.Group className="mb-3" controlId="education">
+                    <Form.Group className="mb-3">
                         <Form.Label>Enter project's name and hit Delete again</Form.Label>
                         <Form.Control onChange={handleChange} name="confirmationtext"></Form.Control>
                     </Form.Group>

@@ -1,8 +1,59 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Card, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Card, Button, Form } from 'react-bootstrap';
+import { Link, useHistory } from 'react-router-dom';
 import Loading from '../../../Components/Loading';
+
+const DeleteSection = (props) => {
+    const history = useHistory();
+    const [show, setShow] = useState(false);
+    const [disable, setDisable] = useState(false);
+    const [confirmed, setConfirmed] = useState(false);
+
+    const handleClick = async (e) => {
+        if (confirmed === false) {
+            setShow(true);
+            setDisable(true);
+        } else {
+            try {
+                axios.delete(`/app/users/${props.id}`)
+                .then(response => {
+                    if (response.status === 200) {
+                        history.push("/users");
+                    }
+                })
+            } catch (err) {
+                console.error(err);
+            }
+        }
+    };
+
+    const handleChange = (e) => {
+        if ( e.target.value === props.confirmationText)
+        {
+            setDisable(false);
+            setConfirmed(true);
+        } else {
+            setDisable(true);
+            setConfirmed(false);
+        }
+    }
+    return (
+        <div>
+            <Button onClick={handleClick} disabled={disable}>Delete</Button>
+            {show ? (
+                <div>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Enter project's name and hit Delete again</Form.Label>
+                        <Form.Control onChange={handleChange} name="confirmationtext"></Form.Control>
+                    </Form.Group>
+                </div>
+            ) : (
+                <></>
+            )}
+        </div>
+    );
+};
 
 const View = (props) => {
     const [User, setUser] = useState({});
@@ -43,6 +94,7 @@ const View = (props) => {
                         </Card.Text>
                     </Card.Body>
                 </Card>
+                <DeleteSection confirmationText={User.username} id={User._id} />
             </>
             )
         }

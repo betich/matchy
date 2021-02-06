@@ -68,7 +68,7 @@ router
 // TODO: Check deletetion authority
 .delete('/:id', (req,res) => {
     try {
-        console.log('delete request come ่่' + req.params.id);
+        console.log('project delete request come id: ่่' + req.params.id);
         Project.findByIdAndDelete(req.params.id, (err,foundProject) => {
             if (err) {
                 res.status(500);

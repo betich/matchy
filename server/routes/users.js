@@ -63,4 +63,30 @@ router
     }
 })
 
+// TODO: Check deletetion authority
+.delete('/:id', (req,res) => {
+    try {
+        console.log('user delete request come id: ่่' + req.params.id);
+        User.findByIdAndDelete(req.params.id, (err,foundProject) => {
+            if (err) {
+                res.status(500);
+                console.error(err);
+                res.send(err);
+            }
+            else if (!foundProject) {
+                res.status(404);
+                res.send('no project found');
+            } 
+            else {
+                res.status(200);
+                res.send({});
+            } 
+        })
+    } catch (err) {
+        console.log(err);
+        console.log('error occur');
+        res.status(404);
+        res.send(err);
+    }
+})
 module.exports = router;
