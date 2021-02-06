@@ -49,7 +49,7 @@ router
         Project.findById(req.params.id).populate("owner").populate("workers").exec((err, foundProject) => {
             if (err) {
                 console.error(err);
-                res.status(404);
+                res.status(500);
                 res.send(err);
             } else if (!foundProject) {
                 res.status(404);
@@ -60,6 +60,33 @@ router
             }
         });
     } catch (err) {
+        res.status(404);
+        res.send(err);
+    }
+})
+
+// TODO: Check deletetion authority
+.delete('/:id', (req,res) => {
+    try {
+        console.log('delete request come ่่' + req.params.id);
+        Project.findByIdAndDelete(req.params.id, (err,foundProject) => {
+            if (err) {
+                res.status(500);
+                console.error(err);
+                res.send(err);
+            }
+            else if (!foundProject) {
+                res.status(404);
+                res.send('no project found');
+            } 
+            else {
+                res.status(200);
+                res.send({});
+            } 
+        })
+    } catch (err) {
+        console.log(err);
+        console.log('error occur');
         res.status(404);
         res.send(err);
     }
