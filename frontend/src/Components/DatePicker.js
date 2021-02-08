@@ -16,7 +16,6 @@ import React from 'react';
 class DatePicker extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
             day: this.props.day || 1,
             month: this.props.month || 1,
@@ -40,6 +39,12 @@ class DatePicker extends React.Component {
                 break;
             default:
                 console.error('unexpected input');
+        }
+    }
+
+    componentDidUpdate (prevProps, prevState) {
+        if (!(prevState.day === this.state.day && prevState.month === this.state.month && prevState.year === this.state.year)) {
+            this.sendData();
         }
     }
 
