@@ -2,17 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 
 /* ==============================================================
-    <Tags onChange={} group=String tags=Array />
+    <Tags onChange={} group=String tags=Array [onAsDefault=Array] />
     group: general grouping
     label: individual label
-
+    onAsDefault: array of string of tags that is clicked as initalized
+    
     onChange(group, tags) {
         
     }
 =================================================================== */
 
 const Tag = (props) => {
-    const [clicked, setClick] = useState(false);
+    const [clicked, setClick] = useState(props.startState);
 
     const handleClick = (e) => {
         setClick(!clicked);
@@ -39,7 +40,9 @@ class Tags extends React.Component {
         this.state = {
             tags: []
         }
-
+        this.initialState = {};
+        this.props.tags.forEach(elem => this.initialState[elem] = false);
+        this.props.onAsDefault?.forEach((elem) => this.initialState[elem] = true);
         this.tagChange = this.tagChange.bind(this);
     }
 
@@ -56,12 +59,19 @@ class Tags extends React.Component {
             this.props.onChange(this.props.group, this.state.tags);        })
     }
 
-    render() {
-        const TagButtons = this.props.tags.map((item, i) => {
-            return (
-                <Tag onChange={this.tagChange} group={this.props.group} label={item} key={i} />
+    render() { 
+        let TagButtons = [];
+        for (const key in this.initialState) {
+            TagButtons.push(
+                <Tag onChange={this.tagChange} group={this.props.group} label={key} key={key} startState={this.initialState[key]} />
             );
-        });
+        }
+       // const TagButtons = this.props.tags.map((item, i) => {
+       //     const startState = this.props.onAsDefault?.includes(item) || false;
+       //     return (
+       //         <Tag onChange={this.tagChange} group={this.props.group} label={item} key={i} startState={startState} />
+       //     );
+       // });
 
         return (
             <>{TagButtons}</>

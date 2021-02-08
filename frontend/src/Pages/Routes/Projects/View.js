@@ -4,6 +4,13 @@ import { Card, Button, Form } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import Loading from "../../../Components/Loading";
 
+const EditSection = (props) => {
+    return (
+        <Link to={`/projects/edit/${props.id}`}>
+            <Button>Edit</Button>
+        </Link>
+    )
+}
 const DeleteSection = (props) => {
     const history = useHistory();
     const [show, setShow] = useState(false);
@@ -96,6 +103,7 @@ const View = (props) => {
                         </Card.Body>
                     </Card>
                     <DeleteSection id={props.match.params.id} confirmationText={Project.name} />
+                    <EditSection id={props.match.params.id} />
                 </>
             )}
         </>

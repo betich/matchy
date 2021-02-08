@@ -10,7 +10,7 @@ const Projects = () => {
       <Switch>
         <Route exact path="/projects" component={Index} />
         <Route path="/projects/create" component={Create} />
-        <Route path="/projects/edit" component={Edit} />
+        <Route path="/projects/edit/:id" component={Edit} />
         <Route path="/projects/:id" component={View} />
       </Switch>
     )

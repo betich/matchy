@@ -20,7 +20,7 @@ const ProjectCard = (props) => {
     
                     </Card.Text>
                 </Card.Body>
-                <Link to={`/users/${props.url}`} className="d-flex justify-content-center mb-3">
+                <Link to={`/projects/${props.url}`} className="d-flex justify-content-center mb-3">
                     <Button variant="outline-info" type="submit">
                         View
                     </Button>
