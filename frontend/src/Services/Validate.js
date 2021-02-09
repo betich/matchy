@@ -58,12 +58,15 @@ const validate = (formData) => {
                 break;
 
             case "fullname":
-                const nameRegex = /^[A-Z][a-zA-Z]{3,}(?: [A-Z][a-zA-Z]*){0,2}$/;
+                const nameRegex = /^([a-zA-Z0-9]+|[a-zA-Z0-9]+\s{1}[a-zA-Z0-9]{1,}|[a-zA-Z0-9]+\s{1}[a-zA-Z0-9]{3,}\s{1}[a-zA-Z0-9]{1,})$/;
                 const fullnameMatch = value.match(nameRegex);
 
                 if (!fullnameMatch) {
                     addToInvalid("fullname", "unsupported name format");
                 }
+                break;
+
+            case "login":
                 break;
 
             case "description":
@@ -79,7 +82,7 @@ const validate = (formData) => {
                 break;
 
             case "password":
-                const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+                const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
                 const passwordMatch = value.match(passwordRegex);
 
                 if (!passwordMatch) {

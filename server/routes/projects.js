@@ -4,6 +4,7 @@ const router = express.Router();
 const multer = require('multer');
 const upload = multer();
 const filterFalsy = require('../helpers/filterFalsy');
+const auth = require('../middleware/index');
 
 router
 .get('/', (req, res) => {
@@ -30,7 +31,7 @@ router
 .post('/', upload.none(), (req, res) => {
     let newProject = Object.assign({}, req.body);
     newProject.name = req.body.projectname;
-    delete newProject["projectname"];
+    delete newProject["projectname"]; // rename projectname=>name
 
     Project.create(filterFalsy(newProject), (err, project) => {
         if (err) {
@@ -44,16 +45,14 @@ router
     });
 })
 
-.get('/:id', (req, res) => {
+.get('/:id', auth.checkAuth, (req, res) => {
     try {
         Project.findById(req.params.id).populate("owner").populate("workers").exec((err, foundProject) => {
             if (err) {
                 console.error(err);
-                res.status(404);
-                res.send(err);
+                res.status(404).send(err);
             } else if (!foundProject) {
-                res.status(404);
-                res.send('unable to find a project with that id');
+                res.status(404).send('unable to find a project with that id');
             } else {
                 res.status(200);
                 res.json(foundProject);

@@ -1,9 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/users');
-const multer = require('multer');
-const upload = multer();
-const filterFalsy = require('../helpers/filterFalsy');
 
 router
 .get('/', (req, res) => {
@@ -25,21 +22,6 @@ router
         res.status(404);
         res.send(err);
     }
-})
-
-.post('/', upload.none(), (req, res) => {
-    let newUser = req.body;
-
-    User.create(filterFalsy(newUser), (err, User) => {
-        if (err) {
-            console.error(err);
-            res.status(404);
-            res.send(err);
-        } else {
-            console.info(`User ${User.username} has been created`);
-            res.json(User);
-        }
-    });
 })
 
 .get('/:id', (req, res) => {

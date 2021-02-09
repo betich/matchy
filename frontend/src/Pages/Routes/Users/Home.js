@@ -41,7 +41,6 @@ const Index = (props) => {
         .then((res) => res.data)
         .then((users) => {
             setUsers(users);
-            console.log(users)
         })
         .then(() => setLoad(true))
         .catch((err) => console.error("oh no", err))
@@ -52,11 +51,6 @@ const Index = (props) => {
         { !loaded ? (<Loading />) : (
         <>
             <h1>Users</h1>
-            <Link to="/users/create">
-                <Button variant="outline-danger" type="submit">
-                    Create
-                </Button>
-            </Link>
             <Link to="/users/edit">
                 <Button variant="outline-danger" type="submit">
                     Edit

@@ -1,12 +1,12 @@
 import axios from 'axios';
 import React from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
-import Tags from '../../../Components/Tag';
-import ExperienceGroup from '../../../Components/ExpandableFields';
-import DatePicker from '../../../Components/DatePicker';
-import { Interests, EducationOptions } from '../../../Services/Mock';
-import validate from "../../../Services/Validate";
-import Error from "../../../Components/Error";
+import Tags from '../../Components/Tag';
+import ExperienceGroup from '../../Components/ExpandableFields';
+import DatePicker from '../../Components/DatePicker';
+import { Interests, EducationOptions } from '../../Services/Mock';
+import validate from "../../Services/Validate";
+import Error from "../../Components/Error";
 
 class Create extends React.Component {
     constructor(props) {
@@ -60,7 +60,7 @@ class Create extends React.Component {
                 headers: {'Content-Type': 'multipart/form-data' }
             };
             
-            axios.post('/app/users', data, options)
+            axios.post('/app/register', data, options)
             .then((response) => {
                 if (response.status === 200) {
                     this.props.history.push(`/users/${response.data._id}`);

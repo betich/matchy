@@ -5,7 +5,8 @@ const Project = require('./models/projects');
 async function seedDB() {
     await User.deleteMany({});
     await Project.deleteMany({});
-    for(const seed of seeds) {
+    /*
+    for (const seed of seeds) {
         let user = await User.create(seed);
         let project = await Project.create({
             name: `planty_${seed.fullname}`,
@@ -20,8 +21,10 @@ async function seedDB() {
         user.projects.push(project._id);
         user.save();
     }
+    */
 };
 
+/*
 const seeds = [
     {
         username: 'betichx',
@@ -56,5 +59,6 @@ const seeds = [
         interests: ['you3', 'you2']
     }
 ]
+*/
 
 module.exports = seedDB;
