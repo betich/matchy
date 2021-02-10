@@ -56,11 +56,6 @@ const Index = (props) => {
                     Edit
                 </Button>
             </Link>
-            <Link to="/users/delete">
-                <Button variant="outline-danger" type="submit">
-                    Delete
-                </Button>
-            </Link>
             <div id="projectLinks">
                 <h4>Project Links</h4>
                 <div className="d-flex flex-wrap">

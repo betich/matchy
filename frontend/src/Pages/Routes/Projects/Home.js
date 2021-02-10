@@ -1,23 +1,40 @@
-import { Button } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Loading from '../../../Components/Loading';
 
-const ProjectLink = (props) => {
-    return (
-        <Link to={`/projects/${props.url}`}>
-            <Button variant="outline-info" type="submit">
-                {props.name}
-            </Button>
-        </Link>
-    );
-}
+const ProjectCard = (props) => {
+    return ( 
+        <>
+            <Card
+                bg="white"
+                text="black"
+                style={{ width: '18rem' }}
+                className="mb-2"
+                >
+                <Card.Header>{props.name}</Card.Header>
+                <Card.Body>
+                    <Card.Title>{props.fullname}</Card.Title>
+                    <Card.Text>
+    
+                    </Card.Text>
+                </Card.Body>
+                <Link to={`/projects/${props.url}`} className="d-flex justify-content-center mb-3">
+                    <Button variant="outline-info" type="submit">
+                        View
+                    </Button>
+                </Link>
+            </Card>
+        </>
+        );
+    }
+    
 
 const Index = (props) => {
     const [Projects, setProjects] = useState([]);
     const [loaded, setLoad] = useState(false);
-    let ProjectLinks = Projects.map((e) => <ProjectLink url={e._id} name={e.name} key={e._id} />);
+    let ProjectLinks = Projects.map((e) => <ProjectCard url={e._id} description={e.description} name={e.name} key={e._id} />);
 
     useEffect(() => {
         axios
@@ -40,19 +57,11 @@ const Index = (props) => {
                     Create
                 </Button>
             </Link>
-            <Link to="/projects/edit">
-                <Button variant="outline-danger" type="submit">
-                    Edit
-                </Button>
-            </Link>
-            <Link to="/projects/delete">
-                <Button variant="outline-danger" type="submit">
-                    Delete
-                </Button>
-            </Link>
             <div id="projectLinks">
                 <h4>Project Links</h4>
-                {ProjectLinks}
+                <div className="d-flex flew-wrap">
+                    {ProjectLinks}
+                </div>
             </div>
         </>
         )

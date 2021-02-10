@@ -3,8 +3,9 @@ import { Form, Button, Col } from 'react-bootstrap';
 import { FaWindowClose } from "react-icons/fa";
 
 /* ==============================================================
-    <InputFieldGroup name=String onChange={} type=input[, select] options=[options] />
+    <InputFieldGroup name=String onChange={} type=input[, select] options=[options] [defaultValue=Array]
 
+    defaultValue = [{title: String, value: String}, ...]
     onChange(name, fields) {
         this.setState({ experiences: { ...this.state.experiences, [type]: fields } });
         
@@ -130,10 +131,9 @@ class InputFieldGroup extends React.Component {
         super(props);
 
         this.state = {
-            fields: [],
+            fields: this.props.defaultValue || [],
             IDCount: 1
         }
-
         this.handleAdd = this.handleAdd.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.handleFieldChange = this.handleFieldChange.bind(this);
