@@ -8,7 +8,7 @@ const middleware = {
             res.status(401).send("You need to be logged in first");
         }
     },
-    checkProjectAuth: (req, res, next) => {
+    checkProjectAuthority: (req, res, next) => {
         if (req.isAuthenticated()) {
             // Is the user authorized?
             Project.findById(req.params.id, (err, foundProject) => {

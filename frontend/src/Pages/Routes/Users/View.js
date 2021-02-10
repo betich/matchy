@@ -53,7 +53,7 @@ const DeleteSection = (props) => {
                 <div>
                     <Form.Group className="mb-3">
                         <Form.Label>
-                            Enter project's name and hit Delete again
+                            Enter User's name and hit Delete again
                         </Form.Label>
                         <Form.Control
                             onChange={handleChange}
