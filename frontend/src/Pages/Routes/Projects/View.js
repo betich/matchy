@@ -65,7 +65,6 @@ const DeleteSection = (props) => {
 const View = (props) => {
     const [Project, setProject] = useState({});
     const [loaded, setLoad] = useState(false);
-<<<<<<< HEAD
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -92,26 +91,10 @@ const View = (props) => {
             console.error("oh no", err);
             setLoad(true);
         });
-=======
-
-    useEffect(() => {
-        axios
-            .get(`/app/projects/${props.match.params.id}`)
-            .then((res) => res.data)
-            .then((project) => {
-                setProject(project);
-            })
-            .then(() => setLoad(true))
-            .catch((err) => {
-                console.error("oh no", err);
-                setLoad(true);
-            });
->>>>>>> 15266119aeb8c51dbb80edfbfbd9ae5240984745
     }, [props.match.params.id]);
 
     return (
         <>
-<<<<<<< HEAD
         { !loaded ? (<Loading />) : 
             (Object.keys(Project).length === 0 && Project.constructor === Object)
                 ? (<span>{error}</span>) : (
@@ -122,21 +105,6 @@ const View = (props) => {
                     text="black"
                     style={{ width: '18rem' }}
                     className="mb-2"
-=======
-            {!loaded ? (
-                <Loading />
-            ) : Object.keys(Project).length === 0 &&
-              Project.constructor === Object ? (
-                <span>Can't find the Project lol</span>
-            ) : (
-                <>
-                    <Link to="/projects">Back</Link>
-                    <Card
-                        bg="white"
-                        text="black"
-                        style={{ width: "18rem" }}
-                        className="mb-2"
->>>>>>> 15266119aeb8c51dbb80edfbfbd9ae5240984745
                     >
                         <Card.Header>Project</Card.Header>
                         <Card.Body>
