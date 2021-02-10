@@ -56,6 +56,7 @@ const DeleteSection = (props) => {
                             Enter User's name and hit Delete again
                         </Form.Label>
                         <Form.Control
+                            autoFocus
                             onChange={handleChange}
                             name="confirmationtext"
                         ></Form.Control>

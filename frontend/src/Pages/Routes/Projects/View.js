@@ -36,8 +36,7 @@ const DeleteSection = (props) => {
     };
 
     const handleChange = (e) => {
-        if ( e.target.value === props.confirmationText)
-        {
+        if ( e.target.value === props.confirmationText) {
             setDisable(false);
             setConfirmed(true);
         } else {
@@ -52,7 +51,7 @@ const DeleteSection = (props) => {
                 <div>
                     <Form.Group className="mb-3">
                         <Form.Label>Enter project's name and hit Delete again</Form.Label>
-                        <Form.Control onChange={handleChange} name="confirmationtext"></Form.Control>
+                        <Form.Control autoFocus onChange={handleChange} name="confirmationtext"></Form.Control>
                     </Form.Group>
                 </div>
             ) : (

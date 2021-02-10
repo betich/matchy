@@ -10,7 +10,7 @@ const upload = multer();
 
 router
 .get('/checkLogin', auth.checkAuth, (req, res) => {
-    res.status(200).send('logged in');
+    res.status(200).json(req.user);
 })
 
 .post('/login', passport.authenticate('local'), (req, res) => {
@@ -28,12 +28,20 @@ router
     newUser.hash = hashed;
 
     User.create(filterFalsy(newUser), (err, User) => {
-        if (err) {
+        try {
+            if (err) {
+                throw err;
+            } else {
+                req.login(User, function (err) {
+                    if (err) throw err;
+                    else res.status(200).json(User);
+                })
+                console.info(`User ${User.username} has been created`);
+            }
+        }
+        catch (err) {
             console.error(err);
-            res.status(404).send(err);
-        } else {
-            console.info(`User ${User.username} has been created`);
-            res.status(200).json(User);
+            res.status(500).send(err);
         }
     });
 })

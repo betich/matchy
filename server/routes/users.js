@@ -3,26 +3,24 @@ const router = express.Router();
 const User = require('../models/users');
 const multer = require('multer');
 const upload = multer();
+const filterFalsy = require('../helpers/filterFalsy');
+const auth = require('../middleware/index');
 
 router
 .get('/', (req, res) => {
     try {
         User.find({}).populate("projects").populate("archive").exec((err, foundUsers) => {
             if (err) {
+                res.status(404).send(err);
                 console.error(err);
-                res.status(404);
-                res.send(err);
             } else if (!foundUsers) {
-                res.status(404);
-                res.send('unable to find users');
+                res.status(404).send('unable to find users');
             } else {
-                res.status(200);
-                res.json(foundUsers);
+                res.status(200).json(foundUsers);
             }
         });
     } catch (err) {
-        res.status(404);
-        res.send(err);
+        res.status(404).send(err);
     }
 })
 
@@ -30,20 +28,16 @@ router
     try {
         User.findById(req.params.id).populate("projects").populate("archive").exec((err, foundUser) => {
             if (err) {
+                res.status(404).send(err);
                 console.error(err);
-                res.status(404);
-                res.send(err);
             } else if (!foundUser) {
-                res.status(404);
-                res.send('unable to find a user with that id');
+                res.status(404).send('unable to find a user with that id');
             } else {
-                res.status(200);
-                res.json(foundUser);
+                res.status(200).json(foundUser);
             }
         });
     } catch (err) {
-        res.status(404);
-        res.send(err);
+        res.status(404).send(err);
     }
 })
 
@@ -53,45 +47,38 @@ router
         console.log('user delete request come id: ่่' + req.params.id);
         User.findByIdAndDelete(req.params.id, (err,foundUser) => {
             if (err) {
-                res.status(500);
+                res.status(500).send(err);
                 console.error(err);
-                res.send(err);
             }
             else if (!foundUser) {
-                res.status(404);
-                res.send('no project found');
+                res.status(404).send('no project found');
             } 
             else {
-                res.status(200);
-                res.send({});
+                res.status(200).send({});
             } 
         })
     } catch (err) {
         console.log(err);
-        console.log('error occur');
-        res.status(404);
-        res.send(err);
+        console.log('an error occured');
+        res.status(404).send(err);
     }
 })
 
 .put('/:id', upload.none(), (req,res) => {
     try {
         let newUser = req.body;
-        User.findByIdAndUpdate(req.params.id, filterFalsy(newUser), (err, foundProject) => {
+        User.findOneAndUpdate(req.params.id, filterFalsy(newUser), (err, foundProject) => {
             if (err) {
                 throw err;
             } else if (!foundProject) {
-                res.status(404);
-                res.send('no project found');
+                res.status(404).send('no project found');
             } else {
-                res.status(200);
-                res.send('update sucessfully');
+                res.status(200).send('update sucessfully');
             }
         })
     } catch (err) {
+        res.status(404).send(err);
         console.error(err);
-        res.status(404);
-        res.send(err);
     }
 })
 
