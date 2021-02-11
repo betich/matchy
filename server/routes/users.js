@@ -45,7 +45,7 @@ router
 .delete('/:id', (req,res) => {
     try {
         console.log('user delete request come id: ่่' + req.params.id);
-        User.findByIdAndDelete(req.params.id, (err,foundUser) => {
+        User.findByIdAndDelete(req.params.id, { useFindAndModify: false }, (err,foundUser) => {
             if (err) {
                 res.status(500).send(err);
                 console.error(err);
@@ -67,10 +67,10 @@ router
 .put('/:id', upload.none(), (req,res) => {
     try {
         let newUser = req.body;
-        User.findOneAndUpdate(req.params.id, filterFalsy(newUser), (err, foundProject) => {
+        User.findByIdAndUpdate(req.params.id, filterFalsy(newUser), { useFindAndModify: false }, (err, foundUser) => {
             if (err) {
                 throw err;
-            } else if (!foundProject) {
+            } else if (!foundUser) {
                 res.status(404).send('no project found');
             } else {
                 res.status(200).send('update sucessfully');

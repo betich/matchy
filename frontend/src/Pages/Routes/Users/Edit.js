@@ -95,7 +95,6 @@ class Edit extends React.Component {
                 headers: { "Content-Type": "multipart/form-data" },
             };
 
-            console.log(data);
             axios
                 .put(`/app/users/${this.props.match.params.id}`, data, options)
                 .then(
@@ -157,19 +156,6 @@ class Edit extends React.Component {
                                         }
                                     />
                                 </Form.Group>
-
-                                <Form.File id="formcheck-api-custom" custom>
-                                    <Form.File.Input isValid />
-                                    <Form.File.Label data-browse="Browse...">
-                                        Profile Picture
-                                    </Form.File.Label>
-                                    <Form.Control.Feedback type="valid">
-                                        yay!
-                                    </Form.Control.Feedback>
-                                    <Form.Control.Feedback type="invalid">
-                                        Yo this is required
-                                    </Form.Control.Feedback>
-                                </Form.File>
 
                                 <Form.Group controlId="fullname">
                                     <Form.Label>Full name</Form.Label>

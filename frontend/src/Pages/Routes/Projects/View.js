@@ -45,10 +45,8 @@ const DeleteSection = (props) => {
     };
     return (
         <div>
-            <Button onClick={handleClick} disabled={disable}>
-                Delete
-            </Button>
-            {show ? (
+            <Button onClick={handleClick} disabled={disable}>Delete</Button>
+            { show && (
                 <div>
                     <Form.Group className="mb-3">
                         <Form.Label>
@@ -61,15 +59,14 @@ const DeleteSection = (props) => {
                         ></Form.Control>
                     </Form.Group>
                 </div>
-            ) : (
-                <></>
-            )}
+            )
+            }
         </div>
     );
 };
 
 const View = (props) => {
-    const [Project, setProject] = useState({});
+    const [Project, setProject] = useState(null);
     const [loaded, setLoad] = useState(false);
     const [error, setError] = useState(null);
     const [authorized, setAuthorized] = useState(false);
@@ -92,7 +89,6 @@ const View = (props) => {
                 }
                 setProject(project);
             })
-            .then(() => setLoad(true))
             .catch((err) => {
                 if (err.response) {
                     switch (err.response.status) {
@@ -104,25 +100,22 @@ const View = (props) => {
                     }
                 }
                 console.error("oh no", err);
-                setLoad(true);
-            });
+            })
+            .finally(() => setLoad(true));
     }, [props.match.params.id]);
 
     return (
         <>
-            {!loaded ? (
-                <Loading />
-            ) : Object.keys(Project).length === 0 &&
-              Project.constructor === Object ? (
-                <span>{error}</span>
-            ) : (
-                <>
-                    <Link to="/projects">Back</Link>
-                    <Card
-                        bg="white"
-                        text="black"
-                        style={{ width: "18rem" }}
-                        className="mb-2"
+        { !loaded ? (<Loading />) : 
+            (!Project)
+                ? (<span>{error}</span>) : (
+            <>
+                <Link to="/projects">Back</Link>
+                <Card
+                    bg="white"
+                    text="black"
+                    style={{ width: '18rem' }}
+                    className="mb-2"
                     >
                         <Card.Header>Project</Card.Header>
                         <Card.Body>

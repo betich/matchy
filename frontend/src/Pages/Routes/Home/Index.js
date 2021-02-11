@@ -1,53 +1,67 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
-import axios from 'axios';
+import isLoggedIn from '../../../Services/isLoggedIn';
 
-const LoggedIn = () => {
-    const [response, setResponse] = useState(null);
-
-    useEffect(() => {
-        axios.get('/app/checkLogin')
-            .then((res) => setResponse(res.status))
-            .catch((err) => {
-                if (err.response) {
-                    switch (err.response.status) {
-                        case 401:
-                            setResponse(401);
-                            break;
-                        case 404:
-                            setResponse(404);
-                            break;
-                        default:
-                            setResponse(null);
-                    }
-                }
-            })
-    }, [])
-
-    if (!response) return <span></span>;
-    else if (response === 200) return (
-        <Link to="/logout">
-            <Button variant="outline-danger" type="submit">
-                Logout
-            </Button>
-        </Link>
-    );
-    else if (response === 401) return (
+const Login = () => {
+    return (
         <Link to="/login">
             <Button variant="outline-danger" type="submit">
                 Login
             </Button>
         </Link>
-    );
+    )
+}
+
+const Logout = () => {
+    return (
+        <Link to="/logout">
+            <Button variant="outline-danger" type="submit">
+                Logout
+            </Button>
+        </Link>
+    )
+}
+
+const LoggedIn = (props) => {
+    const [status, setStatus] = useState(null);
+    const [User, setUser] = useState(null);
+    const [loaded, setLoad] = useState(false);
+
+    useEffect(() => {
+        const getUser = async () => {
+            let [loggedIn, status, user] = await isLoggedIn();
+            if (loggedIn) setUser(user);
+            setStatus(status);
+            setLoad(true);
+        }
+        getUser();
+    }, [])
+
+    const AuthButton = () => {
+        if (status === 200) return <Logout />;
+        else if (status === 401) return <Login />;
+        else return (<span></span>);
+    }
+
+    return (
+        <>
+        { loaded && (
+            <>
+                <h1>
+                    Welcome, {User ? User.username : "please sign in"}!
+                </h1>
+                {AuthButton()}
+            </>
+            )
+        }
+        </>
+    )
 }
 
 const Home = () => {
     return (
         <div className="mt-3 ml-3">
-            <h1>
-                Welcome.
-            </h1>
             <LoggedIn />
             <Link to="/signup">
                 <Button variant="outline-danger" type="submit">

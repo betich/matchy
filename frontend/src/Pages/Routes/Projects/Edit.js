@@ -40,7 +40,6 @@ class Edit extends React.Component {
 
             axios.put(`/app/projects/${this.props.match.params.id}`, data, options).then(
                 (response) => {
-                    console.log(response);
                     if (response.status === 200) {
                         this.props.history.push(
                             `/projects/${this.props.match.params.id}`
@@ -75,9 +74,6 @@ class Edit extends React.Component {
             })
             .then(() => {
                 this.setState({ loaded: true });
-            })
-            .then(() => {
-                console.log(this.state.oldProject);
             })
             .catch((err) => {
                 console.error(err);

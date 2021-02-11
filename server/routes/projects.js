@@ -30,9 +30,7 @@ router
     let newProject = Object.assign({}, req.body);
     newProject.name = req.body.projectname;
     newProject.owner = req.user.id;
-    console.log(newProject);
     delete newProject["projectname"]; // rename projectname=>name
-
     try {
         Project.create(filterFalsy(newProject), (err, project) => {
             if (err) {
@@ -85,8 +83,8 @@ router
 // TODO: Check deletetion authority
 .delete('/:id', (req,res) => {
     try {
-        console.log('project delete request come id: ่่' + req.params.id);
-        Project.findByIdAndDelete(req.params.id, (err,foundProject) => {
+        console.log('deleted่' + req.params.id);
+        Project.findByIdAndDelete(req.params.id, { useFindAndModify: false }, (err,foundProject) => {
             if (err) {
                 throw err;
             }
@@ -100,8 +98,7 @@ router
             } 
         })
     } catch (err) {
-        console.log(err);
-        console.log('error occur');
+        console.error(err);
         res.status(500).send(err);
     }
 })
@@ -112,7 +109,7 @@ router
     delete newProject["projectname"];
     console.log(newProject);
     try {
-        Project.findByIdAndUpdate(req.params.id, newProject, (err, foundProject) => {
+        Project.findByIdAndUpdate(req.params.id, newProject, { useFindAndModify: false }, (err, foundProject) => {
             if (err) {
                 throw err;
             }
