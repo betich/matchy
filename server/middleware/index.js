@@ -15,7 +15,7 @@ const middleware = {
                 if (err || !foundProject) {
                     res.status(404).send("Sorry, Your Project cannot be found!");
                 }
-                else if (!foundProject.owner.id.equals(req.user._id)) {
+                else if (foundProject.owner._id.equals(req.user._id)) {
                     next();
                 } else {
                     res.status(403).send("You don't have permission to do that");

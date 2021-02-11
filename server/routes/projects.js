@@ -81,7 +81,7 @@ router
 })
 
 // TODO: Check deletetion authority
-.delete('/:id', (req,res) => {
+.delete('/:id', auth.checkProjectAuthority, (req,res) => {
     try {
         console.log('deleted่' + req.params.id);
         Project.findByIdAndDelete(req.params.id, { useFindAndModify: false }, (err,foundProject) => {
@@ -103,11 +103,10 @@ router
     }
 })
 
-.put('/:id',upload.none(), (req,res) => {
+.put('/:id',[upload.none(), auth.checkProjectAuthority], (req,res) => {
     let newProject = Object.assign({}, req.body);
     newProject.name = req.body.projectname;
     delete newProject["projectname"];
-    console.log(newProject);
     try {
         Project.findByIdAndUpdate(req.params.id, newProject, { useFindAndModify: false }, (err, foundProject) => {
             if (err) {
