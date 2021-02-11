@@ -51,13 +51,8 @@ const Index = (props) => {
         { !loaded ? (<Loading />) : (
         <>
             <h1>Users</h1>
-            <Link to="/users/edit">
-                <Button variant="outline-danger" type="submit">
-                    Edit
-                </Button>
-            </Link>
             <div id="projectLinks">
-                <h4>Project Links</h4>
+                <h4>Users Links</h4>
                 <div className="d-flex flex-wrap">
                     {UserCardList}
                 </div>

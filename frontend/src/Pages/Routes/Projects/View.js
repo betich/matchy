@@ -9,8 +9,8 @@ const EditSection = (props) => {
         <Link to={`/projects/edit/${props.id}`}>
             <Button>Edit</Button>
         </Link>
-    )
-}
+    );
+};
 const DeleteSection = (props) => {
     const history = useHistory();
     const [show, setShow] = useState(false);
@@ -23,12 +23,11 @@ const DeleteSection = (props) => {
             setDisable(true);
         } else {
             try {
-                axios.delete(`/app/projects/${props.id}`)
-                .then(response => {
+                axios.delete(`/app/projects/${props.id}`).then((response) => {
                     if (response.status === 200) {
                         history.push("/projects");
                     }
-                })
+                });
             } catch (err) {
                 console.error(err);
             }
@@ -36,22 +35,30 @@ const DeleteSection = (props) => {
     };
 
     const handleChange = (e) => {
-        if ( e.target.value === props.confirmationText) {
+        if (e.target.value === props.confirmationText) {
             setDisable(false);
             setConfirmed(true);
         } else {
             setDisable(true);
             setConfirmed(false);
         }
-    }
+    };
     return (
         <div>
-            <Button onClick={handleClick} disabled={disable}>Delete</Button>
+            <Button onClick={handleClick} disabled={disable}>
+                Delete
+            </Button>
             {show ? (
                 <div>
                     <Form.Group className="mb-3">
-                        <Form.Label>Enter project's name and hit Delete again</Form.Label>
-                        <Form.Control autoFocus onChange={handleChange} name="confirmationtext"></Form.Control>
+                        <Form.Label>
+                            Enter project's name and hit Delete again
+                        </Form.Label>
+                        <Form.Control
+                            autoFocus
+                            onChange={handleChange}
+                            name="confirmationtext"
+                        ></Form.Control>
                     </Form.Group>
                 </div>
             ) : (
@@ -65,45 +72,57 @@ const View = (props) => {
     const [Project, setProject] = useState({});
     const [loaded, setLoad] = useState(false);
     const [error, setError] = useState(null);
+    const [authorized, setAuthorized] = useState(false);
 
     useEffect(() => {
-        axios
-        .get(`/app/projects/${props.match.params.id}`)
-        .then((res) => res.data)
-        .then((project) => {
-            setProject(project);
-        })
-        .then(() => setLoad(true))
-        .catch((err) => {
-            if (err.response) {
-                switch (err.response.status) {
-                    case 401:
-                        setError('You aren\'t allowed to view this page');
-                        break;
-                    case 404:
-                        setError('Can\'t find the Project lol');
-                        break;
-                    default:
-                        setError('An unknown error occured');
+        const authorityPromise = axios.get(
+            `/app/projects/checkauthority/${props.match.params.id}`
+        );
+        const projectPromise = axios.get(
+            `/app/projects/${props.match.params.id}`
+        );
+
+        Promise.all([projectPromise, authorityPromise])
+            .then(([projectData, isAuthorized]) => {
+                return Promise.all([projectData.data,isAuthorized.data]);
+            })
+            .then(([project, isAuthorized]) => {
+                if (isAuthorized) {
+                    setAuthorized(true);
                 }
-            }
-            console.error("oh no", err);
-            setLoad(true);
-        });
+                setProject(project);
+            })
+            .then(() => setLoad(true))
+            .catch((err) => {
+                if (err.response) {
+                    switch (err.response.status) {
+                        case 500:
+                            setError("Internal server error occured");
+                            break;
+                        default:
+                            setError("An unknown error occured");
+                    }
+                }
+                console.error("oh no", err);
+                setLoad(true);
+            });
     }, [props.match.params.id]);
 
     return (
         <>
-        { !loaded ? (<Loading />) : 
-            (Object.keys(Project).length === 0 && Project.constructor === Object)
-                ? (<span>{error}</span>) : (
-            <>
-                <Link to="/projects">Back</Link>
-                <Card
-                    bg="white"
-                    text="black"
-                    style={{ width: '18rem' }}
-                    className="mb-2"
+            {!loaded ? (
+                <Loading />
+            ) : Object.keys(Project).length === 0 &&
+              Project.constructor === Object ? (
+                <span>{error}</span>
+            ) : (
+                <>
+                    <Link to="/projects">Back</Link>
+                    <Card
+                        bg="white"
+                        text="black"
+                        style={{ width: "18rem" }}
+                        className="mb-2"
                     >
                         <Card.Header>Project</Card.Header>
                         <Card.Body>
@@ -111,8 +130,17 @@ const View = (props) => {
                             <Card.Text>{Project.description}</Card.Text>
                         </Card.Body>
                     </Card>
-                    <DeleteSection id={props.match.params.id} confirmationText={Project.name} />
-                    <EditSection id={props.match.params.id} />
+                    {authorized ? (
+                        <>
+                            <DeleteSection
+                                id={props.match.params.id}
+                                confirmationText={Project.name}
+                            />
+                            <EditSection id={props.match.params.id} />
+                        </>
+                    ) : (
+                        <></>
+                    )}
                 </>
             )}
         </>

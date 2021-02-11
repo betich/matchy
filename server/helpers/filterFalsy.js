@@ -9,7 +9,7 @@ const filterFalsy = (obj) => {
             res[key] = res[key].filter((e) => (e && e !== 0));
         }
         else if (res[key] instanceof Object) {
-            res[key] = filterFalsey(res[key]);
+            res[key] = filterFalsy(res[key]);
         } 
     }
     return res

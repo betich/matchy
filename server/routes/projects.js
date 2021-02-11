@@ -29,6 +29,8 @@ router
 .post('/', upload.none(), (req, res) => {
     let newProject = Object.assign({}, req.body);
     newProject.name = req.body.projectname;
+    newProject.owner = req.user.id;
+    console.log(newProject);
     delete newProject["projectname"]; // rename projectname=>name
 
     try {
@@ -46,11 +48,26 @@ router
     }
 })
 
-.get('/:id', auth.checkAuth, (req, res) => {
+.get('/checkauthority/:id', (req,res) => {
+    if (req.isAuthenticated()) {
+        // Is the user authorized?
+        Project.findById(req.params.id, (err, foundProject) => {
+            if (foundProject.owner._id.equals(req.user._id)) {
+                res.status(200).send(true);
+            } else {
+                res.status(200).send(false);
+            }
+        });
+    } else {
+        res.status(200).send(false);
+    }
+})
+
+.get('/:id', (req, res) => {
     try {
         Project.findById(req.params.id).populate("owner").populate("workers").exec((err, foundProject) => {
             if (err) {
-                res.status(404).send(err);
+                res.status(500).send(err);
                 throw err;
             } else if (!foundProject) {
                 res.status(404).send('unable to find a project with that id');
