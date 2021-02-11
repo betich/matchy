@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const UserCard = (props) => {
-return ( 
+    return ( 
     <>
         <Card
             bg="white"

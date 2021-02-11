@@ -95,7 +95,6 @@ class Edit extends React.Component {
                 headers: { "Content-Type": "multipart/form-data" },
             };
 
-            console.log(data);
             axios
                 .put(`/app/users/${this.props.match.params.id}`, data, options)
                 .then(

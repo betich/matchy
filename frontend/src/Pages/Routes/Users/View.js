@@ -101,21 +101,17 @@ const View = (props) => {
                     <Card.Body>
                         <Card.Title>{User.username}</Card.Title>
                         <Card.Text>
-                            <p>
-                                interests:{" "}
-                                {User.interests.map((elem, i) => (
-                                    <Button
-                                        key={i}
-                                        variant="outline-danger"
-                                    >
-                                        {elem}
-                                    </Button>
-                                ))}
-                            </p>
-                            <p>
-                                experiences:{" "}
-                                {JSON.stringify(User.experiences)}
-                            </p>
+                            interests:{" "}
+                            {User.interests.map((elem, i) => (
+                                <Button
+                                    key={i}
+                                    variant="outline-danger"
+                                >
+                                    {elem}
+                                </Button>
+                            ))}
+                            experiences:{" "}
+                            {JSON.stringify(User.experiences)}
                         </Card.Text>
                     </Card.Body>
                 </Card>
