@@ -11,6 +11,7 @@ const EditSection = (props) => {
         </Link>
     )
 }
+
 const DeleteSection = (props) => {
     const history = useHistory();
     const [show, setShow] = useState(false);
@@ -62,7 +63,7 @@ const DeleteSection = (props) => {
 };
 
 const View = (props) => {
-    const [Project, setProject] = useState({});
+    const [Project, setProject] = useState(null);
     const [loaded, setLoad] = useState(false);
     const [error, setError] = useState(null);
 
@@ -79,12 +80,12 @@ const View = (props) => {
                 switch (err.response.status) {
                     case 401:
                         setError('You aren\'t allowed to view this page');
-                        break;
+                        return;
                     case 404:
                         setError('Can\'t find the Project lol');
-                        break;
+                        return;
                     default:
-                        setError('An unknown error occured');
+                        break;
                 }
             }
             console.error("oh no", err);
@@ -95,7 +96,7 @@ const View = (props) => {
     return (
         <>
         { !loaded ? (<Loading />) : 
-            (Object.keys(Project).length === 0 && Project.constructor === Object)
+            (!Project)
                 ? (<span>{error}</span>) : (
             <>
                 <Link to="/projects">Back</Link>
