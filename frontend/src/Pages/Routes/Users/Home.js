@@ -2,7 +2,6 @@ import { Button, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Loading from '../../../Components/Loading';
 
 const UserCard = (props) => {
 return ( 
@@ -48,7 +47,7 @@ const Index = (props) => {
 
     return (
     <>
-        { !loaded ? (<Loading />) : (
+        { loaded && (
         <>
             <h1>Users</h1>
             <Link to="/users/edit">

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Card, Button, Form } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
-import Loading from "../../../Components/Loading";
 
 const EditSection = (props) => {
     return (
@@ -70,7 +69,7 @@ const DeleteSection = (props) => {
 };
 
 const View = (props) => {
-    const [User, setUser] = useState({});
+    const [User, setUser] = useState(null);
     const [loaded, setLoad] = useState(false);
 
     useEffect(() => {
@@ -87,51 +86,54 @@ const View = (props) => {
             });
     }, [props.match.params.id]);
 
+    const DisplayUser = () => {
+        if (User) {
+            return (
+                <>
+                <Link to="/users">Back</Link>
+                <Card
+                    bg="white"
+                    text="black"
+                    style={{ width: "18rem" }}
+                    className="mb-2"
+                >
+                    <Card.Header>User</Card.Header>
+                    <Card.Body>
+                        <Card.Title>{User.username}</Card.Title>
+                        <Card.Text>
+                            <p>
+                                interests:{" "}
+                                {User.interests.map((elem, i) => (
+                                    <Button
+                                        key={i}
+                                        variant="outline-danger"
+                                    >
+                                        {elem}
+                                    </Button>
+                                ))}
+                            </p>
+                            <p>
+                                experiences:{" "}
+                                {JSON.stringify(User.experiences)}
+                            </p>
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
+                <DeleteSection
+                    confirmationText={User.username}
+                    id={User._id}
+                />
+                <EditSection id={props.match.params.id} />
+                </>
+            )
+        } else {
+            return (<span>Can't find the User lol</span>)
+        }
+    }
+
     return (
         <>
-            {!loaded ? (
-                <Loading />
-            ) : Object.keys(User).length === 0 &&
-              User.constructor === Object ? (
-                <span>Can't find the User lol</span>
-            ) : (
-                <>
-                    <Link to="/users">Back</Link>
-                    <Card
-                        bg="white"
-                        text="black"
-                        style={{ width: "18rem" }}
-                        className="mb-2"
-                    >
-                        <Card.Header>User</Card.Header>
-                        <Card.Body>
-                            <Card.Title>{User.username}</Card.Title>
-                            <Card.Text>
-                                <p>
-                                    interests:{" "}
-                                    {User.interests.map((elem, i) => (
-                                        <Button
-                                            key={i}
-                                            variant="outline-danger"
-                                        >
-                                            {elem}
-                                        </Button>
-                                    ))}
-                                </p>
-                                <p>
-                                    experiences:{" "}
-                                    {JSON.stringify(User.experiences)}
-                                </p>
-                            </Card.Text>
-                        </Card.Body>
-                    </Card>
-                    <DeleteSection
-                        confirmationText={User.username}
-                        id={User._id}
-                    />
-                    <EditSection id={props.match.params.id} />
-                </>
-            )}
+            { loaded && DisplayUser()}
         </>
     );
 };

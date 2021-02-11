@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import isLoggedIn from '../../../Services/isLoggedIn';
@@ -38,23 +38,22 @@ const LoggedIn = (props) => {
         getUser();
     }, [])
 
+    const AuthButton = () => {
+        if (status === 200) return <Logout />;
+        else if (status === 401) return <Login />;
+        else return (<span></span>);
+    }
+
     return (
         <>
-        { loaded ? (
+        { loaded && (
             <>
                 <h1>
                     Welcome, {User ? User.username : "please sign in"}!
                 </h1>
-                {
-                    (status === 200) ?
-                        <Logout />
-                    : (status === 401) ?
-                        <Login />
-                    : <span></span>
-                }
+                {AuthButton()}
             </>
             )
-            : <></> 
         }
         </>
     )

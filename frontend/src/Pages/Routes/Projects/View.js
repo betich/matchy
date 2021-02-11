@@ -48,16 +48,15 @@ const DeleteSection = (props) => {
     return (
         <div>
             <Button onClick={handleClick} disabled={disable}>Delete</Button>
-            {show ? (
+            { show && (
                 <div>
                     <Form.Group className="mb-3">
                         <Form.Label>Enter project's name and hit Delete again</Form.Label>
                         <Form.Control autoFocus onChange={handleChange} name="confirmationtext"></Form.Control>
                     </Form.Group>
                 </div>
-            ) : (
-                <></>
-            )}
+            )
+            }
         </div>
     );
 };
