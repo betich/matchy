@@ -74,7 +74,6 @@ const View = (props) => {
         .then((project) => {
             setProject(project);
         })
-        .then(() => setLoad(true))
         .catch((err) => {
             if (err.response) {
                 switch (err.response.status) {
@@ -89,8 +88,8 @@ const View = (props) => {
                 }
             }
             console.error("oh no", err);
-            setLoad(true);
-        });
+        })
+        .finally(() => setLoad(true));
     }, [props.match.params.id]);
 
     return (

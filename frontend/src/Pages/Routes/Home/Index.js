@@ -1,65 +1,57 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
-import axios from 'axios';
+import isLoggedIn from '../../../Services/isLoggedIn';
+
+const Login = () => {
+    return (
+        <Link to="/login">
+            <Button variant="outline-danger" type="submit">
+                Login
+            </Button>
+        </Link>
+    )
+}
+
+const Logout = () => {
+    return (
+        <Link to="/logout">
+            <Button variant="outline-danger" type="submit">
+                Logout
+            </Button>
+        </Link>
+    )
+}
 
 const LoggedIn = (props) => {
-    const [response, setResponse] = useState(null);
+    const [status, setStatus] = useState(null);
     const [User, setUser] = useState(null);
+    const [loaded, setLoad] = useState(false);
 
     useEffect(() => {
-        axios.get('/app/checkLogin')
-            .then((res) => {
-                setResponse(res.status);
-                return res.data
-            })
-            .then((userData) => setUser(userData))
-            .catch((err) => {
-                if (err.response) {
-                    switch (err.response.status) {
-                        case 401:
-                            setResponse(401);
-                            return;
-                        case 404:
-                            setResponse(404);
-                            return;
-                        default:
-                            break;
-                    }
-                }
-                console.error("oh no", err);
-            })
+        const getUser = async () => {
+            let [loggedIn, status, user] = await isLoggedIn();
+            if (loggedIn) setUser(user);
+            setStatus(status);
+            setLoad(true);
+        }
+        getUser();
     }, [])
-
-    var AuthButton;
-    if (!response) AuthButton = (<span></span>);
-    else if (response === 200) {
-        AuthButton = (
-            <Link to="/logout">
-                <Button variant="outline-danger" type="submit">
-                    Logout
-                </Button>
-            </Link>
-        )
-    }
-    else if (response === 401) {
-        AuthButton = (
-            <Link to="/login">
-                <Button variant="outline-danger" type="submit">
-                    Login
-                </Button>
-            </Link>
-        )
-    }
 
     return (
         <>
-        { User ? (
+        { loaded ? (
             <>
                 <h1>
-                    Welcome, {User.username}!
+                    Welcome, {User ? User.username : "please sign in"}!
                 </h1>
-                {AuthButton}
+                {
+                    (status === 200) ?
+                        <Logout />
+                    : (status === 401) ?
+                        <Login />
+                    : <span></span>
+                }
             </>
             )
             : <></> 
