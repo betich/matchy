@@ -58,7 +58,7 @@ const Index = (props) => {
             </Link>
             <div id="projectLinks">
                 <h4>Project Links</h4>
-                <div className="d-flex flew-wrap">
+                <div className="d-flex flex-wrap">
                     {ProjectLinks}
                 </div>
             </div>
