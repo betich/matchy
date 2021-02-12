@@ -9,7 +9,7 @@ const router = express.Router();
 const upload = multer();
 
 router
-.get('/checkLogin', auth.checkAuth, (req, res) => {
+.get('/checkLogin', auth.checkLogin, (req, res) => {
     res.status(200).json(req.user);
 })
 
