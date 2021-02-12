@@ -49,7 +49,7 @@ const LoggedIn = (props) => {
         { loaded && (
             <>
                 <h1>
-                    Welcome, {User ? User.username : "please sign in"}!
+                    Welcome, {User ? User.username : "please sign in"}
                 </h1>
                 {AuthButton()}
             </>

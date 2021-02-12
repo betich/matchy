@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const ProjectCard = (props) => {
+    const project = props.project
+
     return ( 
         <>
             <Card
@@ -12,11 +14,18 @@ const ProjectCard = (props) => {
                 style={{ width: '18rem' }}
                 className="mb-2"
                 >
-                <Card.Header>{props.name}</Card.Header>
                 <Card.Body>
-                    <Card.Title>{props.fullname}</Card.Title>
+                    <Card.Title>{project.name}</Card.Title>
+                    <Card.Text>{project.description}</Card.Text>
                     <Card.Text>
-    
+                    {project.tags.map((elem, i) => (
+                        <Button
+                            key={i}
+                            variant="outline-danger"
+                        >
+                            {elem}
+                        </Button>
+                    ))}    
                     </Card.Text>
                 </Card.Body>
                 <Link to={`/projects/${props.url}`} className="d-flex justify-content-center mb-3">
@@ -33,7 +42,7 @@ const ProjectCard = (props) => {
 const Index = (props) => {
     const [Projects, setProjects] = useState([]);
     const [loaded, setLoad] = useState(false);
-    let ProjectLinks = Projects.map((e) => <ProjectCard url={e._id} description={e.description} name={e.name} key={e._id} />);
+    let ProjectLinks = Projects.map((e) => <ProjectCard url={e._id} project={e} key={e._id} />);
 
     useEffect(() => {
         axios

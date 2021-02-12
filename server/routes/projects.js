@@ -56,7 +56,7 @@ router
     }
 })
 
-.get('/checkauthority/:id', auth.checkProjectOwnership, (req,res) => {
+.get('/checkownership/:id', auth.checkProjectOwnership, (req,res) => {
     res.status(200).send(req.user);
 })
 
