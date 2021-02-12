@@ -14,9 +14,9 @@ class Create extends React.Component {
 
         this.state = {
             birthday: {
-                day: "2",
-                month: "1",
-                year: "2001",
+                day: "",
+                month: "",
+                year: "",
             },
             experiences: { education: [], work: [] },
             interests: [],

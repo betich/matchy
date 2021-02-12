@@ -17,9 +17,9 @@ class DatePicker extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            day: this.props.day || 1,
-            month: this.props.month || 1,
-            year: this.props.year || 1970
+            day: this.props.day,
+            month: this.props.month,
+            year: this.props.year
         }
 
         this.inputChange = this.inputChange.bind(this);

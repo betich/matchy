@@ -120,6 +120,10 @@ const validate = (formData) => {
                     31,28,31,30,31,30,30,31,31,30,31,30,31,
                 ];
 
+                if (!day || !month || !year) {
+                    addToInvalid("birthday", "fill out all fields")
+                }
+
                 //check month
                 if (month > 12 || month < 1) {
                     addToInvalid("birthday", "invalid month");
