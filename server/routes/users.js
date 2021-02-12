@@ -24,6 +24,10 @@ router
     }
 })
 
+.get('/checkownership/:id', auth.checkUser, (req,res) => {
+    res.status(200).send(req.user);
+})
+
 .get('/:id', (req, res) => {
     try {
         User.findById(req.params.id).populate("projects").populate("archive").exec((err, foundUser) => {
