@@ -126,42 +126,66 @@ const UserCard = (props) => {
 const View = (props) => {
     const [User, setUser] = useState(null);
     const [loaded, setLoad] = useState(false);
+    const [error, setError] = useState(null);
+    const [authorized, setAuthorized] = useState(false);
 
     useEffect(() => {
-        axios
-            .get(`/app/users/${props.match.params.id}`)
-            .then((res) => res.data)
-            .then((user) => {
-                setUser(user);
-            })
-            .then(() => setLoad(true))
-            .catch((err) => {
-                console.error("oh no", err);
-                setLoad(true);
-            });
+        const handleError = (err) => {
+            // 401, 403s are expected
+            if (err.response.data) {
+                if (err.response.status === 403) return;
+                setError(err.response.data);
+            } else {
+                setError("an unknown error occured");
+            }
+            setAuthorized(false);
+            console.error("oh no", err);
+        };
+
+        const checkOwnership = () => {
+            return axios.get(`/app/users/checkownership/${props.match.params.id}`)
+            .then(response => response.data)
+            .then(user => user)
+            .then(() => setAuthorized(true))
+            .catch(handleError)
+        }
+
+        axios.get(`/app/users/${props.match.params.id}`)
+        .then(response => response.data)
+        .then(user => setUser(user))
+        .then(checkOwnership)
+        .catch(handleError)
+        .finally(() => setLoad(true));
     }, [props.match.params.id]);
 
     const DisplayUser = () => {
-        if (User) {
-            return (
-                <>
-                <Link to="/users">Back</Link>
-                <UserCard user={User} />
+        return (
+        <>
+            <Link to="/users">Back</Link>
+            <UserCard user={User} />
+            { authorized && (
+            <>
                 <DeleteSection
                     confirmationText={User.username}
                     id={User._id}
                 />
                 <EditSection id={props.match.params.id} />
-                </>
-            )
-        } else {
-            return (<span>Can't find the User lol</span>)
-        }
+            </>
+            )}
+        </>
+        )
     }
 
     return (
         <>
-            { loaded && DisplayUser()}
+            { loaded && (
+                <>
+                { error
+                    ? <span>{error}</span>
+                    : DisplayUser()
+                }
+                </>
+            )}
         </>
     );
 };
