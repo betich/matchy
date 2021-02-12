@@ -28,8 +28,13 @@ class Create extends React.Component {
             data.append('tags[]', this.state.tags[i]);
         }
 
-        const { valid, invalidData } = validate(data);
+        let { valid, invalidData } = validate(data);
         
+        if (this.state.tags.length === 0) {
+            valid = false;
+            invalidData["tags"] = ['at least one tag is required'];
+        }
+
         if (valid) {
             const options = {
                 headers: {'Content-Type': 'multipart/form-data' }

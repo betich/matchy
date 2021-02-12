@@ -105,6 +105,9 @@ const validate = (formData) => {
                 break;
 
             case "tags":
+                if ( value.length === 0 ) {
+                    addToInvalid("Tags", "need at least one tags");
+                }
                 break;
 
             case "birthday":

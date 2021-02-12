@@ -31,13 +31,17 @@ class Edit extends React.Component {
             data.append("tags[]", this.state.tags[i]);
         }
 
-        const { valid, invalidData } = validate(data);
+        let { valid, invalidData } = validate(data);
+
+        if (this.state.tags.length === 0) {
+            valid = false;
+            invalidData["tags"] = ['at least one tag is required'];
+        }
 
         if (valid) {
             const options = {
                 headers: { "Content-Type": "multipart/form-data" },
             };
-
             axios.put(`/app/projects/${this.props.match.params.id}`, data, options).then(
                 (response) => {
                     if (response.status === 200) {
@@ -65,20 +69,23 @@ class Edit extends React.Component {
         }
     }
 
+    componentDidUpdate(prevProps,prevState) {
+       if (prevState.tags !== this.state.tags)
+        console.log(this.state.tags); 
+    }
+
     componentDidMount() {
         axios
             .get(`/app/projects/${this.props.match.params.id}`)
             .then((res) => res.data)
             .then((project) => {
                 this.setState({ oldProject: project });
-            })
-            .then(() => {
-                this.setState({ loaded: true });
+                this.setState({ tags: project.tags });
             })
             .catch((err) => {
                 console.error(err);
-                this.setState({ loaded: true });
-            });
+            })
+            .finally(() => this.setState({ loaded: true }));
     }
 
     render() {
