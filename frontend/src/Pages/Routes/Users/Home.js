@@ -47,11 +47,6 @@ const Index = (props) => {
         { loaded && (
         <>
             <h1>Users</h1>
-            <Link to="/users/edit">
-                <Button variant="outline-danger" type="submit">
-                    Edit
-                </Button>
-            </Link>
             <div id="userLinks">
                 <h4>User Links</h4>
                 <div className="d-flex flex-wrap">
