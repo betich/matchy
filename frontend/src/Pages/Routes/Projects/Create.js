@@ -62,7 +62,7 @@ class Create extends React.Component {
         return (
             <>
                 <h1>Create a Project</h1>
-                <Form onSubmit={this.handleSubmit}>
+                <Form onSubmit={this.handleSubmit} noValidate>
                     <Form.Group>
                         <Form.Label>Project name</Form.Label>
                         <Form.Control
