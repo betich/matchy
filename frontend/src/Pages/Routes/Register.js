@@ -75,7 +75,13 @@ class Create extends React.Component {
                     this.props.history.push(`/users/${response.data._id}`);
                 }
             }, (err) => {
-                console.error(err);
+                switch (err.response.status) {
+                    case 409:
+                        this.setState({ errors: {username: ['username taken']}});
+                        break;
+                    default:
+                        console.log(err);
+                }
             });
         } else {
             this.setState({ errors: invalidData });
