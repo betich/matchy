@@ -1,10 +1,11 @@
 import React from 'react';
-import { Container } from 'react-bootstrap';
+import {  } from 'react-bootstrap';
 
 const Matching = () => {
     return (
-        <Container className="mt-3">
-        </Container>
+        <>
+            <h1>Match</h1>
+        </>
     )
 }
 

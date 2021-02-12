@@ -67,6 +67,11 @@ router
 .put('/:id', upload.none(), (req,res) => {
     try {
         let newUser = req.body;
+        const exp = newUser.experiences;
+        for (const e in exp) {
+            newUser.experiences[e] = JSON.parse(exp[e]);
+        }
+
         User.findByIdAndUpdate(req.params.id, filterFalsy(newUser), { useFindAndModify: false }, (err, foundUser) => {
             if (err) {
                 throw err;

@@ -12,12 +12,9 @@ const UserCard = (props) => {
             style={{ width: '18rem' }}
             className="mb-2"
             >
-            <Card.Header>{props.name}</Card.Header>
             <Card.Body>
-                <Card.Title>{props.fullname}</Card.Title>
-                <Card.Text>
-
-                </Card.Text>
+                <Card.Title>{props.user.username}</Card.Title>
+                <Card.Text>{props.user.email}</Card.Text>
             </Card.Body>
             <Link to={`/users/${props.url}`} className="d-flex justify-content-center mb-3">
                 <Button variant="outline-info" type="submit">
@@ -32,7 +29,7 @@ const UserCard = (props) => {
 const Index = (props) => {
     const [Users, setUsers] = useState([]);
     const [loaded, setLoad] = useState(false);
-    let UserCardList = Users.map((e) => <UserCard url={e._id} name={e.username} key={e._id} fullname={e.fullname}/>);
+    let UserCardList = Users.map((e) => <UserCard url={e._id} user={e} key={e._id}/>);
 
     useEffect(() => {
         axios
@@ -55,8 +52,8 @@ const Index = (props) => {
                     Edit
                 </Button>
             </Link>
-            <div id="projectLinks">
-                <h4>Project Links</h4>
+            <div id="userLinks">
+                <h4>User Links</h4>
                 <div className="d-flex flex-wrap">
                     {UserCardList}
                 </div>
