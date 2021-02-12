@@ -117,6 +117,7 @@ const View = (props) => {
                 <Card.Body>
                     <Card.Title>{Project.name}</Card.Title>
                     <Card.Text>{Project.description}</Card.Text>
+                    <Card.Text>tags:</Card.Text>
                     <Card.Text>
                     {Project.tags.map((elem, i) => (
                         <Button

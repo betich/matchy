@@ -17,6 +17,7 @@ const ProjectCard = (props) => {
                 <Card.Body>
                     <Card.Title>{project.name}</Card.Title>
                     <Card.Text>{project.description}</Card.Text>
+                    <Card.Text>tags:</Card.Text>
                     <Card.Text>
                     {project.tags.map((elem, i) => (
                         <Button
@@ -42,6 +43,7 @@ const ProjectCard = (props) => {
 const Index = (props) => {
     const [Projects, setProjects] = useState([]);
     const [loaded, setLoad] = useState(false);
+    const [error, setError] = useState(null);
     let ProjectLinks = Projects.map((e) => <ProjectCard url={e._id} project={e} key={e._id} />);
 
     useEffect(() => {
@@ -51,13 +53,24 @@ const Index = (props) => {
         .then((projects) => {
             setProjects(projects);
         })
-        .then(() => setLoad(true))
-        .catch((err) => console.error("oh no", err))
+        .catch((err) => {
+            if (err.response.data) {
+                setError(err.response.data);
+            } else {
+                setError("an unknown error occured");
+            }
+            
+            console.error("oh no", err)
+        })
+        .finally(() => setLoad(true))
     }, []);
 
     return (
     <>
-        { loaded && (
+    { loaded && (
+        <>
+        { error ? <span>{error}</span>
+        : (
         <>
             <h1>Projects</h1>
             <Link to="/projects/create">
@@ -72,8 +85,10 @@ const Index = (props) => {
                 </div>
             </div>
         </>
-        )
-        }
+        )}
+        </>
+    )
+    }
     </>
     );
 }

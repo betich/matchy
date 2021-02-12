@@ -7,10 +7,14 @@ const upload = multer();
 const filterFalsy = require('../helpers/filterFalsy');
 const auth = require('../middleware/index');
 
+const ObjectId = require('mongoose').Types.ObjectId;
+
 router
-.get('/', (req, res) => {
+.get('/', auth.checkLogin,(req, res) => {
     try {
-        Project.find({}).populate("owner").populate("workers").exec((err, allProjects) => {
+        Project.find({ $or: [{owner: new ObjectId(req.user._id)}, {workers: new ObjectId(req.user._id)}] })
+        .populate("owner").populate("workers")
+        .exec((err, allProjects) => {
             if (err) {
                 throw err;
             } else if (!allProjects) {
@@ -32,20 +36,19 @@ router
     newProject.name = req.body.projectname;
     delete newProject["projectname"]; // rename projectname=>name
     try {
-        User.findById(req.user._id, (err, user) => {
+        User.findById(req.user._id, (err, foundUser) => {
             if (err) throw err;
-            Project.create(filterFalsy(newProject), (err, project) => {
+            Project.create(filterFalsy(newProject), async (err, newProject) => {
                 if (err) throw err;
                 else {
-                    project.owner = req.user._id;
-                    project.save();
-                    user.projects.push({
-                        projectid: project._id,
+                    newProject.owner = req.user._id;
+                    foundUser.projects.push({
+                        projectid: newProject._id,
                         role: "owner"
                     });
-                    user.save();
+                    const [user, project] = await Promise.all([foundUser.save(), newProject.save()])
                     
-                    console.info(`${project.name} has been created`);
+                    console.info(`Project ${project.name} has been created`);
                     res.json(project);
                 }
             })

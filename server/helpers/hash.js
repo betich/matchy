@@ -11,7 +11,7 @@ module.exports = {
         
         return {
           salt: salt,
-          hash: genHash
+          hashed: genHash
         };
     }
 }
