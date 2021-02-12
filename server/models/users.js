@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const project = {
-    id: { type: mongoose.Schema.Types.ObjectId, ref: 'Project' },
+    projectid: { type: mongoose.Schema.Types.ObjectId, ref: 'Project' },
     role: String
 };
 

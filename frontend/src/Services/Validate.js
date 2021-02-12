@@ -93,7 +93,10 @@ const validate = (formData) => {
             case "projectname":
                 const projectRegex = /[^A-Za-z0-9\s]/;
                 const projectMatch = value.match(projectRegex);
-                if (projectMatch) {
+                if (!value) {
+                    addToInvalid("projectname", "project name must not be empty");
+                }
+                else if (projectMatch) {
                     addToInvalid("projectname", "project name contains special characters");
                 }
                 break;

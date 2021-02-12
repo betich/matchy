@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Card, Button, Form } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
-import Loading from "../../../Components/Loading";
 
 const EditSection = (props) => {
     return (
@@ -72,71 +71,78 @@ const View = (props) => {
     const [authorized, setAuthorized] = useState(false);
 
     useEffect(() => {
-        const authorityPromise = axios.get(
-            `/app/projects/checkauthority/${props.match.params.id}`
-        );
-        const projectPromise = axios.get(
-            `/app/projects/${props.match.params.id}`
-        );
+        const handleError = (err) => {
+            // 401, 403s are expected
+            if (err.response.data) {
+                if (err.response.status === 403) return;
+                setError(err.response.data);
+            } else {
+                setError("an unknown error occured");
+            }
+            setAuthorized(false);
+            console.error("oh no", err);
+        };
 
-        Promise.all([projectPromise, authorityPromise])
-            .then(([projectData, isAuthorized]) => {
-                return Promise.all([projectData.data,isAuthorized.data]);
-            })
-            .then(([project, isAuthorized]) => {
-                if (isAuthorized) {
-                    setAuthorized(true);
-                }
-                setProject(project);
-            })
-            .catch((err) => {
-                if (err.response) {
-                    switch (err.response.status) {
-                        case 500:
-                            setError("Internal server error occured");
-                            break;
-                        default:
-                            setError("An unknown error occured");
-                    }
-                }
-                console.error("oh no", err);
-            })
-            .finally(() => setLoad(true));
+        const checkOwnership = () => {
+            return axios.get(`/app/projects/checkownership/${props.match.params.id}`)
+            .then(response => response.data)
+            .then(user => user)
+            .then(() => setAuthorized(true))
+            .catch(handleError)
+        }
+
+        axios.get(`/app/projects/${props.match.params.id}`)
+        .then(response => response.data)
+        .then(project => setProject(project))
+        .then(checkOwnership)
+        .catch(handleError)
+        .finally(() => setLoad(true));
+
     }, [props.match.params.id]);
 
     return (
+    <>
+    { loaded && (
         <>
-        { !loaded ? (<Loading />) : 
-            (!Project)
-                ? (<span>{error}</span>) : (
-            <>
-                <Link to="/projects">Back</Link>
-                <Card
-                    bg="white"
-                    text="black"
-                    style={{ width: '18rem' }}
-                    className="mb-2"
-                    >
-                        <Card.Header>Project</Card.Header>
-                        <Card.Body>
-                            <Card.Title>{Project.name}</Card.Title>
-                            <Card.Text>{Project.description}</Card.Text>
-                        </Card.Body>
-                    </Card>
-                    {authorized ? (
-                        <>
-                            <DeleteSection
-                                id={props.match.params.id}
-                                confirmationText={Project.name}
-                            />
-                            <EditSection id={props.match.params.id} />
-                        </>
-                    ) : (
-                        <></>
-                    )}
+        { error ? <span>{error}</span>
+        : (
+        <>
+            <Link to="/projects">Back</Link>
+            <Card
+                bg="white"
+                text="black"
+                style={{ width: '18rem' }}
+                className="mb-2"
+                >
+                <Card.Body>
+                    <Card.Title>{Project.name}</Card.Title>
+                    <Card.Text>{Project.description}</Card.Text>
+                    <Card.Text>
+                    {Project.tags.map((elem, i) => (
+                        <Button
+                            key={i}
+                            variant="outline-danger"
+                        >
+                            {elem}
+                        </Button>
+                    ))}    
+                    </Card.Text>
+                </Card.Body>
+            </Card>
+            { authorized && (
+                <>
+                    <DeleteSection
+                        id={props.match.params.id}
+                        confirmationText={Project.name}
+                    />
+                    <EditSection id={props.match.params.id} />
                 </>
             )}
         </>
+        )}
+        </>
+    )}
+    </>
     );
 };
 

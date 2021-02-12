@@ -1,5 +1,6 @@
 const express = require('express');
 const Project = require('../models/projects');
+const User = require('../models/users');
 const router = express.Router();
 const multer = require('multer');
 const upload = multer();
@@ -26,39 +27,37 @@ router
     }
 })
 
-.post('/', upload.none(), (req, res) => {
+.post('/', auth.checkLogin, upload.none(), (req, res) => {
     let newProject = Object.assign({}, req.body);
     newProject.name = req.body.projectname;
-    newProject.owner = req.user.id;
     delete newProject["projectname"]; // rename projectname=>name
     try {
-        Project.create(filterFalsy(newProject), (err, project) => {
-            if (err) {
-                throw err;
-            } else {
-                console.info(`${project.name} has been created`);
-                res.json(project);
-            }
-        })
+        User.findById(req.user._id, (err, user) => {
+            if (err) throw err;
+            Project.create(filterFalsy(newProject), (err, project) => {
+                if (err) throw err;
+                else {
+                    project.owner = req.user._id;
+                    project.save();
+                    user.projects.push({
+                        projectid: project._id,
+                        role: "owner"
+                    });
+                    user.save();
+                    
+                    console.info(`${project.name} has been created`);
+                    res.json(project);
+                }
+            })
+        });
     } catch (err) {
         console.error(err);
         res.status(500).send(err);
     }
 })
 
-.get('/checkauthority/:id', (req,res) => {
-    if (req.isAuthenticated()) {
-        // Is the user authorized?
-        Project.findById(req.params.id, (err, foundProject) => {
-            if (foundProject.owner._id.equals(req.user._id)) {
-                res.status(200).send(true);
-            } else {
-                res.status(200).send(false);
-            }
-        });
-    } else {
-        res.status(200).send(false);
-    }
+.get('/checkownership/:id', auth.checkProjectOwnership, (req,res) => {
+    res.status(200).send(req.user);
 })
 
 .get('/:id', (req, res) => {
