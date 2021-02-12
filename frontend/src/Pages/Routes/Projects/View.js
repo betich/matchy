@@ -113,11 +113,20 @@ const View = (props) => {
                 text="black"
                 style={{ width: '18rem' }}
                 className="mb-2"
-            >
-                <Card.Header>Project</Card.Header>
+                >
                 <Card.Body>
                     <Card.Title>{Project.name}</Card.Title>
                     <Card.Text>{Project.description}</Card.Text>
+                    <Card.Text>
+                    {Project.tags.map((elem, i) => (
+                        <Button
+                            key={i}
+                            variant="outline-danger"
+                        >
+                            {elem}
+                        </Button>
+                    ))}    
+                    </Card.Text>
                 </Card.Body>
             </Card>
             { authorized && (
