@@ -6,7 +6,7 @@ import { Link, useHistory } from "react-router-dom";
 const EditSection = (props) => {
     return (
         <Link to={`/users/edit/${props.id}`}>
-            <Button>Edit</Button>
+            <Button variant="outline-info">Edit</Button>
         </Link>
     )
 } 
@@ -45,7 +45,7 @@ const DeleteSection = (props) => {
     };
     return (
         <div>
-            <Button onClick={handleClick} disabled={disable}>
+            <Button onClick={handleClick} disabled={disable} variant="outline-danger">
                 Delete
             </Button>
             {show ? (
