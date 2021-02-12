@@ -68,6 +68,61 @@ const DeleteSection = (props) => {
     );
 };
 
+const UserCard = (props) => {
+    const user = props.user;
+    const displayExpFields = () => {
+        var expFields = {
+            education: [],
+            work: []
+        };
+
+        const exp = user.experiences;
+        
+        for (const e in exp) {
+            if (exp.hasOwnProperty(e) && (e === "education" || e === "work")) {
+                expFields[e] = exp[e];
+            }
+        }
+
+        return (
+        <>
+            <Card.Text>education:</Card.Text>
+            {expFields["education"].map((e, i) => <Card.Text key={i}>{`${e.title}: ${e.value}`}</Card.Text>)}
+            <Card.Text>work:</Card.Text>    
+            {expFields["work"].map((e, i) => <Card.Text key={i}>{`${e.title}: ${e.value}`}</Card.Text>)}
+        </>
+        )
+    }
+
+    return (
+        <Card
+            bg="white"
+            text="black"
+            style={{ width: "18rem" }}
+            className="mb-2"
+        >
+            <Card.Body>
+                <Card.Title>{user.username}</Card.Title>
+                <Card.Text>full name: {user.fullname}</Card.Text>
+                <Card.Text>email: {user.email}</Card.Text>
+                <Card.Text>birthday: {`${user.birthday.day}/${user.birthday.month}/${user.birthday.year}`}</Card.Text>
+                <Card.Text>interests:</Card.Text>
+                <Card.Text>
+                    {user.interests.map((elem, i) => (
+                        <Button
+                            key={i}
+                            variant="outline-danger"
+                        >
+                            {elem}
+                        </Button>
+                    ))}
+                </Card.Text>
+                {displayExpFields()}
+            </Card.Body>
+        </Card>
+    );
+}
+
 const View = (props) => {
     const [User, setUser] = useState(null);
     const [loaded, setLoad] = useState(false);
@@ -91,30 +146,7 @@ const View = (props) => {
             return (
                 <>
                 <Link to="/users">Back</Link>
-                <Card
-                    bg="white"
-                    text="black"
-                    style={{ width: "18rem" }}
-                    className="mb-2"
-                >
-                    <Card.Header>User</Card.Header>
-                    <Card.Body>
-                        <Card.Title>{User.username}</Card.Title>
-                        <Card.Text>
-                            interests:{" "}
-                            {User.interests.map((elem, i) => (
-                                <Button
-                                    key={i}
-                                    variant="outline-danger"
-                                >
-                                    {elem}
-                                </Button>
-                            ))}
-                            experiences:{" "}
-                            {JSON.stringify(User.experiences)}
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
+                <UserCard user={User} />
                 <DeleteSection
                     confirmationText={User.username}
                     id={User._id}

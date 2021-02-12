@@ -179,10 +179,10 @@ class Edit extends React.Component {
                                         name="education"
                                         onChange={this.setInfo}
                                         options={EducationOptions}
-                                        defaultValue={JSON.parse(
+                                        defaultValue={
                                             this.state.oldUserData
-                                                .experiences[0].education
-                                        )}
+                                                .experiences.education
+                                        }
                                     />
                                 </Form.Group>
 
@@ -192,10 +192,10 @@ class Edit extends React.Component {
                                         type="input"
                                         name="work"
                                         onChange={this.setInfo}
-                                        defaultValue={JSON.parse(
+                                        defaultValue={
                                             this.state.oldUserData
-                                                .experiences[0].work
-                                        )}
+                                                .experiences.work
+                                        }
                                     />
                                 </Form.Group>
 

@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
         month: { type: Number, required: true },
         year: { type: Number, required: true }
     },
-    experiences: [{ type: Object }],
+    experiences: { type: Object },
     email: { type: String, required: true, unique: true },
     interests: [{ type: String }],
     projects: [ project ],

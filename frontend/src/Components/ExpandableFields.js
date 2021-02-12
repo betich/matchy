@@ -177,9 +177,9 @@ class InputFieldGroup extends React.Component {
     }
     
     render() {
-        let fieldElems = this.state.fields.map((field) => {
+        let fieldElems = this.state.fields.map((field, i) => {
             return <InputGroup
-                key={field.uID}
+                key={i}
                 uID={field.uID}
                 title={field.title}
                 value={field.value}

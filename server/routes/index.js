@@ -18,14 +18,18 @@ router
 })
 
 .post('/register', upload.none(), (req, res) => {
-    const saltHash = hash.hashPassword(req.body.password);
+    const { salt, hashed } = hash.hashPassword(req.body.password);
     
-    const salt = saltHash.salt;
-    const hashed = saltHash.hash;
     let newUser = Object.assign({}, req.body);
+    
     delete newUser["password"];
     newUser.salt = salt;
     newUser.hash = hashed;
+
+    const exp = newUser.experiences;
+    for (const e in exp) {
+        newUser.experiences[e] = JSON.parse(exp[e]);
+    }
 
     User.create(filterFalsy(newUser), (err, User) => {
         try {
