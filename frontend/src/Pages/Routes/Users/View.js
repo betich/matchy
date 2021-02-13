@@ -5,7 +5,7 @@ import { Link, useHistory } from "react-router-dom";
 
 const EditSection = (props) => {
     return (
-        <Link to={`/users/edit/${props.id}`}>
+        <Link to={`/users/${props.id}/edit`}>
             <Button variant="outline-info">Edit</Button>
         </Link>
     )

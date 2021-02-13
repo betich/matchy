@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Button, Col } from 'react-bootstrap';
+import { Form, Button, Col, InputGroup } from 'react-bootstrap';
 import { FaWindowClose } from "react-icons/fa";
 
 /* ==============================================================
@@ -42,7 +42,7 @@ const SelectField = (props) => {
     );
 }
 
-class InputGroup extends React.Component {
+class FormInputGroup extends React.Component {
     constructor(props) {
         super(props);
 
@@ -96,16 +96,12 @@ class InputGroup extends React.Component {
 
         return (
             <Form.Row>
-                <Col>
-                    <Form.Group>
-                    { (this.props.type === 'select')
-                        ? <SelectField onChange={this.titleChange} options={options} />
-                        : <InputField value={this.state.title} onChange={this.titleChange} />
-                    }
-                    </Form.Group>
-                </Col>
-                <Col>
-                    <Form.Group>
+                <Col xs={10}>
+                    <InputGroup>
+                        { (this.props.type === 'select')
+                            ? <SelectField onChange={this.titleChange} options={options} />
+                            : <InputField value={this.state.title} onChange={this.titleChange} />
+                        }
                         <Form.Control
                             required
                             ref={elem => this.expField = elem}
@@ -114,9 +110,9 @@ class InputGroup extends React.Component {
                             onChange={this.valueChange}
                             placeholder="Field"
                         />
-                    </Form.Group>
+                    </InputGroup>
                 </Col>
-                <Col>
+                <Col xs={2}>
                     <Button variant="danger" onClick={this.sendDelete}>
                         <FaWindowClose size={16} />
                     </Button>
@@ -178,7 +174,7 @@ class InputFieldGroup extends React.Component {
     
     render() {
         let fieldElems = this.state.fields.map((field, i) => {
-            return <InputGroup
+            return <FormInputGroup
                 key={i}
                 uID={field.uID}
                 title={field.title}
