@@ -19,10 +19,11 @@ router
 
 .post('/register', upload.none(), (req, res) => {
     const { salt, hashed } = hash.hashPassword(req.body.password);
-    User.find({username: new RegExp('\\b' + req.body.username + '\\b', 'i')}, (err, foundUser) => {
+    User.findOne({username: new RegExp('\\b' + req.body.username + '\\b', 'i')}, (err, foundUser) => {
         if (err) {
             res.status(500).send('Internal error occured');
         } else if (foundUser) {
+            console.log(foundUser);
             res.status(409).send('Username is already taken');
         } else {
             let newUser = Object.assign({}, req.body);

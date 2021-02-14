@@ -29,7 +29,7 @@ const UserCard = (props) => {
 const Index = (props) => {
     const [Users, setUsers] = useState([]);
     const [loaded, setLoad] = useState(false);
-    let UserCardList = Users.map((e) => <UserCard url={e._id} user={e} key={e._id}/>);
+    let UserCardList = Users.map((e) => <UserCard url={e.username} user={e} key={e._id}/>);
 
     useEffect(() => {
         axios

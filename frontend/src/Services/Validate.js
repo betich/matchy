@@ -44,9 +44,10 @@ const validate = (formData) => {
     for (const [key, value] of Object.entries(formObj)) {
         switch (key) {
             case "username":
-                const usernameRegex = /^[a-zA-Z0-9]/g;
+                const usernameRegex = /[^a-zA-Z0-9]/g;
                 const usernameMatch = value.match(usernameRegex);
-                if (!usernameMatch) {
+                console.log({Regex: usernameMatch, value: value});
+                if (usernameMatch) {
                     addToInvalid("username", "username contains special characters");
                 }
                 if (value.length < 2 || value.length > 30) {
@@ -117,7 +118,7 @@ const validate = (formData) => {
                 //check birthday
                 const {day, month, year} = value;
                 const dayCount = [
-                    31,28,31,30,31,30,30,31,31,30,31,30,31,
+                    31,28,31,30,31,30,31,31,30,31,30,31,
                 ];
 
                 if (!day || !month || !year) {
