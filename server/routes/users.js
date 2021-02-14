@@ -6,7 +6,7 @@ const multer = require('multer');
 const upload = multer();
 const filterFalsy = require('../helpers/filterFalsy');
 const auth = require('../middleware/index');
-
+const { usernameRegex } = require('../helpers/usernameRegex');
 router
 .get('/', (req, res) => {
     try {
@@ -25,13 +25,14 @@ router
     }
 })
 
-.get('/checkownership/:id', auth.checkUser, (req,res) => {
+.get('/checkownership/:username', auth.checkUserByUsername, (req,res) => {
     res.status(200).send(req.user);
 })
 
-.get('/:id', (req, res) => {
+.get('/:username', (req, res) => {
     try {
-        User.findById(req.params.id).populate("projects").populate("archive").exec((err, foundUser) => {
+        User.findOne({username : usernameRegex(req.params.username)}, (err, foundUser) => {
+            console.log(foundUser);
             if (err) {
                 res.status(404).send(err);
                 console.error(err);
@@ -48,7 +49,7 @@ router
 
 .delete('/:id', auth.checkUser, (req,res) => {
     try {
-        User.findById(req.params.id, async (err, foundUser) => {
+        User.findOne({ username: usernameRegex(req.params.username) }, { useFindAndModify: false }, async (err, foundUser) => {
             if (err) throw err;
             else if (!foundUser) {
                 res.status(404).send('no user found');
@@ -69,7 +70,7 @@ router
     }
 })
 
-.put('/:id', upload.none(), (req,res) => {
+.put('/:username', [auth.checkUserByUsername, upload.none()] , (req,res) => {
     try {
         let newUser = req.body;
         const exp = newUser.experiences;
@@ -77,7 +78,7 @@ router
             newUser.experiences[e] = JSON.parse(exp[e]);
         }
 
-        User.findByIdAndUpdate(req.params.id, filterFalsy(newUser), { useFindAndModify: false }, (err, foundUser) => {
+        User.findOneAndUpdate({ username: usernameRegex(req.params.username)}, filterFalsy(newUser), { useFindAndModify: false }, (err, foundUser) => {
             if (err) throw err;
             else if (!foundUser) {
                 res.status(404).send('no project found');

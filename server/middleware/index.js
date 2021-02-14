@@ -1,6 +1,7 @@
 const Project = require('../models/projects');
 const User = require('../models/users');
-
+const { usernameRegex } = require('../helpers/usernameRegex');
+    
 const middleware = {
     checkLogin: (req, res, next) => {
         if (req.isAuthenticated()) {
@@ -13,6 +14,27 @@ const middleware = {
         if (req.isAuthenticated()) {
             // Is the user the same?
             User.findById(req.params.id, (err, foundUser) => {
+                if (err || !foundUser) {
+                    res.status(404).send("Sorry, We Can't find the User!");
+                }
+                else if (foundUser._id.equals(req.user._id)) {
+                    next();
+                }
+                else if (!foundUser._id.equals(req.user._id)) {
+                    res.status(403).send("You don't have permission to do that");
+                }
+                else {
+                    res.status(500).send("An an unknown error occured");
+                }
+            });
+        } else {
+            res.status(401).send("You need to be logged in first");
+        }
+    },
+    checkUserByUsername: (req,res,next) => {
+        if (req.isAuthenticated()) {
+            // Is the user the same?
+            User.findOne({username : usernameRegex(req.params.username)}, (err, foundUser) => {
                 if (err || !foundUser) {
                     res.status(404).send("Sorry, We Can't find the User!");
                 }

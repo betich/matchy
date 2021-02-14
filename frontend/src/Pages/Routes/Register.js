@@ -73,7 +73,7 @@ class Create extends React.Component {
             axios.post('/app/register', data, options)
             .then((response) => {
                 if (response.status === 200) {
-                    this.props.history.push(`/users/${response.data._id}`);
+                    this.props.history.push(`/users/${response.data.username}`);
                 }
             }, (err) => {
                 switch (err.response.status) {
