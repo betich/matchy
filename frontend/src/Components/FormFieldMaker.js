@@ -43,7 +43,7 @@ const SelectField = (props) => {
     );
 }
 
-class InputGroup extends React.Component {
+class FormInputGroup extends React.Component {
     constructor(props) {
         super(props);
 
@@ -126,3 +126,80 @@ class InputGroup extends React.Component {
         );
     }
 }
+
+class InputFieldGroup extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            fields: this.props.defaultValue || [],
+            IDCount: 0
+        }
+        this.handleAdd = this.handleAdd.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
+        this.handleFieldChange = this.handleFieldChange.bind(this);
+    }
+
+    handleAdd(e) {
+        let newUID = this.state.IDCount + 1;
+        let placeholder = this.props.options ? this.props.options[0] : 'Planty';
+        let newFields = [...this.state.fields].concat({
+            title: placeholder, value: '', uID: newUID
+        });
+        
+        this.setState({ fields: newFields, IDCount: newUID }, () => {
+            this.props.onChange(this.props.name, this.state.fields);
+        });
+    }
+    
+    handleDelete(field) {
+        let newFields = [...this.state.fields];
+        for (let i = 0; i < newFields.length; i++) {
+            if (field["uID"] === this.state.fields[i]["uID"]) {
+                newFields = newFields.slice(0, i).concat(newFields.slice(i+1, newFields.length));
+            }
+        }
+
+        this.setState({ fields: newFields }, () => {
+            this.props.onChange(this.props.name, this.state.fields);
+        });
+    }
+
+    handleFieldChange(field) {
+        let newFields = [...this.state.fields];
+        
+        for (let e in newFields) {
+            if (field["uID"] === this.state.fields[e]["uID"]) {
+                newFields[e] = field;
+            }
+        }
+
+        this.setState({ fields: newFields }, () => {
+            this.props.onChange(this.props.name, this.state.fields);
+        });
+    }
+    
+    render() {
+        let fieldElems = this.state.fields.map((field, i) => {
+            return <FormInputGroup
+                key={i}
+                uID={field.uID}
+                title={field.title}
+                value={field.value}
+                handleFieldChange={this.handleFieldChange}    
+                handleDelete={this.handleDelete}
+                options={this.props.options}
+                type={this.props.type}
+                addField={this.handleAdd}
+            />;
+        });
+        return (
+            <>
+                <Button variant="danger" onClick={this.handleAdd}>Add</Button>
+                {fieldElems}
+            </>
+        );
+    }
+}
+
+export default InputFieldGroup;

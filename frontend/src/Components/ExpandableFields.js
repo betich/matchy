@@ -128,7 +128,7 @@ class InputFieldGroup extends React.Component {
 
         this.state = {
             fields: this.props.defaultValue || [],
-            IDCount: 1
+            IDCount: 0
         }
         this.handleAdd = this.handleAdd.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
@@ -138,7 +138,9 @@ class InputFieldGroup extends React.Component {
     handleAdd(e) {
         let newUID = this.state.IDCount + 1;
         let placeholder = this.props.options ? this.props.options[0] : 'Planty';
-        let newFields = [...this.state.fields].concat({title: placeholder, value: '', uID: newUID});
+        let newFields = [...this.state.fields].concat({
+            title: placeholder, value: '', uID: newUID
+        });
         
         this.setState({ fields: newFields, IDCount: newUID }, () => {
             this.props.onChange(this.props.name, this.state.fields);
@@ -161,9 +163,9 @@ class InputFieldGroup extends React.Component {
     handleFieldChange(field) {
         let newFields = [...this.state.fields];
         
-        for (let i in newFields) {
-            if (field["uID"] === this.state.fields[i]["uID"]) {
-                newFields[i] = field;
+        for (let e in newFields) {
+            if (field["uID"] === this.state.fields[e]["uID"]) {
+                newFields[e] = field;
             }
         }
 

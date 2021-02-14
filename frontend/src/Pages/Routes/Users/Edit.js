@@ -15,9 +15,9 @@ class Edit extends React.Component {
 
         this.state = {
             birthday: {
-                day: "2",
-                month: "1",
-                year: "2001",
+                day: "",
+                month: "",
+                year: "",
             },
             experiences: { education: [], work: [] },
             interests: [],
@@ -43,15 +43,13 @@ class Edit extends React.Component {
                         month: user.birthday.month,
                         year: user.birthday.year,
                     },
+                    experiences: user.experiences
                 });
-            })
-            .then(() => {
-                this.setState({ loaded: true });
             })
             .catch((err) => {
                 console.error(err);
-                this.setState({ loaded: true });
-            });
+            })
+            .finally(() => this.setState({ loaded: true }));
     }
 
     tagChange(group, tags) {
@@ -81,6 +79,7 @@ class Edit extends React.Component {
         Object.keys(this.state.birthday).forEach((key) =>
             data.append(`birthday[${key}]`, this.state.birthday[key])
         );
+        
         Object.keys(this.state.experiences).forEach((key) =>
             data.append(
                 `experiences[${key}]`,
