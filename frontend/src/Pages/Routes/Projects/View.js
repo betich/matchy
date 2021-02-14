@@ -132,11 +132,11 @@ const View = (props) => {
             </Card>
             { authorized && (
                 <>
+                    <EditSection id={props.match.params.id} />
                     <DeleteSection
                         id={props.match.params.id}
                         confirmationText={Project.name}
                     />
-                    <EditSection id={props.match.params.id} />
                 </>
             )}
         </>

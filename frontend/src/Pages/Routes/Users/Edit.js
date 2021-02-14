@@ -33,7 +33,7 @@ class Edit extends React.Component {
 
     componentDidMount() {
         axios
-            .get(`/app/users/${this.props.match.params.id}`)
+            .get(`/app/users/${this.props.match.params.username}`)
             .then((res) => res.data)
             .then((user) => {
                 this.setState({ oldUserData: user });
@@ -95,12 +95,12 @@ class Edit extends React.Component {
             };
 
             axios
-                .put(`/app/users/${this.props.match.params.id}`, data, options)
+                .put(`/app/users/${this.props.match.params.username}`, data, options)
                 .then(
                     (response) => {
                         if (response.status === 200) {
                             this.props.history.push(
-                                `/users/${this.props.match.params.id}`
+                                `/users/${this.props.match.params.username}`
                             );
                         }
                     },

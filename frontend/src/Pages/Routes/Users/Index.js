@@ -8,8 +8,8 @@ const Users = () => {
     return (
         <Switch>
             <Route exact path="/users" component={Index} />
-            <Route path="/users/:id/edit" component={Edit} />
-            <Route path="/users/:id" component={View} />
+            <Route path="/users/:username/edit" component={Edit} />
+            <Route path="/users/:username" component={View} />
         </Switch>
     );
 }

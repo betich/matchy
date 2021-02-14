@@ -5,7 +5,7 @@ import { Link, useHistory } from "react-router-dom";
 
 const EditSection = (props) => {
     return (
-        <Link to={`/users/${props.id}/edit`}>
+        <Link to={`/users/${props.username}/edit`}>
             <Button variant="outline-info">Edit</Button>
         </Link>
     )
@@ -23,7 +23,7 @@ const DeleteSection = (props) => {
             setDisable(true);
         } else {
             try {
-                axios.delete(`/app/users/${props.id}`).then((response) => {
+                axios.delete(`/app/users/${props.username}`).then((response) => {
                     if (response.status === 200) {
                         history.push("/users");
                     }
@@ -35,7 +35,7 @@ const DeleteSection = (props) => {
     };
 
     const handleChange = (e) => {
-        if (e.target.value === props.confirmationText) {
+        if (e.target.value === props.username) {
             setDisable(false);
             setConfirmed(true);
         } else {
@@ -143,20 +143,20 @@ const View = (props) => {
         };
 
         const checkOwnership = () => {
-            return axios.get(`/app/users/checkownership/${props.match.params.id}`)
+            return axios.get(`/app/users/checkownership/${props.match.params.username}`)
             .then(response => response.data)
             .then(user => user)
             .then(() => setAuthorized(true))
             .catch(handleError)
         }
 
-        axios.get(`/app/users/${props.match.params.id}`)
+        axios.get(`/app/users/${props.match.params.username}`)
         .then(response => response.data)
         .then(user => setUser(user))
         .then(checkOwnership)
         .catch(handleError)
         .finally(() => setLoad(true));
-    }, [props.match.params.id]);
+    }, [props.match.params.username]);
 
     const DisplayUser = () => {
         return (
@@ -165,11 +165,10 @@ const View = (props) => {
             <UserCard user={User} />
             { authorized && (
             <>
+                <EditSection username={props.match.params.username} />
                 <DeleteSection
-                    confirmationText={User.username}
-                    id={User._id}
+                    username={User.username}
                 />
-                <EditSection id={props.match.params.id} />
             </>
             )}
         </>

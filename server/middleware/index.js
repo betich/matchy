@@ -13,7 +13,7 @@ const middleware = {
     checkUser: (req,res,next) => {
         if (req.isAuthenticated()) {
             // Is the user the same?
-            User.findById(req.params.id, (err, foundUser) => {
+            User.findOne({ username: req.params.username }, (err, foundUser) => {
                 if (err || !foundUser) {
                     res.status(404).send("Sorry, We Can't find the User!");
                 }

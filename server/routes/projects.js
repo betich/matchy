@@ -85,17 +85,19 @@ router
 
 .delete('/:id', auth.checkProjectOwnership, (req,res) => {
     try {
-        Project.findById(req.params.id, (err,foundProject) => {
+        Project.findById(req.params.id,
+        { useFindAndModify: false },
+        async (err,foundProject) => {
             if (err) throw err;
             else if (!foundProject) {
                 res.status(404).send('no project found');
             }
             else {
-                foundProject.remove((err, deletedProject) => {
+                await foundProject.remove((err, deletedProject) => {
                     if (err) throw err;
                     else {
-                        console.log('deleted่ project' + deletedProject.name);
                         res.status(200).send('deleted' + deletedProject.name);
+                        console.log('deleted่ project' + deletedProject.name);
                     }
                 })
             }

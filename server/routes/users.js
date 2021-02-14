@@ -32,7 +32,6 @@ router
 .get('/:username', (req, res) => {
     try {
         User.findOne({username : usernameRegex(req.params.username)}, (err, foundUser) => {
-            console.log(foundUser);
             if (err) {
                 res.status(404).send(err);
                 console.error(err);
@@ -47,19 +46,21 @@ router
     }
 })
 
-.delete('/:id', auth.checkUser, (req,res) => {
+.delete('/:username', auth.checkUser, (req,res) => {
     try {
-        User.findOne({ username: usernameRegex(req.params.username) }, { useFindAndModify: false }, async (err, foundUser) => {
+        User.findOne({ username: usernameRegex(req.params.username) },
+        { useFindAndModify: false},
+        async (err, foundUser) => {
             if (err) throw err;
             else if (!foundUser) {
                 res.status(404).send('no user found');
             }
             else {
-                foundUser.remove((err, deletedUser) => {
+                await foundUser.remove((err, deletedUser) => {
                     if (err) throw err;
                     else {
-                        console.log('deleted '+ deletedUser.username);
                         res.status(200).send('deleted ' + deletedUser.username);
+                        console.log('deleted '+ deletedUser.username);
                     }
                 });
             }
