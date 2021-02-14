@@ -18,7 +18,8 @@ const app = express();
 const Routes = {
 	users: require('./server/routes/users'),
     index: require('./server/routes/index'),
-    projects: require('./server/routes/projects')
+    projects: require('./server/routes/projects'),
+    match: require('./server/routes/match')
 };
 
 mongoose.connect(process.env.DATABASEURL || "mongodb://localhost:27017/planty",
@@ -89,7 +90,8 @@ passport.deserializeUser((id, cb) => {
 app
 .use('/app', Routes.index)
 .use('/app/users', Routes.users)
-.use('/app/projects', Routes.projects);
+.use('/app/projects', Routes.projects)
+.use('/app/match', Routes.match);
 
 app.disable('x-powered-by');
 
