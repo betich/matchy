@@ -44,6 +44,7 @@ router
                     newProject.owner = req.user._id;
                     foundUser.projects.push({
                         projectid: newProject._id,
+                        name: newProject.name,
                         role: "owner"
                     });
                     const [user, project] = await Promise.all([foundUser.save(), newProject.save()])
@@ -82,22 +83,22 @@ router
     }
 })
 
-// TODO: Check deletetion authority
 .delete('/:id', auth.checkProjectOwnership, (req,res) => {
     try {
-        console.log('deleted่' + req.params.id);
-        Project.findByIdAndDelete(req.params.id, { useFindAndModify: false }, (err,foundProject) => {
-            if (err) {
-                throw err;
-            }
+        Project.findById(req.params.id, (err,foundProject) => {
+            if (err) throw err;
             else if (!foundProject) {
-                res.status(404);
-                res.send('no project found');
-            } 
+                res.status(404).send('no project found');
+            }
             else {
-                res.status(200);
-                res.send({});
-            } 
+                foundProject.remove((err, deletedProject) => {
+                    if (err) throw err;
+                    else {
+                        console.log('deleted่ project' + deletedProject.name);
+                        res.status(200).send('deleted' + deletedProject.name);
+                    }
+                })
+            }
         })
     } catch (err) {
         console.error(err);
@@ -111,9 +112,7 @@ router
     delete newProject["projectname"];
     try {
         Project.findByIdAndUpdate(req.params.id, newProject, { useFindAndModify: false }, (err, foundProject) => {
-            if (err) {
-                throw err;
-            }
+            if (err) throw err;
             if (!foundProject) {
                 res.status(404).send('no project found');
             } else {

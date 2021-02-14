@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 
-const project = {
+const project = mongoose.Schema({
     projectid: { type: mongoose.Schema.Types.ObjectId, ref: 'Project' },
+    name: String,
     role: String
-};
+}, { _id : false });
 
 const options = {
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at'}
@@ -25,5 +26,14 @@ const userSchema = new mongoose.Schema({
     projects: [ project ],
     archive: [ project ]
 }, options);
+
+const Project = require('./projects');
+userSchema.pre('remove', async function() {
+    await Project.deleteMany({
+        owner: {
+            $in: this._id
+        }
+    });
+});
 
 module.exports = mongoose.model("User", userSchema);

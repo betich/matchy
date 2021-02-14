@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/users');
+const Project = require('../models/projects');
 const multer = require('multer');
 const upload = multer();
 const filterFalsy = require('../helpers/filterFalsy');
@@ -45,26 +46,26 @@ router
     }
 })
 
-// TODO: Check deletetion authority
-.delete('/:id', (req,res) => {
+.delete('/:id', auth.checkUser, (req,res) => {
     try {
-        console.log('user delete request come id: ่่' + req.params.id);
-        User.findByIdAndDelete(req.params.id, { useFindAndModify: false }, (err,foundUser) => {
-            if (err) {
-                res.status(500).send(err);
-                console.error(err);
-            }
+        User.findById(req.params.id, async (err, foundUser) => {
+            if (err) throw err;
             else if (!foundUser) {
-                res.status(404).send('no project found');
-            } 
+                res.status(404).send('no user found');
+            }
             else {
-                res.status(200).send({});
-            } 
+                foundUser.remove((err, deletedUser) => {
+                    if (err) throw err;
+                    else {
+                        console.log('deleted '+ deletedUser.username);
+                        res.status(200).send('deleted ' + deletedUser.username);
+                    }
+                });
+            }
         })
     } catch (err) {
-        console.log(err);
-        console.log('an error occured');
-        res.status(404).send(err);
+        console.error(err);
+        res.status(500).send(err);
     }
 })
 
@@ -77,9 +78,8 @@ router
         }
 
         User.findByIdAndUpdate(req.params.id, filterFalsy(newUser), { useFindAndModify: false }, (err, foundUser) => {
-            if (err) {
-                throw err;
-            } else if (!foundUser) {
+            if (err) throw err;
+            else if (!foundUser) {
                 res.status(404).send('no project found');
             } else {
                 res.status(200).send('update sucessfully');

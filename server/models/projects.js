@@ -17,4 +17,24 @@ const projectSchema = new mongoose.Schema({
     questions: [{ type: String }]
 }, options);
 
+/*
+const User = require('./users');
+projectSchema.pre('remove', async function() {
+    await User.findByIdAndUpdate({
+        _id: {
+            $in: [this.owner, ...this.workers]
+        }
+    }, {
+        
+    }, { useFindAndModify: false }, (err, foundUser) => {
+        if (err) throw err;
+        else if (!foundUser) {
+            res.status(404).send('no project found');
+        } else {
+            res.status(200).send('update sucessfully');
+        }
+    })
+});
+*/
+
 module.exports = mongoose.model("Project", projectSchema);
