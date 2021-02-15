@@ -15,7 +15,7 @@ router
                 res.status(404).send(err);
                 console.error(err);
             } else if (!foundUsers) {
-                res.status(404).send('unable to find users');
+                res.status(404).send('unable to find any users');
             } else {
                 res.status(200).json(foundUsers);
             }

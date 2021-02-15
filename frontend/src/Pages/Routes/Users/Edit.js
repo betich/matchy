@@ -125,7 +125,7 @@ class Edit extends React.Component {
                     <Loading />
                 ) : Object.keys(this.state.oldUserData).length === 0 &&
                   this.state.oldUserData.constructor === Object ? (
-                    <span>Can't find the User lol</span>
+                    <span>can't find the user</span>
                 ) : (
                     <>
                         <Container className="mt-3">

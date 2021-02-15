@@ -96,7 +96,7 @@ class Edit extends React.Component {
                     <Loading />
                 ) : Object.keys(this.state.oldProject).length === 0 &&
                   this.state.oldProject.constructor === Object ? (
-                    <span>Can't find the User lol</span>
+                    <span>can't find the project</span>
                 ) : (
                     <>
                         <Link to={`/projects/${this.state.oldProject._id}`}>back</Link>
