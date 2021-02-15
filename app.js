@@ -15,12 +15,6 @@ require('dotenv/config');
 
 const app = express();
 
-const Routes = {
-	users: require('./server/routes/users'),
-    index: require('./server/routes/index'),
-    projects: require('./server/routes/projects')
-};
-
 mongoose.connect(process.env.DATABASEURL || "mongodb://localhost:27017/planty",
 { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true /* autoIndex: false */}
 ).then(() => {
@@ -85,6 +79,12 @@ passport.deserializeUser((id, cb) => {
         else cb(null, user);
     });
 });
+
+const Routes = {
+	users: require('./server/routes/users'),
+    index: require('./server/routes/index'),
+    projects: require('./server/routes/projects')
+};
 
 app
 .use('/app', Routes.index)

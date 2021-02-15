@@ -1,6 +1,6 @@
 const express = require('express');
-const Project = require('../models/projects');
 const User = require('../models/users');
+const Project = require('../models/projects');
 const router = express.Router();
 const multer = require('multer');
 const upload = multer();
@@ -15,14 +15,11 @@ router
         Project.find({ $or: [{owner: new ObjectId(req.user._id)}, {workers: new ObjectId(req.user._id)}] })
         .populate("owner").populate("workers")
         .exec((err, allProjects) => {
-            if (err) {
-                throw err;
-            } else if (!allProjects) {
-                res.status(404);
-                res.send('unable to find projects');
+            if (err) throw err;
+            else if (!allProjects) {
+                res.status(404).send('unable to find projects');
             } else {
-                res.status(200);
-                res.json(allProjects);
+                res.status(200).json(allProjects);
             }
         })
     } catch (err) {
@@ -96,8 +93,8 @@ router
                 await foundProject.remove((err, deletedProject) => {
                     if (err) throw err;
                     else {
-                        res.status(200).send('deleted' + deletedProject.name);
-                        console.log('deleted่ project' + deletedProject.name);
+                        res.status(200).send('deleted ' + deletedProject.name);
+                        console.log('deleted่ project ' + deletedProject.name);
                     }
                 })
             }
