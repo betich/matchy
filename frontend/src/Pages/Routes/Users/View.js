@@ -158,33 +158,37 @@ const View = (props) => {
         .finally(() => setLoad(true));
     }, [props.match.params.username]);
 
-    const DisplayUser = () => {
-        return (
-        <>
-            <Link to="/users">Back</Link>
-            <UserCard user={User} />
-            { authorized && (
+    
+    const renderComponents = () => {
+        const DisplayUser = () => {
+            return (
             <>
-                <EditSection username={props.match.params.username} />
-                <DeleteSection
-                    username={User.username}
-                />
+                <Link to="/users">Back</Link>
+                <h1>View {User.username}</h1>
+                <UserCard user={User} />
+                { authorized && (
+                <>
+                    <EditSection username={props.match.params.username} />
+                    <DeleteSection
+                        username={User.username}
+                    />
+                </>
+                )}
             </>
-            )}
-        </>
-        )
+            )
+        }
+        
+        if (loaded) {
+            if (error) return (<span>{error}</span>)
+            else return (<> { DisplayUser() } </>);
+        } else {
+            return (<span>loading...</span>)
+        }
     }
 
     return (
         <>
-            { loaded && (
-                <>
-                { error
-                    ? <span>{error}</span>
-                    : DisplayUser()
-                }
-                </>
-            )}
+            { renderComponents() }
         </>
     );
 };

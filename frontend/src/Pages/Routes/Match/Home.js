@@ -62,7 +62,7 @@ class Match extends React.Component {
             if (this.state.loaded) {
                 if (this.state.error) return (<span>{this.state.error}</span>);
                 else if (!this.state.Project) return (<span>There are no projects left to display</span>)
-                else return ( <> { MatchApp() } </> );
+                else return (<> { MatchApp() } </>);
             } else {
                 return (<span>loading...</span>)
             }
