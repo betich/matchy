@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Card, Button, Container } from "react-bootstrap";
 
-const Matching = () => {
+const Match = () => {
     const [loaded, setLoaded] = useState(false);
     const [Project, setProject] = useState(null);
     const [error, setError] = useState(null);
@@ -80,7 +80,7 @@ const Matching = () => {
                         </Card.Body>
                     </Card>
                 </Container>
-                <Button variant="primary" onClick={handleClick} disabled={!clickable}>
+                <Button variant="outline-info" onClick={handleClick} disabled={!clickable}>
                     Next
                 </Button>
             </>
@@ -91,4 +91,4 @@ const Matching = () => {
     );
 };
 
-export default Matching;
+export default Match;
