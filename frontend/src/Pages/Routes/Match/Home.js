@@ -5,9 +5,10 @@ import { Card, Button } from "react-bootstrap";
 const ProjectCard = (props) => {
     const Project = props.project;
     const Owner = props.owner;
+    const Workers = props.workers;
 
     const renderCard = () => {
-        if (Project && Owner) {
+        if (Project && Owner && Workers) {
             return (
                 <Card
                     bg="white"
@@ -19,6 +20,7 @@ const ProjectCard = (props) => {
                         <Card.Title>{Project.name}</Card.Title>
                         <Card.Text>by {Owner.username}</Card.Text>
                         <Card.Text>{Project.description}</Card.Text>
+                        <Card.Text>employees: { Workers.map((e) => e.username).join(', ') }</Card.Text>
                         <Card.Text>tags:</Card.Text>
                         <Card.Text>
                         {Project.tags.map((elem, i) => (
@@ -28,7 +30,7 @@ const ProjectCard = (props) => {
                             >
                                 {elem}
                             </Button>
-                        ))}    
+                        ))}
                         </Card.Text>
                     </Card.Body>
                 </Card>
@@ -54,7 +56,8 @@ class Match extends React.Component {
             error: null,
             clickable: false,
             Project: null,
-            Owner: null
+            Owner: null,
+            Workers: null
         }
 
         this.handleClick = this.handleClick.bind(this);
@@ -77,13 +80,22 @@ class Match extends React.Component {
             .catch((err) => handleError(err))
 
         if (this.state.Project) {
-            await axios.get(`/app/users/id/${this.state.Project.owner}`)
-                .then((raw) => raw.data)
-                .then((user) => this.setState({ Owner: user }))
-                .catch((err) => handleError(err))
+            await axios.all([
+                    axios.get(`/app/users/id/${this.state.Project.owner}`),
+                    ...this.state.Project.workers.map((worker) => axios.get(`/app/users/id/${worker}`))
+                ])
+                .then(axios.spread((ownerRaw, ...workerRaw) => {
+                    this.setState({
+                        Owner: ownerRaw.data,
+                        Workers: workerRaw.map((e) => e.data)
+                    })
+                }))
+                .catch((errs) => handleError(errs))
                 .finally(() => {
                     this.setState({ clickable: true, loaded: true});
                 });
+        } else {
+            this.setState({ clickable: true, loaded: true })
         }
     }
 
@@ -98,21 +110,33 @@ class Match extends React.Component {
     }
 
     render() {
+        const renderComponents = () => {
+            const MatchApp = () => {
+                return (
+                    <>
+                        <ProjectCard project={this.state.Project} owner={this.state.Owner} workers={this.state.Workers} />
+                        <Button variant="outline-info" onClick={this.handleClick} disabled={!this.state.clickable}>
+                            Next
+                        </Button>
+                    </>
+                )
+            }
+
+            if (this.state.loaded) {
+                if (this.state.error) return (<span>{this.state.error}</span>);
+                else if (!this.state.Project) return (<span>There are no projects left to display</span>)
+                else {
+                    return ( <> { MatchApp() } </> );
+                }
+            } else {
+                return (<span>loading...</span>)
+            }
+        }
+
         return (
             <>
-            { this.state.loaded && (
-                <>
-                { this.state.error ? <span>{this.state.error}</span>
-                : (
-                <>
-                    <ProjectCard project={this.state.Project} owner={this.state.Owner} />
-                    <Button variant="outline-info" onClick={this.handleClick} disabled={!this.state.clickable}>
-                        Next
-                    </Button>
-                </>
-                )}
-                </>
-            )}
+                <h1>Match</h1>
+                { renderComponents() }
             </>
         );
     }

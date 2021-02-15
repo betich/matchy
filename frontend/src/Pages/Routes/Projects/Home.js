@@ -79,7 +79,7 @@ const Index = (props) => {
                 </Button>
             </Link>
             <div id="projectLinks">
-                <h4>Project Links</h4>
+                <h4>My Projects</h4>
                 <div className="d-flex flex-wrap">
                     {ProjectLinks}
                 </div>
