@@ -29,6 +29,23 @@ router
     res.status(200).send(req.user);
 })
 
+.get('/id/:id', (req, res) => {
+    try {
+        User.findById(req.params.id, (err, foundUser) => {
+            if (err) {
+                res.status(404).send(err);
+                console.error(err);
+            } else if (!foundUser) {
+                res.status(404).send('unable to find a user with that id');
+            } else {
+                res.status(200).json(foundUser);
+            }
+        });
+    } catch (err) {
+        res.status(404).send(err);
+    }
+})
+
 .get('/:username', (req, res) => {
     try {
         User.findOne({username : usernameRegex(req.params.username)}, (err, foundUser) => {
@@ -36,7 +53,7 @@ router
                 res.status(404).send(err);
                 console.error(err);
             } else if (!foundUser) {
-                res.status(404).send('unable to find a user with that id');
+                res.status(404).send('unable to find a user with that username');
             } else {
                 res.status(200).json(foundUser);
             }
