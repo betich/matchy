@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Button, Card, Form } from "react-bootstrap";
-import { Link, useHistory } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Button, Card, Form } from 'react-bootstrap';
+import { Link, useHistory } from 'react-router-dom';
 
 const ProjectView = (props) => {
     const Project = props.project;
@@ -147,29 +147,38 @@ const View = (props) => {
 
     }, [props.match.params.id]);
 
-    return (
-    <>
-    { loaded && (
-        <>
-        { error ? <span>{error}</span>
-        : (
-        <>
-            <Link to="/projects">Back</Link>
-            <ProjectView project={Project} />
-            { authorized && (
+    const renderComponents = () => {
+        const MatchApp = () => {
+            return (
                 <>
-                    <EditSection id={props.match.params.id} />
-                    <DeleteSection
-                        id={props.match.params.id}
-                        confirmationText={Project.name}
-                    />
+                    <Link to="/projects">Back</Link>
+                    <h1>View {Project.name}</h1>
+                    <ProjectView project={Project} />
+                    { authorized && (
+                        <>
+                            <EditSection id={props.match.params.id} />
+                            <DeleteSection
+                                id={props.match.params.id}
+                                confirmationText={Project.name}
+                            />
+                        </>
+                    )}
                 </>
-            )}
+            )
+        }
+
+        if (loaded) {
+            if (error) return (<span>{error}</span>);
+            else return ( <> { MatchApp() } </> );
+        } else {
+            return (<span>loading...</span>)
+        }
+    }
+
+    return (
+        <>
+            { renderComponents() }
         </>
-        )}
-        </>
-    )}
-    </>
     );
 };
 

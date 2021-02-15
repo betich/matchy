@@ -1,6 +1,7 @@
-import axios from "axios";
-import React from "react";
-import Tags from "../../../Components/Tag";
+import axios from 'axios';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import Tags from '../../../Components/Tag';
 import { Form, Button } from "react-bootstrap";
 import { ProjectTags as TagsList } from "../../../Services/Mock";
 import validate from "../../../Services/Validate";
@@ -98,6 +99,7 @@ class Edit extends React.Component {
                     <span>Can't find the User lol</span>
                 ) : (
                     <>
+                        <Link to={`/projects/${this.state.oldProject._id}`}>back</Link>
                         <h1>Edit Project</h1>
                         <Form onSubmit={this.handleSubmit}>
                             <Form.Group>

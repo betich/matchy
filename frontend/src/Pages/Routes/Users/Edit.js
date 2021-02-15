@@ -1,6 +1,7 @@
 import axios from "axios";
 import React from "react";
 import { Container, Form, Button } from "react-bootstrap";
+import { Link } from 'react-router-dom';
 import Tags from "../../../Components/Tag";
 import ExperienceGroup from "../../../Components/ExpandableFields";
 import DatePicker from "../../../Components/DatePicker";
@@ -128,6 +129,7 @@ class Edit extends React.Component {
                 ) : (
                     <>
                         <Container className="mt-3">
+                            <Link to={`/users/${this.state.oldUserData.username}`}>back</Link>
                             <h1>Edit user information</h1>
                             <Form onSubmit={this.handleSubmit} noValidate>
                                 <Form.Group controlId="username">
