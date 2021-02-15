@@ -6,7 +6,6 @@ import { Form, Button } from "react-bootstrap";
 import { ProjectTags as TagsList } from "../../../Services/Mock";
 import validate from "../../../Services/Validate";
 import Error from "../../../Components/Error";
-import Loading from "../../../Components/Loading";
 
 class Edit extends React.Component {
     constructor(props) {
@@ -16,7 +15,7 @@ class Edit extends React.Component {
             questions: [],
             errors: {},
             loaded: false,
-            oldProject: {},
+            oldProject: null,
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -70,11 +69,6 @@ class Edit extends React.Component {
         }
     }
 
-    componentDidUpdate(prevProps,prevState) {
-       if (prevState.tags !== this.state.tags)
-        console.log(this.state.tags); 
-    }
-
     componentDidMount() {
         axios
             .get(`/app/projects/${this.props.match.params.id}`)
@@ -90,14 +84,9 @@ class Edit extends React.Component {
     }
 
     render() {
-        return (
-            <>
-                {!this.state.loaded ? (
-                    <Loading />
-                ) : Object.keys(this.state.oldProject).length === 0 &&
-                  this.state.oldProject.constructor === Object ? (
-                    <span>can't find the project</span>
-                ) : (
+        const renderComponents = () => {
+            const EditProject = () => {
+                return (
                     <>
                         <Link to={`/projects/${this.state.oldProject._id}`}>back</Link>
                         <h1>Edit Project</h1>
@@ -112,7 +101,7 @@ class Edit extends React.Component {
                                     defaultValue={this.state.oldProject.name}
                                 />
                             </Form.Group>
-
+                
                             <Form.Group>
                                 <Form.Label>Description</Form.Label>
                                 <Form.Control
@@ -121,7 +110,7 @@ class Edit extends React.Component {
                                     defaultValue={this.state.oldProject.description}
                                 />
                             </Form.Group>
-
+                
                             <Form.Group className="mb-3">
                                 <Form.Label>Tags:</Form.Label>
                                 <Tags
@@ -131,15 +120,28 @@ class Edit extends React.Component {
                                     onAsDefault={this.state.oldProject.tags}
                                 />
                             </Form.Group>
-
+                
                             <Error errors={this.state.errors} />
-
+                
                             <Button variant="primary" type="submit">
                                 Save Edit
                             </Button>
                         </Form>
                     </>
-                )}
+                );
+            }
+            
+            if (this.state.loaded) {
+                if (!this.state.oldProject) return (<span>can't find the project</span>);
+                else return (<>{ EditProject() }</>);
+            } else {
+                return (<span>loading...</span>)
+            }
+        }
+
+        return (
+            <>
+                { renderComponents() }
             </>
         );
     }

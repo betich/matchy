@@ -148,7 +148,7 @@ const View = (props) => {
     }, [props.match.params.id]);
 
     const renderComponents = () => {
-        const MatchApp = () => {
+        const ViewProject = () => {
             return (
                 <>
                     <Link to="/projects">Back</Link>
@@ -169,7 +169,7 @@ const View = (props) => {
 
         if (loaded) {
             if (error) return (<span>{error}</span>);
-            else return ( <> { MatchApp() } </> );
+            else return (<> { ViewProject() } </>);
         } else {
             return (<span>loading...</span>)
         }
