@@ -29,6 +29,8 @@ const UserCard = (props) => {
 const Index = (props) => {
     const [Users, setUsers] = useState([]);
     const [loaded, setLoad] = useState(false);
+    const [error, setError] = useState(null);
+
     let UserCardList = Users.map((e) => <UserCard url={e.username} user={e} key={e._id}/>);
 
     useEffect(() => {
@@ -39,24 +41,44 @@ const Index = (props) => {
             setUsers(users);
         })
         .then(() => setLoad(true))
-        .catch((err) => console.error("oh no", err))
+        .catch((err) => {
+            if (err.response.data) {
+                setError(err.response.data);
+            } else {
+                setError("an unknown error occured");
+            }
+
+            console.error("oh no", err);
+        })
     }, []);
 
-    return (
-    <>
-        { loaded && (
-        <>
-            <h1>Users</h1>
-            <div id="userLinks">
-                <h4>User Links</h4>
-                <div className="d-flex flex-wrap">
-                    {UserCardList}
-                </div>
-            </div>
-        </>
-        )
+    const renderComponents = () => {
+        const HomeUser = () => {
+            return (
+                <>
+                    <h1>Users</h1>
+                    <div id="userLinks">
+                        <h4>User Links</h4>
+                        <div className="d-flex flex-wrap">
+                            {UserCardList}
+                        </div>
+                    </div>
+                </>
+            );
         }
-    </>
+
+        if (loaded) {
+            if (error) return (<span>{error}</span>);
+            else return (<> { HomeUser() } </>);
+        } else {
+            return (<span>loading...</span>)
+        }
+    }
+
+    return (
+        <>
+            { renderComponents() }
+        </>
     );
 }
 

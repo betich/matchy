@@ -29,31 +29,39 @@ const Index = (props) => {
     }, []);
     
     let ProjectLinks = Projects.map((project) => <ProjectCard project={project} key={project._id} />);
-    return (
-    <>
-    { loaded && (
-        <>
-        { error ? <span>{error}</span>
-        : (
-        <>
-            <h1>Projects</h1>
-            <Link to="/projects/create">
-                <Button variant="outline-danger" type="submit">
-                    Create
-                </Button>
-            </Link>
-            <div id="projectLinks">
-                <h4>My Projects</h4>
-                <div className="d-flex flex-wrap">
-                    {ProjectLinks}
-                </div>
-            </div>
-        </>
-        )}
-        </>
-    )
+    
+    const renderComponents = () => {
+        const HomeProject = () => {
+            return (
+                <>
+                    <h1>Projects</h1>
+                    <Link to="/projects/create">
+                        <Button variant="outline-danger" type="submit">
+                            Create
+                        </Button>
+                    </Link>
+                    <div id="projectLinks">
+                        <h4>My Projects</h4>
+                        <div className="d-flex flex-wrap">
+                            {ProjectLinks}
+                        </div>
+                    </div>
+                </>
+            );
+        }
+
+        if (loaded) {
+            if (error) return (<span>{error}</span>);
+            else return (<> { HomeProject() } </>);
+        } else {
+            return (<span>loading...</span>)
+        }
     }
-    </>
+
+    return (
+        <>
+            { renderComponents() }
+        </>
     );
 }
 
