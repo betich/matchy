@@ -1,52 +1,7 @@
-import axios from "axios";
-import React from "react";
-import { Card, Button } from "react-bootstrap";
-
-const ProjectCard = (props) => {
-    const Project = props.project;
-    const Owner = props.owner;
-    const Workers = props.workers;
-
-    const renderCard = () => {
-        if (Project && Owner && Workers) {
-            return (
-                <Card
-                    bg="white"
-                    text="black"
-                    style={{ width: '18rem' }}
-                    className="mb-2"
-                    >
-                    <Card.Body>
-                        <Card.Title>{Project.name}</Card.Title>
-                        <Card.Text>by {Owner.username}</Card.Text>
-                        <Card.Text>{Project.description}</Card.Text>
-                        <Card.Text>employees: { Workers.map((e) => e.username).join(', ') }</Card.Text>
-                        <Card.Text>tags:</Card.Text>
-                        <Card.Text>
-                        {Project.tags.map((elem, i) => (
-                            <Button
-                                key={i}
-                                variant="outline-danger"
-                            >
-                                {elem}
-                            </Button>
-                        ))}
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-            )
-        }
-        else {
-            return (<span>can't display the project</span>)
-        }
-    }
-
-    return (
-        <>
-        { renderCard() }
-        </>
-    )
-}
+import axios from 'axios';
+import React from 'react';
+import { Button } from 'react-bootstrap';
+import ProjectCard from '../../../Components/ProjectCard';
 
 class Match extends React.Component {
     constructor (props) {
@@ -55,9 +10,7 @@ class Match extends React.Component {
             loaded: false,
             error: null,
             clickable: false,
-            Project: null,
-            Owner: null,
-            Workers: null
+            Project: null
         }
 
         this.handleClick = this.handleClick.bind(this);
@@ -78,25 +31,9 @@ class Match extends React.Component {
             .then((raw) => raw.data)
             .then((project) => this.setState({ Project: project }))
             .catch((err) => handleError(err))
-
-        if (this.state.Project) {
-            await axios.all([
-                    axios.get(`/app/users/id/${this.state.Project.owner}`),
-                    ...this.state.Project.workers.map((worker) => axios.get(`/app/users/id/${worker}`))
-                ])
-                .then(axios.spread((ownerRaw, ...workerRaw) => {
-                    this.setState({
-                        Owner: ownerRaw.data,
-                        Workers: workerRaw.map((e) => e.data)
-                    })
-                }))
-                .catch((errs) => handleError(errs))
-                .finally(() => {
-                    this.setState({ clickable: true, loaded: true});
-                });
-        } else {
-            this.setState({ clickable: true, loaded: true })
-        }
+            .finally(() => {
+                this.setState({ clickable: true, loaded: true});
+            });
     }
 
     handleClick(e) {
@@ -114,7 +51,7 @@ class Match extends React.Component {
             const MatchApp = () => {
                 return (
                     <>
-                        <ProjectCard project={this.state.Project} owner={this.state.Owner} workers={this.state.Workers} />
+                        <ProjectCard project={this.state.Project} />
                         <Button variant="outline-info" onClick={this.handleClick} disabled={!this.state.clickable}>
                             Next
                         </Button>

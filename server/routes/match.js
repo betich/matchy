@@ -13,6 +13,8 @@ router
             const random = Math.floor(Math.random() * count);
 
             Project.findOne()
+                .populate("owner")
+                .populate("workers")
                 .skip(random)
                 .exec((err, result) => {
                     if (err) throw err;

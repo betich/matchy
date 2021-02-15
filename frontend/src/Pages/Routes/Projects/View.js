@@ -1,7 +1,53 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, Button, Form } from "react-bootstrap";
+import { Button, Card, Form } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
+
+const ProjectView = (props) => {
+    const Project = props.project;
+    const Owner = Project.owner;
+    const Workers = Project.workers;
+
+    const renderCard = () => {
+        if (Project && Owner && Workers) {
+            return (
+                <Card
+                    bg="white"
+                    text="black"
+                    style={{ width: '18rem' }}
+                    className="mb-2"
+                    >
+                    <Card.Body>
+                        <Card.Title>{Project.name}</Card.Title>
+                        <Card.Text>by {Owner.username}</Card.Text>
+                        <Card.Text>{Project.description}</Card.Text>
+                        <Card.Text>employees: { Workers.map((e) => e.username).join(', ') }</Card.Text>
+                        <Card.Text>tags:</Card.Text>
+                        <Card.Text>
+                        {Project.tags.map((elem, i) => (
+                            <Button
+                                key={i}
+                                variant="outline-danger"
+                            >
+                                {elem}
+                            </Button>
+                        ))}
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
+            )
+        }
+        else {
+            return (<span>can't display the project</span>)
+        }
+    }
+
+    return (
+        <>
+        { renderCard() }
+        </>
+    )
+}
 
 const EditSection = (props) => {
     return (
@@ -10,6 +56,7 @@ const EditSection = (props) => {
         </Link>
     );
 };
+
 const DeleteSection = (props) => {
     const history = useHistory();
     const [show, setShow] = useState(false);
@@ -85,18 +132,18 @@ const View = (props) => {
 
         const checkOwnership = () => {
             return axios.get(`/app/projects/checkownership/${props.match.params.id}`)
-            .then(response => response.data)
-            .then(user => user)
-            .then(() => setAuthorized(true))
-            .catch(handleError)
+                .then(response => response.data)
+                .then(user => user)
+                .then(() => setAuthorized(true))
+                .catch(handleError)
         }
 
         axios.get(`/app/projects/${props.match.params.id}`)
-        .then(response => response.data)
-        .then(project => setProject(project))
-        .then(checkOwnership)
-        .catch(handleError)
-        .finally(() => setLoad(true));
+            .then(response => response.data)
+            .then(project => setProject(project))
+            .then(checkOwnership)
+            .catch(handleError)
+            .finally(() => setLoad(true));
 
     }, [props.match.params.id]);
 
@@ -108,28 +155,7 @@ const View = (props) => {
         : (
         <>
             <Link to="/projects">Back</Link>
-            <Card
-                bg="white"
-                text="black"
-                style={{ width: '18rem' }}
-                className="mb-2"
-                >
-                <Card.Body>
-                    <Card.Title>{Project.name}</Card.Title>
-                    <Card.Text>{Project.description}</Card.Text>
-                    <Card.Text>tags:</Card.Text>
-                    <Card.Text>
-                    {Project.tags.map((elem, i) => (
-                        <Button
-                            key={i}
-                            variant="outline-danger"
-                        >
-                            {elem}
-                        </Button>
-                    ))}    
-                    </Card.Text>
-                </Card.Body>
-            </Card>
+            <ProjectView project={Project} />
             { authorized && (
                 <>
                     <EditSection id={props.match.params.id} />
