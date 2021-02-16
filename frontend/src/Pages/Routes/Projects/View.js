@@ -120,9 +120,10 @@ const View = (props) => {
     useEffect(() => {
         const handleError = (err) => {
             // 401, 403s are expected
-            if (err.response.data) {
+            if (err.response) {
                 if (err.response.status === 403) return;
-                setError(err.response.data);
+                else if (err.response.status === 500) return setError("internal server error");
+                else setError(err.response.data);
             } else {
                 setError("an unknown error occured");
             }

@@ -17,8 +17,9 @@ const Index = (props) => {
             setProjects(projects);
         })
         .catch((err) => {
-            if (err.response.data) {
-                setError(err.response.data);
+            if (err.response) {
+                if (err.response.status === 500) setError("internal server error");
+                else setError(err.response.data);
             } else {
                 setError("an unknown error occured");
             }

@@ -32,13 +32,35 @@ router
     Project.findById(req.params.id)
         .then((foundProject) => {
             if (foundProject) {
-                Project.workers.push(req.user._id);
-                Project.save((err) => {
+                foundProject.workers.push(req.user._id);
+                foundProject.save((err) => {
                     if (err) throw err;
-                    res.status(200).send("sucess");
-                })
+                });
+                return foundProject;
             } else {
                 res.status(404).send("can't find the project you're looking for");
+            }
+        })
+        .then((foundProject) => {
+            try {
+                User.findById(req.user._id, (err, foundUser) => {
+                    if (err) throw err;
+                    else {
+                        foundUser.projects.push({
+                            projectid: foundProject._id,
+                            name: foundProject.name,
+                            role: "worker"
+                        })
+
+                        foundUser.save((err) => {
+                            if (err) throw err;
+                            res.status(200).send(foundProject);
+                        });
+                    }
+                })
+            } catch (err) {
+                console.error(err);
+                res.status(500).send(err);
             }
         })
         .catch((err) => {

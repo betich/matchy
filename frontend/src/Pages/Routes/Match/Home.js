@@ -14,13 +14,15 @@ class Match extends React.Component {
         }
 
         this.handleNextClick = this.handleNextClick.bind(this);
+        this.handleAcceptClick = this.handleAcceptClick.bind(this);
         this.getRandomProject = this.getRandomProject.bind(this);
         this.handleError = this.handleError.bind(this);
     }
 
     handleError(err) {
-        if (err.response.data) {
-            this.setState({ error: err.response.data });
+        if (err.response) {
+            if (err.response.status === 500) this.setState({ error: "internal server error" });
+            else this.setState({ error: err.response.statusText });
         } else {
             this.setState({ error: "an unknown error occured" });
         }
@@ -45,7 +47,7 @@ class Match extends React.Component {
 
     handleAcceptClick(e) {
         this.setState({ clickable: false}, () => {
-            axios.post(`/app/match/${this.Project._id}`)
+            axios.post(`/app/match/apply/${this.state.Project._id}`)
                 .then((res) => {
                     console.log(res.data);
                     if (res.status === 200) {
