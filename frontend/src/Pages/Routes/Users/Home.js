@@ -44,7 +44,7 @@ const Index = (props) => {
         .catch((err) => {
             if (err.response) {
                 if (err.response.status === 500) setError("internal server error");
-                setError(err.response.data);
+                else setError(err.response.data);
             } else {
                 setError("an unknown error occured");
             }

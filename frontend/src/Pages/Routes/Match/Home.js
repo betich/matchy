@@ -49,7 +49,6 @@ class Match extends React.Component {
         this.setState({ clickable: false}, () => {
             axios.post(`/app/match/apply/${this.state.Project._id}`)
                 .then((res) => {
-                    console.log(res.data);
                     if (res.status === 200) {
                         this.props.history.push(`/projects/${res.data._id}`);
                     }
