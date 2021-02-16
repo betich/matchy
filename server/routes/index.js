@@ -19,30 +19,31 @@ router
 
 .post('/register', upload.none(), (req, res) => {
     const { salt, hashed } = hash.hashPassword(req.body.password);
-    User.findOne({username: new RegExp('\\b' + req.body.username + '\\b', 'i')}, (err, foundUser) => {
-        if (err) {
-            res.status(500).send('Internal error occured');
-        } else if (foundUser) {
-            console.log(foundUser);
-            res.status(409).send('Username is already taken');
-        } else {
-            let newUser = Object.assign({}, req.body);
+    User.findOne({username: new RegExp('\\b' + req.body.username + '\\b', 'i')})
+        .then((foundUser) => {
+            if (foundUser) {
+                res.status(409).send('Username is already taken');
+            } else {
+                let newUser = Object.assign({}, req.body);
+
+                delete newUser["password"];
+                newUser.salt = salt;
+                newUser.hash = hashed;
             
-            delete newUser["password"];
-            newUser.salt = salt;
-            newUser.hash = hashed;
-        
-            const exp = newUser.experiences;
-            for (const e in exp) {
-                newUser.experiences[e] = JSON.parse(exp[e]);
+                const exp = newUser.experiences;
+                for (const e in exp) {
+                    newUser.experiences[e] = JSON.parse(exp[e]);
+                }
+
+                return newUser;
             }
-        
+        })
+        .then((newUser) => {
             User.create(filterFalsy(newUser), (err, User) => {
                 try {
-                    if (err) {
-                        throw err;
-                    } else {
-                        req.login(User, function (err) {
+                    if (err) throw err;
+                    else {
+                        req.login(User, (err) => {
                             if (err) throw err;
                             else res.status(200).json(User);
                         })
@@ -54,8 +55,11 @@ router
                     res.status(500).send(err);
                 }
             });
-        }
-    });
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send(err);
+        })
 })
 
 .get('/logout', (req, res) => {
