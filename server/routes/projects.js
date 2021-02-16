@@ -89,20 +89,23 @@ router
         )
         .then((foundProject) => {
             if (foundProject) {
-                try {
-                    foundProject.remove((err, deletedProject) => {
-                        if (err) throw err;
-                        else {
-                            res.status(200).send('deleted ' + deletedProject.name);
-                            console.log('deleted่ project ' + deletedProject.name);
-                        }
-                    })
-                } catch (err) {
-                    console.error(err);
-                    res.status(500).send(err);
-                }
+                return foundProject;
             } else {
                 res.status(404).send("unable to find the project");
+            }
+        })
+        .then((foundProject) => {
+            try {
+                foundProject.remove((err, deletedProject) => {
+                    if (err) throw err;
+                    else {
+                        res.status(200).send('deleted ' + deletedProject.name);
+                        console.log('deleted่ project ' + deletedProject.name);
+                    }
+                })
+            } catch (err) {
+                console.error(err);
+                res.status(500).send(err);
             }
         })
         .catch((err) => {
