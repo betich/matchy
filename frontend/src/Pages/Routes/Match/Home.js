@@ -13,32 +13,49 @@ class Match extends React.Component {
             Project: null
         }
 
-        this.handleClick = this.handleClick.bind(this);
+        this.handleNextClick = this.handleNextClick.bind(this);
         this.getRandomProject = this.getRandomProject.bind(this);
+        this.handleError = this.handleError.bind(this);
     }
 
-    async getRandomProject() {
-        const handleError = (err) => {
-            if (err.response.data) {
-                this.setState({ error: err.response.data });
-            } else {
-                this.setState({ error: "an unknown error occured" });
-            }
-            console.error("oh no", err);
-        };
+    handleError(err) {
+        if (err.response.data) {
+            this.setState({ error: err.response.data });
+        } else {
+            this.setState({ error: "an unknown error occured" });
+        }
+        console.error("oh no", err);
+    }
 
-        await axios.get("/app/match")
+    getRandomProject() {
+        axios.get("/app/match")
             .then((raw) => raw.data)
             .then((project) => this.setState({ Project: project }))
-            .catch((err) => handleError(err))
+            .catch((err) => this.handleError(err))
             .finally(() => {
                 this.setState({ clickable: true, loaded: true});
             });
     }
 
-    handleClick(e) {
+    handleNextClick(e) {
         this.setState({ clickable: false}, () => {
             this.getRandomProject();
+        });
+    }
+
+    handleAcceptClick(e) {
+        this.setState({ clickable: false}, () => {
+            axios.post(`/app/match/${this.Project._id}`)
+                .then((res) => {
+                    console.log(res.data);
+                    if (res.status === 200) {
+                        this.props.history.push(`/projects/${res.data._id}`);
+                    }
+                })
+                .catch((err) => this.handleError(err))
+                .finally(() => {
+                    this.setState({ clickable: true, loaded: true});
+                });
         });
     }
 
@@ -51,10 +68,13 @@ class Match extends React.Component {
             const MatchApp = () => {
                 return (
                     <>
-                        <ProjectCard project={this.state.Project} />
-                        <Button variant="outline-info" onClick={this.handleClick} disabled={!this.state.clickable}>
-                            Next
+                        <Button variant="outline-success" onClick={this.handleAcceptClick} disabled={!this.state.clickable} className="mr-2">
+                            {this.state.clickable ? "Accept" : "loading..."}
                         </Button>
+                        <Button variant="outline-danger" onClick={this.handleNextClick} disabled={!this.state.clickable}>
+                            {this.state.clickable ? "Next" : "loading..."}
+                        </Button>
+                        <ProjectCard project={this.state.Project} />
                     </>
                 )
             }

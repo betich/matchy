@@ -17,7 +17,6 @@ const projectSchema = new mongoose.Schema({
     questions: [{ type: String }]
 }, options);
 
-
 projectSchema.pre('remove', async function() {
     const User = require('./users');
     try {
