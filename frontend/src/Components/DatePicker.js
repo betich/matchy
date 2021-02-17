@@ -13,6 +13,23 @@ import React from 'react';
     }
 =================================================================== */
 
+
+function range(start, end) {
+    var ans = [];
+    for (let i = start; i <= end; i++) {
+        ans.push(i);
+    }
+    return ans;
+}
+
+
+const getCurrentYear = () => {
+    var dateObj = new Date();
+    var year = dateObj.getUTCFullYear();
+
+    return year;
+};
+
 class DatePicker extends React.Component {
     constructor(props) {
         super(props);
@@ -21,7 +38,8 @@ class DatePicker extends React.Component {
             month: this.props.month,
             year: this.props.year
         }
-
+        this.startYear = 1920;
+        this.currentYear = getCurrentYear();
         this.inputChange = this.inputChange.bind(this);
         this.sendData = this.sendData.bind(this);
     }
@@ -29,13 +47,13 @@ class DatePicker extends React.Component {
     inputChange(e) {
         switch (e.target.dataset.format) {
             case('day'):
-                this.setState({ day: e.target.value }, this.sendData());   
+                this.setState({ day: e.target.value });   
                 break;
             case('month'):
-                this.setState({ month: e.target.value }, this.sendData());
+                this.setState({ month: e.target.value });
                 break;
             case('year'):
-                this.setState({ year: e.target.value }, this.sendData());
+                this.setState({ year: e.target.value });
                 break;
             default:
                 console.error('unexpected input');
@@ -55,9 +73,17 @@ class DatePicker extends React.Component {
     render() {
         return (
             <>
-                <Form.Control required onChange={this.inputChange} data-format="day" placeholder="Day" value={this.state.day} />
-                <Form.Control required onChange={this.inputChange} data-format="month" placeholder="Month" value={this.state.month} />
-                <Form.Control required onChange={this.inputChange} data-format="year" placeholder="Year" value={this.state.year} />
+                <Form.Control as="select" required onChange={this.inputChange} data-format="day" value={this.state.day} >
+                    {range(1,31).map(day => <option className="form-select" value={ day }>{ day }</option>)}
+                </Form.Control>
+
+                <Form.Control as="select" required onChange={this.inputChange} data-format="month" value={this.state.month} >
+                    {range(1,12).map(month => <option className="form-select"  value={ month }>{ month }</option>)}
+                </Form.Control>
+
+                <Form.Control as="select" required onChange={this.inputChange} data-format="year" value={this.state.year} >
+                    {range(this.startYear,this.currentYear).map(year => <option className="form-select" value={ year }>{ year }</option>)}
+                </Form.Control>
             </>
         );
     }
