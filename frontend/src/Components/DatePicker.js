@@ -1,4 +1,4 @@
-import { Form } from 'react-bootstrap';
+import { Form, Col } from 'react-bootstrap';
 import React from 'react';
 
 /* ==============================================================
@@ -72,19 +72,23 @@ class DatePicker extends React.Component {
 
     render() {
         return (
-            <>
-                <Form.Control as="select" required onChange={this.inputChange} data-format="day" value={this.state.day} >
-                    {range(1,31).map(day => <option className="form-select" value={ day }>{ day }</option>)}
-                </Form.Control>
-
-                <Form.Control as="select" required onChange={this.inputChange} data-format="month" value={this.state.month} >
-                    {range(1,12).map(month => <option className="form-select"  value={ month }>{ month }</option>)}
-                </Form.Control>
-
-                <Form.Control as="select" required onChange={this.inputChange} data-format="year" value={this.state.year} >
-                    {range(this.startYear,this.currentYear).map(year => <option className="form-select" value={ year }>{ year }</option>)}
-                </Form.Control>
-            </>
+            <Form.Row>
+                <Form.Group as={Col} md="4" >
+                    <Form.Control as="select" required  onChange={this.inputChange} data-format="day" value={this.state.day} >
+                    {range(1,31).map((day, i) => <option className="form-select" key={i} value={ day }>{ day }</option>)}
+                    </Form.Control>
+                </Form.Group>
+                <Form.Group as={Col} md="4" >
+                    <Form.Control as="select" required onChange={this.inputChange} data-format="month" value={this.state.month} >
+                    {range(1,12).map((month, i) => <option className="form-select" key={i} value={ month }>{ month }</option>)}
+                    </Form.Control>
+                </Form.Group>
+                <Form.Group as={Col} md="4" >
+                    <Form.Control as="select" required onChange={this.inputChange} data-format="year" value={this.state.year} >
+                    {range(this.startYear,this.currentYear).map((year, i) => <option className="form-select" key={i} value={ year }>{ year }</option>)}
+                    </Form.Control>
+                </Form.Group>
+            </Form.Row>
         );
     }
 }
