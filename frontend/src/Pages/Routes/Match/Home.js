@@ -62,6 +62,14 @@ class Match extends React.Component {
     }
 
     render() {
+        const errorMessage = () => {
+            if (this.state.error) {
+                return (<span>{this.state.error}</span>);
+            } else {
+                return (<></>);
+            }
+        }
+
         const renderComponents = () => {
             const MatchApp = () => {
                 return (
@@ -78,8 +86,7 @@ class Match extends React.Component {
             }
 
             if (this.state.loaded) {
-                if (this.state.error) return (<span>{this.state.error}</span>);
-                else if (!this.state.Project) return (<span>There are no projects left to display</span>)
+                if (!this.state.Project) return (<span>There are no projects left to display</span>)
                 else return (<> { MatchApp() } </>);
             } else {
                 return (<span>loading...</span>)
@@ -88,6 +95,7 @@ class Match extends React.Component {
 
         return (
             <>
+                { errorMessage() }
                 <h1>Match</h1>
                 { renderComponents() }
             </>
