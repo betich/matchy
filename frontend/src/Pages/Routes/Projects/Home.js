@@ -10,23 +10,22 @@ const Index = (props) => {
     const [error, setError] = useState(null);
     
     useEffect(() => {
-        axios
-        .get(`/app/projects`)
-        .then((res) => res.data)
-        .then((projects) => {
-            setProjects(projects);
-        })
-        .catch((err) => {
-            if (err.response) {
-                if (err.response.status === 500) setError("internal server error");
-                else setError(err.response.data);
-            } else {
-                setError("an unknown error occured");
-            }
-            
-            console.error("oh no", err)
-        })
-        .finally(() => setLoad(true))
+        axios.get(`/app/projects`)
+            .then((res) => res.data)
+            .then((projects) => {
+                setProjects(projects);
+            })
+            .catch((err) => {
+                if (err.response) {
+                    if (err.response.status === 500) setError("internal server error");
+                    else setError(err.response.data);
+                } else {
+                    setError("an unknown error occured");
+                }
+
+                console.error("oh no", err)
+            })
+            .finally(() => setLoad(true))
     }, []);
     
     let ProjectLinks = Projects.map((project) => <ProjectCard project={project} key={project._id} />);

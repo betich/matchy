@@ -43,10 +43,10 @@ class Edit extends React.Component {
                 headers: { "Content-Type": "multipart/form-data" },
             };
             axios.put(`/app/projects/${this.props.match.params.id}`, data, options).then(
-                (response) => {
-                    if (response.status === 200) {
+                (res) => {
+                    if (res.status === 200) {
                         this.props.history.push(
-                            `/projects/${this.props.match.params.id}`
+                            `/projects/${res.data.owner}/${res.data.newurl}`
                         );
                     }
                 },
@@ -70,8 +70,7 @@ class Edit extends React.Component {
     }
 
     componentDidMount() {
-        axios
-            .get(`/app/projects/${this.props.match.params.id}`)
+        axios.get(`/app/projects/i/${this.props.match.params.id}`)
             .then((res) => res.data)
             .then((project) => {
                 this.setState({ oldProject: project });
@@ -88,7 +87,7 @@ class Edit extends React.Component {
             const EditProject = () => {
                 return (
                     <>
-                        <Link to={`/projects/${this.state.oldProject._id}`}>back</Link>
+                        <Link to={`/projects/i/${this.state.oldProject._id}`}>back</Link>
                         <h1>Edit Project</h1>
                         <Form onSubmit={this.handleSubmit}>
                             <Form.Group>

@@ -131,35 +131,37 @@ const View = (props) => {
             console.error("oh no", err);
         };
 
-        const checkOwnership = () => {
-            return axios.get(`/app/projects/checkownership/${props.match.params.id}`)
+        const checkOwnership = (id) => {
+            return axios.get(`/app/projects/checkownership/${id}`)
                 .then(response => response.data)
                 .then(user => user)
                 .then(() => setAuthorized(true))
                 .catch(handleError)
         }
 
-        axios.get(`/app/projects/${props.match.params.id}`)
+        axios.get(`/app/projects/${props.match.params.user}/${props.match.params.project}`)
             .then(response => response.data)
-            .then(project => setProject(project))
-            .then(checkOwnership)
+            .then(project => {
+                setProject(project);
+                checkOwnership(project._id);
+            })
             .catch(handleError)
             .finally(() => setLoad(true));
 
-    }, [props.match.params.id]);
+    }, [props.match.params.project, props.match.params.user]);
 
     const renderComponents = () => {
         const ViewProject = () => {
             return (
                 <>
                     <Link to="/projects">Back</Link>
-                    <h1>View {Project.name}</h1>
+                    <h1>{Project.name}</h1>
                     <ProjectView project={Project} />
                     { authorized && (
                         <>
-                            <EditSection id={props.match.params.id} />
+                            <EditSection id={Project._id} />
                             <DeleteSection
-                                id={props.match.params.id}
+                                id={Project._id}
                                 confirmationText={Project.name}
                             />
                         </>

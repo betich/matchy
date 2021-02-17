@@ -46,7 +46,6 @@ const validate = (formData) => {
             case "username":
                 const usernameRegex = /[^a-zA-Z0-9]/g;
                 const usernameMatch = value.match(usernameRegex);
-                console.log({Regex: usernameMatch, value: value});
                 if (usernameMatch) {
                     addToInvalid("username", "username contains special characters");
                 }

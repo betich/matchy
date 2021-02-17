@@ -146,18 +146,18 @@ const View = (props) => {
 
         const checkOwnership = () => {
             return axios.get(`/app/users/checkownership/${props.match.params.username}`)
-            .then(response => response.data)
-            .then(user => user)
-            .then(() => setAuthorized(true))
-            .catch(handleError)
+                .then(response => response.data)
+                .then(user => user)
+                .then(() => setAuthorized(true))
+                .catch(handleError)
         }
 
         axios.get(`/app/users/${props.match.params.username}`)
-        .then(response => response.data)
-        .then(user => setUser(user))
-        .then(checkOwnership)
-        .catch(handleError)
-        .finally(() => setLoad(true));
+            .then(response => response.data)
+            .then(user => setUser(user))
+            .then(checkOwnership)
+            .catch(handleError)
+            .finally(() => setLoad(true));
     }, [props.match.params.username]);
 
     

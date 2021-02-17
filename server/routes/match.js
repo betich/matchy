@@ -3,6 +3,7 @@ const auth = require('../middleware/index');
 const router = express.Router();
 const Project = require('../models/projects');
 const User = require('../models/users');
+const sendError = require('../helpers/sendError');
 
 router
 .get('/', auth.checkLogin, (req, res) => {
@@ -23,13 +24,12 @@ router
                 });
         });
     } catch (err) {
-        console.error(err);
-        res.status(500).send(err);
+        sendError(req, res, err);
     }
 })
 
-.post('/apply/:id', auth.checkLogin, (req, res) => {
-    Project.findById(req.params.id)
+.post('/a/:id', auth.checkLogin, (req, res) => {
+    Project.findById(req.params.id).populate("owner")
         .then((foundProject) => {
             if (foundProject) {
                 foundProject.workers.push(req.user._id);
@@ -47,8 +47,7 @@ router
                     if (err) throw err;
                     else {
                         foundUser.projects.push({
-                            projectid: foundProject._id,
-                            name: foundProject.name,
+                            info: foundProject._id,
                             role: "worker"
                         })
 
@@ -59,14 +58,10 @@ router
                     }
                 })
             } catch (err) {
-                console.error(err);
-                res.status(500).send(err);
+                sendError(req, res, err);
             }
         })
-        .catch((err) => {
-            console.log(err);
-            res.status(500).send(err);
-        })
+        .catch((err) => sendError(req, res, err))
 })
 
 module.exports = router;

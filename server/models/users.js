@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 
 const project = mongoose.Schema({
-    projectid: { type: mongoose.Schema.Types.ObjectId, ref: 'Project' },
-    name: String,
+    info: { type: mongoose.Schema.Types.ObjectId, ref: 'Project' },
     role: String
 }, { _id : false });
 

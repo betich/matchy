@@ -42,13 +42,22 @@ class Create extends React.Component {
             };
             
             axios.post('/app/projects', data, options)
-            .then((response) => {
-                if (response.status === 200) {
-                    this.props.history.push(`/projects/${response.data._id}`);
-                }
-            }, (err) => {
-                console.error(err);
-            });
+                .then((res) => {
+                    if (res.status === 200) {
+                        this.props.history.push(
+                            `/projects/${res.data.owner.username}/${res.data.url}`
+                        );
+                    }
+                })
+                .catch((err) => {
+                    switch (err.response.status) {
+                        case 409:
+                            this.setState({ errors: {projectname: ['project name taken']}});
+                            break;
+                        default:
+                            console.error(err);
+                    }
+                });
         } else {
             this.setState({ errors: invalidData });
         }

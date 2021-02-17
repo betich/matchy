@@ -22,7 +22,7 @@ class Match extends React.Component {
     handleError(err) {
         if (err.response) {
             if (err.response.status === 500) this.setState({ error: "internal server error" });
-            else this.setState({ error: err.response.statusText });
+            else this.setState({ error: err.response.data });
         } else {
             this.setState({ error: "an unknown error occured" });
         }
@@ -47,15 +47,12 @@ class Match extends React.Component {
 
     handleAcceptClick(e) {
         this.setState({ clickable: false}, () => {
-            axios.post(`/app/match/apply/${this.state.Project._id}`)
-                .then((res) => {
-                    if (res.status === 200) {
-                        this.props.history.push(`/projects/${res.data._id}`);
-                    }
-                })
+            axios.post(`/app/match/a/${this.state.Project._id}`)
                 .catch((err) => this.handleError(err))
                 .finally(() => {
-                    this.setState({ clickable: true, loaded: true});
+                    this.setState({ clickable: true, loaded: true}, () => {
+                        this.getRandomProject();
+                    });
                 });
         });
     }

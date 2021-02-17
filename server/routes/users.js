@@ -17,17 +17,14 @@ router
                 res.status(404).send('unable to find any users');
             }
         })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).send(err);    
-        });
+        .catch((err) => sendError(req, res, err));
 })
 
 .get('/checkownership/:username', auth.checkUserByUsername, (req, res) => {
     res.status(200).send(req.user);
 })
 
-.get('/id/:id', (req, res) => {
+.get('/i/:id', (req, res) => {
     User.findById(req.params.id)
         .then((foundUser) => {
             if (foundUser) {
@@ -36,10 +33,7 @@ router
                 res.status(404).send("unable to find a user with that id");
             }
         })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).send(err);
-        })
+        .catch((err) => sendError(req, res, err))
 })
 
 .get('/:username', (req, res) => {
@@ -51,16 +45,12 @@ router
                 res.status(400).send("unable to find a user with that username")
             }
         })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).send(err);
-        })
+        .catch((err) => sendError(req, res, err))
 })
 
 .delete('/:username', auth.checkUser, (req,res) => {
     User.findOne(
-            { username: usernameRegex(req.params.username) },
-            { useFindAndModify: false}
+            { username: usernameRegex(req.params.username) }
         )
         .then(async (foundUser) => {
             if (foundUser) {
@@ -75,10 +65,7 @@ router
                 res.status(404).send("unable to find a user with that username");
             }
         })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).send(err);
-        })
+        .catch((err) => sendError(req, res, err))
 })
 
 .put('/:username', [auth.checkUserByUsername, upload.none()] , (req,res) => {
@@ -99,10 +86,7 @@ router
                 res.status(404).send("no project found");
             }
         })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).send(err);
-        })
+        .catch((err) => sendError(req, res, err))
 })
 
 module.exports = router;

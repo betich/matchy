@@ -5,6 +5,7 @@ const filterFalsy = require('../helpers/filterFalsy');
 const auth = require('../middleware/index');
 const passport = require('passport');
 const hash = require('../helpers/hash');
+const sendError = require('../helpers/sendError');
 const router = express.Router();
 const upload = multer();
 
@@ -22,7 +23,7 @@ router
     User.findOne({username: new RegExp('\\b' + req.body.username + '\\b', 'i')})
         .then((foundUser) => {
             if (foundUser) {
-                res.status(409).send('Username is already taken');
+                res.status(409).send('duplicate user');
             } else {
                 let newUser = Object.assign({}, req.body);
 
@@ -51,15 +52,11 @@ router
                     }
                 }
                 catch (err) {
-                    console.error(err);
-                    res.status(500).send(err);
+                    sendError(req, res, err);
                 }
             });
         })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).send(err);
-        })
+        .catch((err) => sendError(req, res, err))
 })
 
 .get('/logout', (req, res) => {

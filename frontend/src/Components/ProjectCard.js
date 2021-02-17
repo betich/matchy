@@ -31,7 +31,7 @@ const ProjectCard = (props) => {
                             </Button>
                         ))}
                         </Card.Text>
-                        <Link to={`/projects/${Project._id}`}>
+                        <Link to={`/projects/${Project.owner.username}/${Project.url}`}>
                             <Button variant="outline-info" type="submit">
                                 View
                             </Button>
