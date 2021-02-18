@@ -144,6 +144,7 @@ const View = (props) => {
             .then(project => {
                 setProject(project);
                 checkOwnership(project._id);
+                console.log(project);
             })
             .catch(handleError)
             .finally(() => setLoad(true));
