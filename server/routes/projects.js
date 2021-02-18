@@ -30,6 +30,7 @@ router
         .then((foundProject) => {
             if (foundProject) {
                 res.status(409).send('duplicate project');
+                return null;
             } else {
                 let newProject = Object.assign({}, req.body);
                 
@@ -41,6 +42,7 @@ router
             }
         })
         .then((newProject) => {
+            if (!newProject) return null;
             Project.create(filterFalsy(newProject), async (err, newProject) => {
                 if (err) sendError(req, res, err);
                 else {
@@ -91,9 +93,11 @@ router
                 return foundUser;
             } else {
                 res.status(404).send("unable to find a user with that username");
+                return null;
             }
         })
         .then((foundUser) => {
+            if (!foundUser) return null;
             let projectFound = false;
             foundUser.projects.forEach((project) => {
                 if (project.info.url === req.params.project) {
@@ -141,9 +145,11 @@ router
                 return foundProject;
             } else {
                 res.status(404).send("unable to find the project");
+                return null;
             }
         })
         .then((foundProject) => {
+            if (!foundProject) return null;
             foundProject.remove((err, deletedProject) => {
                 if (err) sendError(req, res, err);
                 else {

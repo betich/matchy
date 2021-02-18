@@ -24,6 +24,7 @@ router
         .then((foundUser) => {
             if (foundUser) {
                 res.status(409).send('duplicate user');
+                return null;
             } else {
                 let newUser = Object.assign({}, req.body);
 
@@ -40,6 +41,7 @@ router
             }
         })
         .then((newUser) => {
+            if (!newUser) return null;
             User.create(filterFalsy(newUser), (err, User) => {
                 try {
                     if (err) throw err;

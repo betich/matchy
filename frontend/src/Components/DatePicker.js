@@ -75,19 +75,19 @@ class DatePicker extends React.Component {
             <Form.Row>
                 <Form.Group as={Col} md="4" >
                     <Form.Control as="select" required onChange={this.inputChange} data-format="day" value={this.state.day} >
-                    <option value="" disabled selected>Day</option>
+                    <option value="" disabled defaultValue>Day</option>
                     {range(1,31).map((day, i) => <option className="form-select" key={i} value={ day }>{ day }</option>)}
                     </Form.Control>
                 </Form.Group>
                 <Form.Group as={Col} md="4" >
                     <Form.Control as="select" required onChange={this.inputChange} data-format="month" value={this.state.month} >
-                    <option value="" disabled selected>Month</option>
+                    <option value="" disabled defaultValue>Month</option>
                     {range(1,12).map((month, i) => <option className="form-select" key={i} value={ month }>{ month }</option>)}
                     </Form.Control>
                 </Form.Group>
                 <Form.Group as={Col} md="4" >
                     <Form.Control as="select" required onChange={this.inputChange} data-format="year" value={this.state.year} >
-                    <option value="" disabled selected>Year</option>
+                    <option value="" disabled defaultValue>Year</option>
                     {range(this.startYear,this.currentYear).map((year, i) => <option className="form-select" key={i} value={ year }>{ year }</option>)}
                     </Form.Control>
                 </Form.Group>
