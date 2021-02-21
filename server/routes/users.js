@@ -6,7 +6,7 @@ const multer = require('multer');
 const upload = multer();
 const filterFalsy = require('../helpers/filterFalsy');
 const auth = require('../middleware/index');
-const { usernameRegex } = require('../helpers/usernameRegex');
+const usernameRegex = require('../helpers/usernameRegex');
 router
 .get('/', (req, res) => {
     User.find({}).populate('projects').populate('archive')

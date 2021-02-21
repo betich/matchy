@@ -1,6 +1,6 @@
 const Project = require('../models/projects');
 const User = require('../models/users');
-const { usernameRegex } = require('../helpers/usernameRegex');
+const usernameRegex = require('../helpers/usernameRegex');
     
 const middleware = {
     checkLogin: (req, res, next) => {

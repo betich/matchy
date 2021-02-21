@@ -92,8 +92,9 @@ router
             if (foundUser) {
                 return foundUser;
             } else {
-                res.status(404).send("unable to find a user with that username");
-                return null;
+                let Err = new Error("unable to find a user with that username");
+                Err.status = 404;
+                throw Err;
             }
         })
         .then((foundUser) => {
@@ -102,14 +103,18 @@ router
             
             foundUser.projects.forEach((project) => {
                 if (project.info.url === req.params.project) {
-                    projectFound = project.info;
+                    foundProject = project.info;
                 }
             })
 
-            return projectFound;
+            return foundProject;
         })
         .then((foundProject) => {
-            if (!foundProject) res.status(404).send("unable to find the project");
+            if (!foundProject) {
+                let Err = new Error("unable to the project");
+                Err.status = 404;
+                throw Err;
+            }
             else {
                 Project.populate(foundProject, ['owner', 'workers'],
                     (err, populatedProject) => {
@@ -118,7 +123,9 @@ router
                     });
             } 
         })
-        .catch((err) => sendError(req, res, err))
+        .catch((err) => {
+            sendError(req, res, err);
+        })
 })
 
 .put('/:id', [upload.none(), auth.checkProjectOwnership], (req,res) => {
