@@ -13,8 +13,7 @@ router
         Project.estimatedDocumentCount().exec((err, count) => {
             if (err) throw err;
             const random = Math.floor(Math.random() * count);
-
-            Project.findOne()
+            Project.findOne({ owner: { $ne: req.user._id }, workers: { $ne: req.user._id } } )
                 .populate("owner")
                 .populate("workers")
                 .skip(random)
