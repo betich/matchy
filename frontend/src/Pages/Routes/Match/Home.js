@@ -47,7 +47,7 @@ class Match extends React.Component {
 
     handleAcceptClick(e) {
         this.setState({ clickable: false}, () => {
-            axios.post(`/app/match/a/${this.state.Project._id}`)
+            axios.post(`/app/match?p=${this.state.Project._id}`)
                 .catch((err) => this.handleError(err))
                 .finally(() => {
                     this.setState({ clickable: true, loaded: true}, () => {

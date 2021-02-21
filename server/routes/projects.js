@@ -98,20 +98,25 @@ router
         })
         .then((foundUser) => {
             if (!foundUser) return null;
-            let projectFound = false;
+            let foundProject = null;
+            
             foundUser.projects.forEach((project) => {
                 if (project.info.url === req.params.project) {
-                    Project.populate(project.info, ['owner', 'workers'],
-                    (err, populatedProject) => {
-                        if (err) sendError(req, res, err);
-                        else {
-                            res.status(200).json(populatedProject);
-                        }
-                    });
-                    projectFound = true;
+                    projectFound = project.info;
                 }
             })
-            if (!projectFound) res.status(404).send("unable to find the project");
+
+            return projectFound;
+        })
+        .then((foundProject) => {
+            if (!foundProject) res.status(404).send("unable to find the project");
+            else {
+                Project.populate(foundProject, ['owner', 'workers'],
+                    (err, populatedProject) => {
+                        if (err) sendError(req, res, err);
+                        else res.status(200).json(populatedProject);
+                    });
+            } 
         })
         .catch((err) => sendError(req, res, err))
 })

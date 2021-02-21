@@ -28,8 +28,8 @@ router
     }
 })
 
-.post('/a/:id', auth.checkLogin, (req, res) => {
-    Project.findById(req.params.id)
+.post('/', auth.checkLogin, (req, res) => {
+    Project.findById(req.query.p)
         .populate("owner", "_id").populate("workers", "_id")
         .then((foundProject) => {
             if (foundProject) {
