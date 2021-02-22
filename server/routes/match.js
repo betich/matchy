@@ -6,14 +6,30 @@ const User = require('../models/users');
 const sendError = require('../helpers/sendError');
 
 router
-.get('/', auth.checkLogin, (req, res) => {
+.get('/', auth.checkLogin, async (req, res) => {
     try {
         // estimatedDocumentCount() - O(1)
         // countDocuments({}) - O(n)
+        await Project.aggregate([
+            { $match: {
+                $and: [{owner: { $ne: req.user._id }}, {workers: { $ne: req.user._id }}]
+            }},
+            { $sample: { size: 1 } }
+        ])
+        .exec((err, result) => {
+            if (err) throw err;
+            Project.populate(result, ['owner', 'workers'],
+                (err, foundProject) => {
+                    if (err) throw err;
+                    res.status(200).json(foundProject[0]);
+                });
+        });
+        
+        /*
         Project.estimatedDocumentCount().exec((err, count) => {
             if (err) throw err;
             const random = Math.floor(Math.random() * count);
-            Project.findOne({ owner: { $ne: req.user._id }, workers: { $ne: req.user._id } } )
+            Project.findOne({ owner: { $ne: req.user._id }, workers: { $ne: req.user._id }})
                 .populate("owner")
                 .populate("workers")
                 .skip(random)
@@ -22,6 +38,7 @@ router
                     res.status(200).send(result);
                 });
         });
+        */
     } catch (err) {
         sendError(req, res, err);
     }
