@@ -36,6 +36,8 @@ router
                 
                 newProject.name = req.body.projectname;
                 newProject.url = slug(req.body.projectname, '_', {lower: false});
+                console.log(newProject);
+
                 delete newProject["projectname"]; // rename projectname=>name
                 
                 return newProject;
@@ -53,6 +55,7 @@ router
                         role: "owner"
                     });
                     const [user, project] = await Promise.all([foundUser.save(), newProject.save()])
+                    console.log(project);
                     
                     console.info(`Project ${project.name} has been created`);
                     Project.findById(newProject._id).populate("owner")

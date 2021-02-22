@@ -31,6 +31,10 @@ class Create extends React.Component {
             data.append('tags[]', this.state.tags[i]);
         }
 
+        for ( let i = 0; i < this.state.questions.length; i++ ) {
+            data.append('formquestions[]', JSON.stringify(this.state.questions[i]));
+        }
+
         let { valid, invalidData } = validate(data);
         
         if (this.state.tags.length === 0) {
@@ -76,7 +80,6 @@ class Create extends React.Component {
     }
 
     handleFormChange(Formdata) {
-        console.log(Formdata);
         this.setState({questions: Formdata});
     }
 

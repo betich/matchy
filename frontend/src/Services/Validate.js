@@ -107,6 +107,9 @@ const validate = (formData) => {
             case "experiences":
                 break;
 
+            case "formquestions":
+                break;
+
             case "tags":
                 if ( value.length === 0 ) {
                     addToInvalid("Tags", "need at least one tags");
