@@ -4,6 +4,7 @@ import { Form, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Tags from '../../../Components/Tag';
 import { ProjectTags as TagsList } from "../../../Services/Mock";
+import QAForm from "../../../Components/QAForm"
 import validate from "../../../Services/Validate";
 import Error from "../../../Components/Error";
 
@@ -18,6 +19,7 @@ class Create extends React.Component {
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.tagChange = this.tagChange.bind(this);
+        this.handleFormChange = this.handleFormChange.bind(this);
     }
 
     async handleSubmit(e) {
@@ -73,6 +75,11 @@ class Create extends React.Component {
         }
     }
 
+    handleFormChange(Formdata) {
+        console.log(Formdata);
+        this.setState({questions: Formdata});
+    }
+
     render() {
         return (
             <>
@@ -100,6 +107,10 @@ class Create extends React.Component {
                     <Form.Group className="mb-3">
                         <Form.Label>Tags:</Form.Label>
                         <Tags onChange={this.tagChange} tags={TagsList} group="projectTags" />
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label>Question and Answer</Form.Label>
+                        <QAForm type="create" onChange={this.handleFormChange} />
                     </Form.Group>
 
                     <Error errors={this.state.errors} />
