@@ -12,7 +12,10 @@ router
         // countDocuments({}) - O(n)
         await Project.aggregate([
             { $match: {
-                $and: [{owner: { $ne: req.user._id }}, {workers: { $ne: req.user._id }}]
+                $and: [
+                    {owner: { $ne: req.user._id }},
+                    {workers: { $ne: req.user._id }}
+                ]
             }},
             { $sample: { size: 1 } }
         ])
