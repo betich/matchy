@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Button, Card, Form } from 'react-bootstrap';
-import { Link, useHistory } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Button, Card, Form } from "react-bootstrap";
+import { Link, useHistory } from "react-router-dom";
+import QAForm from "../../../Components/QAForm";
 
 const ProjectView = (props) => {
     const Project = props.project;
@@ -14,40 +15,35 @@ const ProjectView = (props) => {
                 <Card
                     bg="white"
                     text="black"
-                    style={{ width: '18rem' }}
+                    style={{ width: "18rem" }}
                     className="mb-2"
-                    >
+                >
                     <Card.Body>
                         <Card.Title>{Project.name}</Card.Title>
                         <Card.Text>by {Owner.username}</Card.Text>
                         <Card.Text>{Project.description}</Card.Text>
-                        <Card.Text>employees: { Workers.map((e) => e.username).join(', ') }</Card.Text>
+                        <Card.Text>
+                            employees:{" "}
+                            {Workers.map((e) => e.username).join(", ")}
+                        </Card.Text>
                         <Card.Text>tags:</Card.Text>
                         <Card.Text>
-                        {Project.tags.map((elem, i) => (
-                            <Button
-                                key={i}
-                                variant="outline-danger"
-                            >
-                                {elem}
-                            </Button>
-                        ))}
+                            {Project.tags.map((elem, i) => (
+                                <Button key={i} variant="outline-danger">
+                                    {elem}
+                                </Button>
+                            ))}
                         </Card.Text>
                     </Card.Body>
                 </Card>
-            )
+            );
+        } else {
+            return <span>can't display the project</span>;
         }
-        else {
-            return (<span>can't display the project</span>)
-        }
-    }
+    };
 
-    return (
-        <>
-        { renderCard() }
-        </>
-    )
-}
+    return <>{renderCard()}</>;
+};
 
 const EditSection = (props) => {
     return (
@@ -91,8 +87,14 @@ const DeleteSection = (props) => {
     };
     return (
         <div>
-            <Button onClick={handleClick} disabled={disable} variant="outline-danger">Delete</Button>
-            { show && (
+            <Button
+                onClick={handleClick}
+                disabled={disable}
+                variant="outline-danger"
+            >
+                Delete
+            </Button>
+            {show && (
                 <div>
                     <Form.Group className="mb-3">
                         <Form.Label>
@@ -105,8 +107,7 @@ const DeleteSection = (props) => {
                         ></Form.Control>
                     </Form.Group>
                 </div>
-            )
-            }
+            )}
         </div>
     );
 };
@@ -116,13 +117,15 @@ const View = (props) => {
     const [loaded, setLoad] = useState(false);
     const [error, setError] = useState(null);
     const [authorized, setAuthorized] = useState(false);
+    const [answer, setAnswer] = useState({});
 
     useEffect(() => {
         const handleError = (err) => {
             // 401, 403s are expected
             if (err.response) {
                 if (err.response.status === 403) return;
-                else if (err.response.status === 500) return setError("internal server error");
+                else if (err.response.status === 500)
+                    return setError("internal server error");
                 else setError(err.response.data);
             } else {
                 setError("an unknown error occured");
@@ -132,23 +135,43 @@ const View = (props) => {
         };
 
         const checkOwnership = (id) => {
-            return axios.get(`/app/projects/checkownership/${id}`)
-                .then(response => response.data)
-                .then(user => user)
+            return axios
+                .get(`/app/projects/checkownership/${id}`)
+                .then((response) => response.data)
+                .then((user) => user)
                 .then(() => setAuthorized(true))
-                .catch(handleError)
-        }
+                .catch(handleError);
+        };
 
-        axios.get(`/app/projects/${props.match.params.user}/${props.match.params.project}`)
-            .then(response => response.data)
-            .then(project => {
+        axios
+            .get(
+                `/app/projects/${props.match.params.user}/${props.match.params.project}`
+            )
+            .then((response) => response.data)
+            .then((project) => {
+                console.log(project);
                 setProject(project);
                 checkOwnership(project._id);
             })
             .catch(handleError)
             .finally(() => setLoad(true));
-
     }, [props.match.params.project, props.match.params.user]);
+
+    const handleAnswer = (value) => {
+        setAnswer(value);
+    };
+
+    const debug = () => {
+        console.log(answer)
+    }
+    const handleSubmitAnswer = () => {
+        axios
+            .post(
+                `/app/projects/${props.match.params.user}/${props.match.params.project}/answer`,
+                answer
+            )
+            .then((res) => res.data);
+    };
 
     const renderComponents = () => {
         const ViewProject = () => {
@@ -157,7 +180,13 @@ const View = (props) => {
                     <Link to="/projects">Back</Link>
                     <h1>{Project.name}</h1>
                     <ProjectView project={Project} />
-                    { authorized && (
+                    <QAForm
+                        type="view"
+                        questions={Project.questions}
+                        onChange={handleAnswer}
+                    />
+                    <Button onClick={debug}>Submit answer</Button>
+                    {authorized && (
                         <>
                             <EditSection id={Project._id} />
                             <DeleteSection
@@ -167,22 +196,18 @@ const View = (props) => {
                         </>
                     )}
                 </>
-            )
-        }
+            );
+        };
 
         if (loaded) {
-            if (error) return (<span>{error}</span>);
-            else return (<> { ViewProject() } </>);
+            if (error) return <span>{error}</span>;
+            else return <> {ViewProject()} </>;
         } else {
-            return (<span>loading...</span>)
+            return <span>loading...</span>;
         }
-    }
+    };
 
-    return (
-        <>
-            { renderComponents() }
-        </>
-    );
+    return <>{renderComponents()}</>;
 };
 
 export default View;

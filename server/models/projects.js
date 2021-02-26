@@ -15,7 +15,7 @@ const projectSchema = new mongoose.Schema({
         { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
     ],
     tags: [{ type: String }],
-    questions: [{ type: String }]
+    questions: [{ value: { type: String }}]
 }, options);
 
 projectSchema.pre('remove', function() {
