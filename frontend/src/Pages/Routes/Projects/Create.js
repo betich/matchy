@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Tags from '../../../Components/Tag';
 import { ProjectTags as TagsList } from "../../../Services/Mock";
@@ -79,28 +79,34 @@ class Create extends React.Component {
                 <Link to="/projects">back</Link>
                 <h1>Create a Project</h1>
                 <Form onSubmit={this.handleSubmit} noValidate>
-                    <Form.Group>
-                        <Form.Label>Project name</Form.Label>
-                        <Form.Control
-                            name="projectname"
-                            required
-                            type="text"
-                            placeholder="Example project"
-                        />
-                    </Form.Group>
+                    <Form.Row>
+                        <Form.Group as={Col} sm={12}>
+                            <Form.Label>Project name</Form.Label>
+                            <Form.Control
+                                name="projectname"
+                                required
+                                type="text"
+                                placeholder="Example project"
+                            />
+                        </Form.Group>
+                    </Form.Row>
+                    
+                    <Form.Row>
+                        <Form.Group as={Col} sm={12}>
+                            <Form.Label>Description</Form.Label>
+                            <Form.Control
+                                name="description"
+                                placeholder="Description"
+                            />
+                        </Form.Group>  
+                    </Form.Row>
 
-                    <Form.Group>
-                        <Form.Label>Description</Form.Label>
-                        <Form.Control
-                            name="description"
-                            placeholder="Description"
-                        />
-                    </Form.Group>
-
-                    <Form.Group className="mb-3">
-                        <Form.Label>Tags:</Form.Label>
-                        <Tags onChange={this.tagChange} tags={TagsList} group="projectTags" />
-                    </Form.Group>
+                    <Form.Row>
+                        <Form.Group as={Col} sm={12} className="mb-3">
+                            <Form.Label>Tags:</Form.Label>
+                            <Tags onChange={this.tagChange} tags={TagsList} group="projectTags" />
+                        </Form.Group>
+                    </Form.Row>
 
                     <Error errors={this.state.errors} />
 

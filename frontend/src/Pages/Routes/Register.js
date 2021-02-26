@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React from 'react';
-import { Container, Form, Button } from 'react-bootstrap';
+import { Container, Form, Button, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Tags from '../../Components/Tag';
 import ExperienceGroup from '../../Components/ExpandableFields';
@@ -99,82 +99,94 @@ class Create extends React.Component {
                 <Link to="/">back</Link>
                 <h1>Create User</h1>
                 <Form onSubmit={this.handleSubmit} noValidate>
-                    <Form.Group controlId="username">
-                        <Form.Label>Username</Form.Label>
-                        <Form.Control
-                            required
-                            autoFocus
-                            name="username"
-                            placeholder="Username"
-                        />
-                    </Form.Group>
+                    <Form.Row>
+                        <Form.Group as={Col} sm={12} controlId="username">
+                                <Form.Label>Username</Form.Label>
+                                <Form.Control
+                                    required
+                                    autoFocus
+                                    name="username"
+                                    placeholder="Username"
+                                />
+                            </Form.Group>
+                        </Form.Row>
+                    <Form.Row>
+                        <Form.Group as={Col} sm={6} controlId="fullname">
+                            <Form.Label>Full name</Form.Label>
+                            <Form.Control
+                                required
+                                name="fullname"
+                                placeholder="Full Name"
+                            />
+                        </Form.Group>
+                        <Form.Group as={Col} sm={6} controlId="email">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control
+                                required
+                                name="email"
+                                type="email"
+                                placeholder="Email"
+                            />
+                        </Form.Group>
+                    </Form.Row>
 
-                    <Form.Group controlId="email">
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control
-                            required
-                            name="email"
-                            type="email"
-                            placeholder="Email"
-                        />
-                    </Form.Group>
+                    <Form.Row>
+                        <Form.Group as={Col} sm={12} controlId="password">
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control
+                                required
+                                name="password"
+                                type="password"
+                                placeholder="Password"
+                            />
+                        </Form.Group>
+                    </Form.Row>
 
-                    <Form.Group controlId="password">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control
-                            required
-                            name="password"
-                            type="password"
-                            placeholder="Password"
-                        />
-                    </Form.Group>
+                    <Form.Row>
+                        <Form.Group as={Col} sm={12} className="mb-3" controlId="education">
+                            <Form.Label>Education:</Form.Label>
+                            <ExperienceGroup
+                                type="select"
+                                name="education"
+                                onChange={this.setInfo}
+                                options={EducationOptions}
+                            />
+                        </Form.Group>
+                    </Form.Row>
 
-                    <Form.Group controlId="fullname">
-                        <Form.Label>Full name</Form.Label>
-                        <Form.Control
-                            required
-                            name="fullname"
-                            placeholder="Full Name"
-                        />
-                    </Form.Group>
+                    <Form.Row>
+                        <Form.Group as={Col} sm={12} controlId="birthday">
+                            <Form.Label>Birthday</Form.Label>
+                            <DatePicker
+                                onChange={this.handleBirthday}
+                                day={this.state.birthday.day}
+                                month={this.state.birthday.month}
+                                year={this.state.birthday.year}
+                            />
+                        </Form.Group>
+                    </Form.Row>
 
-                    <Form.Group className="mb-3" controlId="education">
-                        <Form.Label>Education:</Form.Label>
-                        <ExperienceGroup
-                            type="select"
-                            name="education"
-                            onChange={this.setInfo}
-                            options={EducationOptions}
-                        />
-                    </Form.Group>
+                    <Form.Row>
+                        <Form.Group as={Col} sm={12} className="mb-3" controlId="work">
+                            <Form.Label>Work</Form.Label>
+                            <ExperienceGroup
+                                type="input"
+                                name="work"
+                                onChange={this.setInfo}
+                            />
+                        </Form.Group>
+                    </Form.Row>
 
-                    <Form.Group className="mb-3" controlId="work">
-                        <Form.Label>Work:</Form.Label>
-                        <ExperienceGroup
-                            type="input"
-                            name="work"
-                            onChange={this.setInfo}
-                        />
-                    </Form.Group>
-
-                    <Form.Group controlId="birthday">
-                        <Form.Label>Birthday</Form.Label>
-                        <DatePicker
-                            onChange={this.handleBirthday}
-                            day={this.state.birthday.day}
-                            month={this.state.birthday.month}
-                            year={this.state.birthday.year}
-                        />
-                    </Form.Group>
-
-                    <Form.Group className="mb-3" controlId="interests">
-                        <Form.Label>Interests:</Form.Label>
-                        <Tags
-                            onChange={this.tagChange}
-                            tags={Interests}
-                            group="interests"
-                        />
-                    </Form.Group>
+                    <Form.Row>
+                        <Form.Group as={Col} sm={12} className="mb-3" controlId="interests">
+                            <Form.Label>Interests</Form.Label>
+                            <Tags
+                                onChange={this.tagChange}
+                                tags={Interests}
+                                group="interests"
+                            />
+                        </Form.Group>
+                    </Form.Row>
 
                     <Error errors={this.state.errors} />
 
