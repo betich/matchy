@@ -161,9 +161,6 @@ const View = (props) => {
         setAnswer(value);
     };
 
-    const debug = () => {
-        console.log(answer)
-    }
     const handleSubmitAnswer = () => {
         axios
             .post(
@@ -185,7 +182,7 @@ const View = (props) => {
                         questions={Project.questions}
                         onChange={handleAnswer}
                     />
-                    <Button onClick={debug}>Submit answer</Button>
+                    <Button onClick={handleSubmitAnswer}>Submit answer</Button>
                     {authorized && (
                         <>
                             <EditSection id={Project._id} />

@@ -1,6 +1,7 @@
 const express = require('express');
 const User = require('../models/users');
 const Project = require('../models/projects');
+const Response = require('../models/responses');
 const router = express.Router();
 const slug = require('slug');
 const multer = require('multer');
@@ -127,6 +128,44 @@ router
                         else res.status(200).json(populatedProject);
                     });
             } 
+        })
+        .catch((err) => {
+            sendError(req, res, err);
+        })
+})
+
+.post('/:user/:project/answer', (req, res) => {
+    User.findOne({ username: req.params.user }).populate("projects.info")
+        .then((foundUser) => {
+            if (foundUser) {
+                return foundUser;
+            } else {
+                let Err = new Error("unable to find a user with that username");
+                Err.status = 404;
+                throw Err;
+            }
+        })
+        .then((foundUser) => {
+            if (!foundUser) return null;
+            let foundProject = null;
+            
+            foundUser.projects.forEach((project) => {
+                if (project.info.url === req.params.project) {
+                    foundProject = project.info;
+                }
+            })
+
+            return foundProject;
+        })
+        .then((foundProject) => {
+            Response.create(req.body, async (err, response) => {
+                if (err) throw err;
+                foundProject.responses.push(response);
+                foundProject.save();
+                res.status(200).json({});
+                console.log('new response added');
+            })
+            console.log(foundProject);
         })
         .catch((err) => {
             sendError(req, res, err);
