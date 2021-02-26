@@ -150,12 +150,14 @@ class InputFieldGroup extends React.Component {
     handleDelete(field) {
         let newFields = [...this.state.fields];
         for (let i = 0; i < newFields.length; i++) {
+            console.log(field["uID"], this.state.fields[i]["uID"]);
             if (field["uID"] === this.state.fields[i]["uID"]) {
                 newFields = newFields.slice(0, i).concat(newFields.slice(i+1, newFields.length));
             }
         }
 
         this.setState({ fields: newFields }, () => {
+            console.log(this.state.fields)
             this.props.onChange(this.props.name, this.state.fields);
         });
     }

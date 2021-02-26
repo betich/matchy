@@ -8,6 +8,7 @@ const projectSchema = new mongoose.Schema({
     name: { type: String, required: true },
     description: String,
     url: String,
+    responses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Response' }],
     owner: {
         type: mongoose.Schema.Types.ObjectId, ref: 'User'
     },
@@ -15,7 +16,7 @@ const projectSchema = new mongoose.Schema({
         { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
     ],
     tags: [{ type: String }],
-    questions: [{ value: { type: String }}]
+    questions: [{ type: Object }]
 }, options);
 
 projectSchema.pre('remove', function() {
@@ -74,25 +75,5 @@ projectSchema.pre('remove', function() {
         if (err) console.error(err);
     })
 });
-
-/* USING UPDATE (Doesn't move deleted projects to archive)
-// find workers, owners
-    await User.updateMany({
-        _id: {
-            $in: [this.owner, ...this.workers]
-        }
-    }, {
-        $pull: {
-            projects: { projectid: this._id }
-        }
-    }, (err, updateStatus) => {
-        if (err) throw err;
-        else if (updateStatus.n === 0) throw 'no user found';
-        else {
-            // and remove the project out of the 'projects' field
-            console.log(`updated user sucessfully:`, updateStatus);
-        }
-    })
-*/
 
 module.exports = mongoose.model("Project", projectSchema);

@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const project = mongoose.Schema({
     info: { type: mongoose.Schema.Types.ObjectId, ref: 'Project' },
+    response: { type: mongoose.Schema.Types.ObjectId, ref: 'Response' },
     role: String
 }, { _id : false });
 
