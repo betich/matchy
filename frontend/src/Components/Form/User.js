@@ -3,7 +3,7 @@ import { Col, Form } from 'react-bootstrap';
 import Tags from '../Tag';
 import ExperienceGroup from '../ExpandableFields';
 import DatePicker from '../DatePicker';
-import { Interests, EducationOptions } from '../../Services/Mock';
+import { TagsList as Interests, EducationOptions } from '../../Services/Mock';
 
 class UserForm extends React.Component {
     constructor(props) {

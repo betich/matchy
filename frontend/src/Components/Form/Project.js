@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Col } from 'react-bootstrap';
 import Tags from '../Tag';
-import { ProjectTags as TagsList } from "../../Services/Mock";
+import { TagsList } from "../../Services/Mock";
 
 class ProjectForm extends React.Component {
     constructor(props) {
