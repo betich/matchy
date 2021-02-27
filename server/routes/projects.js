@@ -80,6 +80,33 @@ router
     res.status(200).send(req.user);
 })
 
+.get('/answer/:id', auth.checkProjectOwnership, (req,res) => {
+    Project.findById(
+            req.params.id
+        )
+        .then((foundProject) => {
+            if (foundProject) {
+                return foundProject;
+            } else {
+                res.status(404).send("unable to find the project3");
+                return null;
+            }
+        })
+        .then((foundProject) => {
+            if (!foundProject) {
+                res.status(404).send("unable to find the project1");
+            }
+            Project.populate(foundProject, ['responses'], (err, populatedProject) => {
+                if (err) throw err;
+                Response.populate(populatedProject.responses, ['user', 'project'], (err, populatedResponse) => {
+                    if (err) throw err;
+                    res.status(200).send(populatedResponse);
+                })
+            })
+        })
+        .catch((err) => sendError(req, res, err))
+})
+
 .get('/i/:id', (req, res) => {
     Project.findById(req.params.id).populate("owner").populate("workers")
         .then((foundProject) => {
@@ -98,7 +125,7 @@ router
             if (foundUser) {
                 return foundUser;
             } else {
-                let Err = new Error("unable to find a user with that username");
+                let Err = new Error("unable to find a user with that username2");
                 Err.status = 404;
                 throw Err;
             }
@@ -158,14 +185,17 @@ router
             return foundProject;
         })
         .then((foundProject) => {
-            Response.create(req.body, async (err, response) => {
+            let response = {};
+            response.answers = req.body;
+            response.user = req.user;
+            response.project = foundProject;
+            Response.create(response, async (err, response) => {
                 if (err) throw err;
                 foundProject.responses.push(response);
                 foundProject.save();
                 res.status(200).json({});
                 console.log('new response added');
             })
-            console.log(foundProject);
         })
         .catch((err) => {
             sendError(req, res, err);

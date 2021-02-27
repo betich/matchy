@@ -7,7 +7,7 @@ const responseSchema = new mongoose.Schema({
     project: {
         type: mongoose.Schema.Types.ObjectId, ref: 'Project'
     },
-    answers: [{ type: Object }]
+    answers: { type: Object }
 })
 
 module.exports = mongoose.model("Response", responseSchema);
