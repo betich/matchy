@@ -18,7 +18,7 @@ router
     res.status(200).send('logged in');
 })
 
-.post('/register', upload.none(), (req, res) => {
+.post('/register', (req, res) => {
     const { salt, hashed } = hash.hashPassword(req.body.password);
     User.findOne({username: new RegExp('\\b' + req.body.username + '\\b', 'i')})
         .then((foundUser) => {
@@ -31,11 +31,6 @@ router
                 delete newUser["password"];
                 newUser.salt = salt;
                 newUser.hash = hashed;
-            
-                const exp = newUser.experiences;
-                for (const e in exp) {
-                    newUser.experiences[e] = JSON.parse(exp[e]);
-                }
 
                 return newUser;
             }
