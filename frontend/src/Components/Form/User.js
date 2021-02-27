@@ -81,21 +81,44 @@ class UserForm extends React.Component {
     }
 
     render() {
+        const UserNamePassword = () => {
+            if (!this.props.edit) {
+                return (
+                    <>
+                        <Form.Row>
+                            <Form.Group as={Col} sm={12} controlId="username">
+                                <Form.Label>Username</Form.Label>
+                                <Form.Control
+                                    required
+                                    autoFocus
+                                    name="username"
+                                    placeholder="Username"
+                                    onChange={this.inputChange}
+                                    value={this.state.username}
+                                />
+                            </Form.Group>
+                        </Form.Row>
+
+                        <Form.Row>
+                            <Form.Group as={Col} sm={12} controlId="password">
+                                <Form.Label>Password</Form.Label>
+                                <Form.Control
+                                    required
+                                    name="password"
+                                    type="password"
+                                    placeholder="Password"
+                                    onChange={this.inputChange}
+                                    value={this.state.password}
+                                />
+                            </Form.Group>
+                        </Form.Row>
+                    </>
+                );
+            }
+        }
         return (
             <>
-                <Form.Row>
-                    <Form.Group as={Col} sm={12} controlId="username">
-                        <Form.Label>Username</Form.Label>
-                        <Form.Control
-                            required
-                            autoFocus
-                            name="username"
-                            placeholder="Username"
-                            onChange={this.inputChange}
-                            value={this.state.username}
-                        />
-                    </Form.Group>
-                </Form.Row>
+                { UserNamePassword() }
 
                 <Form.Row>
                     <Form.Group as={Col} sm={6} controlId="fullname">
@@ -117,20 +140,6 @@ class UserForm extends React.Component {
                             placeholder="Email"
                             onChange={this.inputChange}
                             value={this.state.email}
-                        />
-                    </Form.Group>
-                </Form.Row>
-
-                <Form.Row>
-                    <Form.Group as={Col} sm={12} controlId="password">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control
-                            required
-                            name="password"
-                            type="password"
-                            placeholder="Password"
-                            onChange={this.inputChange}
-                            value={this.state.password}
                         />
                     </Form.Group>
                 </Form.Row>
@@ -177,6 +186,7 @@ class UserForm extends React.Component {
                             onChange={this.tagChange}
                             tags={Interests}
                             group="interests"
+                            onAsDefault={this.state.interests}
                         />
                     </Form.Group>
                 </Form.Row>

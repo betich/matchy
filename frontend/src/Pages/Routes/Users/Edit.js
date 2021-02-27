@@ -75,7 +75,7 @@ class Edit extends React.Component {
                         <Link to={`/users/${this.state.oldUserData.username}`}>back</Link>
                         <h1>Edit user information</h1>
                         <Form onSubmit={this.handleSubmit} noValidate>
-                            <UserForm inputChange={this.handleInputChange} oldData={this.state.oldUserData} />
+                            <UserForm inputChange={this.handleInputChange} oldData={this.state.oldUserData} edit={true} />
 
                             <Error errors={this.state.errors} />
 

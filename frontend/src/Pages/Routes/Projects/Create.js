@@ -1,44 +1,36 @@
 import axios from 'axios';
 import React from 'react';
-import { Form, Button, Col } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import Tags from '../../../Components/Tag';
-import { ProjectTags as TagsList } from "../../../Services/Mock";
 import validate from "../../../Services/Validate";
 import Error from "../../../Components/Error";
+import ProjectForm from "../../../Components/Form/Project";
 
 class Create extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            tags: [],
-            questions: [],
+            data: {},
             errors: {}
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.tagChange = this.tagChange.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+    }
+
+    handleInputChange(formData) {
+        this.setState({ data: formData });
     }
 
     async handleSubmit(e) {
         e.preventDefault();
-        this.setState({ errors: {}});
-        const data = new FormData(e.target);
-
-        for ( let i = 0; i < this.state.tags.length; i++ ) {
-            data.append('tags[]', this.state.tags[i]);
-        }
+        const data = this.state.data;
 
         let { valid, invalidData } = validate(data);
-        
-        if (this.state.tags.length === 0) {
-            valid = false;
-            invalidData["tags"] = ['at least one tag is required'];
-        }
 
         if (valid) {
             const options = {
-                headers: {'Content-Type': 'multipart/form-data' }
+                headers: {'Content-Type': 'application/json' }
             };
             
             axios.post('/app/projects', data, options)
@@ -63,51 +55,13 @@ class Create extends React.Component {
         }
     }
 
-    tagChange(group, tags) {
-        switch (group) {
-            case 'projectTags':
-                this.setState({ tags: tags })
-                break;
-            default:
-                console.error('unknown tag group');
-        }
-    }
-
     render() {
         return (
             <>
                 <Link to="/projects">back</Link>
                 <h1>Create a Project</h1>
                 <Form onSubmit={this.handleSubmit} noValidate>
-                    <Form.Row>
-                        <Form.Group as={Col} sm={12}>
-                            <Form.Label>Project name</Form.Label>
-                            <Form.Control
-                                name="projectname"
-                                required
-                                type="text"
-                                placeholder="Example project"
-                            />
-                        </Form.Group>
-                    </Form.Row>
-                    
-                    <Form.Row>
-                        <Form.Group as={Col} sm={12}>
-                            <Form.Label>Description</Form.Label>
-                            <Form.Control
-                                name="description"
-                                placeholder="Description"
-                            />
-                        </Form.Group>  
-                    </Form.Row>
-
-                    <Form.Row>
-                        <Form.Group as={Col} sm={12} className="mb-3">
-                            <Form.Label>Tags:</Form.Label>
-                            <Tags onChange={this.tagChange} tags={TagsList} group="projectTags" />
-                        </Form.Group>
-                    </Form.Row>
-
+                    <ProjectForm inputChange={this.handleInputChange} />
                     <Error errors={this.state.errors} />
 
                     <Button variant="primary" type="submit">
