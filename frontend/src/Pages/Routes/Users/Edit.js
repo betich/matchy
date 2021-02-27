@@ -39,7 +39,9 @@ class Edit extends React.Component {
 
     async handleSubmit(e) {
         e.preventDefault();
-        const data = this.state.data;
+        let data = this.state.data;
+        delete data["username"];
+        delete data["password"];
 
         const { valid, invalidData } = validate(data);
 
