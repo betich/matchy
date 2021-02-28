@@ -1,30 +1,5 @@
 const validate = (formData) => {
     let invalidData = {};
-    const objKeyRegex = /^([\w]+)\[([\w]+)?\]/;
-    let formObj = {};
-    
-    const isJson = (str) => {
-        try {
-            JSON.parse(str);
-        } catch (e) {
-            return false;
-        }
-        return true;
-    }
-
-    formData.forEach((value, key) => {
-        let keyMatch = key.match(objKeyRegex);
-        if (keyMatch && keyMatch[1] && keyMatch[2]) {
-            // Object
-            formObj[keyMatch[1]] = formObj[keyMatch[1]] ? formObj[keyMatch[1]] : {};
-            formObj[keyMatch[1]][keyMatch[2]] = isJson(value) ? JSON.parse(value) : value; // If JSON.parse works assign value
-        } else if (keyMatch && keyMatch[1]) {
-            // Array
-            formObj[keyMatch[1]] = formObj[keyMatch[1]] ? formObj[keyMatch[1]] : [];
-            formObj[keyMatch[1]].push(value);
-        }
-        else formObj[key] = value;
-    });
 
     const addToInvalid = (key, errMsg) => {
         if (key in invalidData) {
@@ -41,7 +16,7 @@ const validate = (formData) => {
         return year;
     };
 
-    for (const [key, value] of Object.entries(formObj)) {
+    for (const [key, value] of Object.entries(formData)) {
         switch (key) {
             case "username":
                 const usernameRegex = /[^a-zA-Z0-9]/g;
@@ -82,7 +57,7 @@ const validate = (formData) => {
                 break;
 
             case "password":
-                const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+                const passwordRegex = /^(?=.*[a-z])(?=.*\d).{8,}$/;
                 const passwordMatch = value.match(passwordRegex);
 
                 if (!passwordMatch) {
@@ -107,12 +82,12 @@ const validate = (formData) => {
             case "experiences":
                 break;
 
-            case "formquestions":
+            case "questions":
                 break;
 
             case "tags":
                 if ( value.length === 0 ) {
-                    addToInvalid("Tags", "need at least one tags");
+                    addToInvalid("Tags", "at least one tag is required");
                 }
                 break;
 

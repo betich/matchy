@@ -7,6 +7,8 @@ const options = {
 const projectSchema = new mongoose.Schema({
     name: { type: String, required: true },
     description: String,
+    tags: [{ type: String }],
+    questions: [{ type: Object }],
     url: String,
     responses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Response' }],
     owner: {
@@ -14,9 +16,7 @@ const projectSchema = new mongoose.Schema({
     },
     workers: [
         { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
-    ],
-    tags: [{ type: String }],
-    questions: [{ type: Object }]
+    ]
 }, options);
 
 projectSchema.pre('remove', function() {

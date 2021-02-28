@@ -26,7 +26,7 @@ router
         .catch((err) => sendError(req, res, err))
 })
 
-.post('/', [auth.checkLogin, upload.none()], (req, res) => {
+.post('/', [auth.checkLogin], (req, res) => {
     Project.findOne({ name: req.body.projectname })
         .then((foundProject) => {
             if (foundProject) {
@@ -38,7 +38,7 @@ router
                 newProject.name = req.body.projectname;
                 newProject.url = slug(req.body.projectname, '_', {lower: false});
                 newProject.questions = [];
-                req.body.formquestions.forEach(elem => newProject.questions.push(JSON.parse(elem)));
+                req.body.questions.forEach(elem => newProject.questions.push(elem));
 
                 delete newProject["projectname"]; // rename projectname=>name
                 delete newProject["formquestions"];

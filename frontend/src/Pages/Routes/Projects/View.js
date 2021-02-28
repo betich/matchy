@@ -59,13 +59,15 @@ const ViewOneAnswer = (props) => {
     }
     const handleClose = () => props.close();
     console.log(props);
-    const { user={}, answers={} } = props.answers[props.idx];
+    const { user = {}, answers = {} } = props.answers[props.idx];
 
     const response = Object.keys(answers).map((key) => {
-        return <div>
-            {key + ": " + answers[key]}
-            <br />
-        </div>;
+        return (
+            <div>
+                {key + ": " + answers[key]}
+                <br />
+            </div>
+        );
     });
 
     return (
@@ -92,7 +94,7 @@ const ViewAnswerSection = (props) => {
     const [idx, setIdx] = useState(-1);
     // rendered component
 
-    const view2 = (
+    const viewtable = (
         <>
             <Table>
                 <thead>
@@ -104,50 +106,41 @@ const ViewAnswerSection = (props) => {
                 </thead>
                 <tbody>
                     {answers.map((elem, idx) => {
-                        return <>
-                            <tr>
-                                <td>
-                                    {idx+1}
-                                </td>
-                                <td>
-                                    {elem.user.fullname}
-                                </td>
-                                <td>
-                                    <Button onClick={() => setModal(idx)}>show</Button>
-                                </td>
-                            </tr>
-                        </>;
+                        return (
+                            <>
+                                <tr>
+                                    <td>{idx + 1}</td>
+                                    <td>{elem.user.fullname}</td>
+                                    <td>
+                                        <Button onClick={() => setModal(idx)}>
+                                            show
+                                        </Button>
+                                    </td>
+                                </tr>
+                            </>
+                        );
                     })}
                 </tbody>
             </Table>
         </>
     );
 
-    const view = answers.map((elem, idx) => {
-        return (
-            <>
-                <Button onClick={() => setModal(idx)}>Show</Button>
-            </>
-        );
-    });
-    
     useEffect(() => {
         axios
-        .get(`/app/projects/answer/${props.id}`)
-        .then((raw) => raw.data)
-        .then((responses) => setAnswers(responses));
+            .get(`/app/projects/answer/${props.id}`)
+            .then((raw) => raw.data)
+            .then((responses) => setAnswers(responses));
     }, [props.id, show]);
-    
-        const handleClick = () => setShow(!show);
-    
-        const handleClose = () => setShowModal(false);
-    
-        const setModal = (idx) => {
-            setIdx(idx);
-    
-            setShowModal(true);
-        };
-    
+
+    const handleClick = () => setShow(!show);
+
+    const handleClose = () => setShowModal(false);
+
+    const setModal = (idx) => {
+        setIdx(idx);
+
+        setShowModal(true);
+    };
 
     return (
         <>
@@ -160,7 +153,7 @@ const ViewAnswerSection = (props) => {
                 on={showModal}
                 close={handleClose}
             />
-            {show && <>{view2}</>}
+            {show && <>{viewtable}</>}
         </>
     );
 };
@@ -261,7 +254,6 @@ const View = (props) => {
             )
             .then((response) => response.data)
             .then((project) => {
-                console.log(project);
                 setProject(project);
                 checkOwnership(project._id);
             })
@@ -282,6 +274,11 @@ const View = (props) => {
             .then((res) => res.data);
     };
 
+    const haveQuestion = () => {
+        console.log(Project);
+        return Project.questions.length > 0;
+    };
+
     const renderComponents = () => {
         const ViewProject = () => {
             return (
@@ -294,7 +291,15 @@ const View = (props) => {
                         questions={Project.questions}
                         onChange={handleAnswer}
                     />
-                    <Button onClick={handleSubmitAnswer}>Submit answer</Button>
+                    {haveQuestion() ? (
+                        <>
+                            <Button onClick={handleSubmitAnswer}>
+                                Submit answer
+                            </Button>
+                        </>
+                    ) : (
+                        <></>
+                    )}
                     {authorized && (
                         <>
                             <EditSection id={Project._id} />
@@ -302,7 +307,13 @@ const View = (props) => {
                                 id={Project._id}
                                 confirmationText={Project.name}
                             />
-                            <ViewAnswerSection id={Project._id} />
+                            {haveQuestion() ? (
+                                <>
+                                    <ViewAnswerSection id={Project._id} />
+                                </>
+                            ) : (
+                                <></>
+                            )}
                         </>
                     )}
                 </>
