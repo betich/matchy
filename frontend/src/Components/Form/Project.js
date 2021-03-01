@@ -2,7 +2,7 @@ import React from "react";
 import { Form, Col } from "react-bootstrap";
 import Tags from "../Tag";
 import { TagsList } from "../../Services/Mock";
-import QAForm from "../../Components/QAForm";
+import { CreateQA } from "../../Components/QAForm";
 
 class ProjectForm extends React.Component {
     constructor(props) {
@@ -26,7 +26,7 @@ class ProjectForm extends React.Component {
 
         this.tagChange = this.tagChange.bind(this);
         this.inputChange = this.inputChange.bind(this);
-        this.kuy = this.kuy.bind(this);
+        this.formQAChange = this.formQAChange.bind(this);
     }
 
     inputChange(e) {
@@ -35,7 +35,7 @@ class ProjectForm extends React.Component {
         });
     }
 
-    kuy(form) {
+    formQAChange(form) {
         this.setState({ questions: form }, () => {
             this.props.inputChange(this.state);
         });
@@ -95,7 +95,7 @@ class ProjectForm extends React.Component {
                 </Form.Row>
                 <Form.Group>
                     <Form.Label>Question and Answer</Form.Label>
-                    <QAForm type="create" onChange={this.kuy} />
+                    <CreateQA onChange={this.formQAChange} />
                 </Form.Group>
             </>
         );

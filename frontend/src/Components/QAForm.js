@@ -47,12 +47,12 @@ const CreateOneForm = (props) => {
                 value={props.value.value}
             ></Form.Control>
             <Form.Control placeholder="Answer" disabled></Form.Control>
-            <Button onClick={handleDelete}>Delete</Button>
+            <Button variant="danger" onClick={handleDelete}>Delete</Button>
         </>
     );
 };
 
-const ViewForm = (props) => {
+const FillQA = (props) => {
     const [answers, setAnswers] = useState({});
     
     const handleChange = (key, value) => {
@@ -63,9 +63,19 @@ const ViewForm = (props) => {
 
     return <>
         <Form>
-            {props.questions.map((elem,idx) => {
-                return <ViewOneForm question={elem} key={idx} onChange={handleChange} />
+            {props.questions.map((elem, idx) => {
+                return <ViewOneForm
+                    key={idx}
+                    question={elem}
+                    onChange={handleChange}
+                />
             })}
+            <Button
+                onClick={props.onSubmit}
+                variant="info"
+            >
+                Submit answer
+            </Button>
         </Form>
     </>;
 };
@@ -91,42 +101,21 @@ const CreateQA = (props) => {
         FormChange(QuestionList);
     }, [QuestionList, props.onChange]);
 
-    const k = QuestionList.map((elem, idx) => {
+    const Questions = QuestionList.map((elem, idx) => {
             return (
                 <CreateOneForm
-                    kk={idx}
                     key={idx}
                     value={elem}
                     onChange={(value) => handleChange(idx, value)}
-                ></CreateOneForm>
+                />
     )});
 
     return (
         <>
-            <Button onClick={createForm}>Create</Button>
-            {k}
+            <Button onClick={createForm} variant="outline-info">Create</Button>
+            {Questions}
         </>
     );
 };
 
-const QAForm = (props) => {
-    const createForm = (type) => {
-        switch (type) {
-            case "create":
-                return <CreateQA onChange={props.onChange} />;
-            case "view":
-                return (
-                    <ViewForm
-                        onChange={props.onChange}
-                        questions={props.questions}
-                    />
-                );
-            default:
-                console.error("type doesn't exist");
-        }
-    };
-
-    return <>{createForm(props.type)}</>;
-};
-
-export default QAForm;
+export { FillQA, CreateQA };

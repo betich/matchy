@@ -109,9 +109,9 @@ const UserCard = (props) => {
                 <Card.Text>birthday: {`${user.birthday.day}/${user.birthday.month}/${user.birthday.year}`}</Card.Text>
                 <Card.Text>interests:</Card.Text>
                 <Card.Text>
-                    {user.interests.map((elem, i) => (
+                    {user.interests.map((elem) => (
                         <Button
-                            key={i}
+                            key={elem._id}
                             variant="outline-danger"
                         >
                             {elem}

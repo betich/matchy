@@ -64,7 +64,7 @@ class Create extends React.Component {
                     <ProjectForm inputChange={this.handleInputChange} />
                     <Error errors={this.state.errors} />
 
-                    <Button variant="primary" type="submit">
+                    <Button variant="info" type="submit">
                         Create
                     </Button>
                 </Form>

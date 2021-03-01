@@ -42,7 +42,6 @@ router
 
                 delete newProject["projectname"]; // rename projectname=>name
                 delete newProject["formquestions"];
-                console.log(newProject);
 
                 return newProject;
             }
@@ -194,7 +193,7 @@ router
                 foundProject.responses.push(response);
                 foundProject.save();
                 res.status(200).json({});
-                console.log('new response added');
+                console.info('new response added');
             })
         })
         .catch((err) => {

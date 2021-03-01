@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, Card, Form, Modal, Table } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
-import QAForm from "../../../Components/QAForm";
+import { FillQA as QAForm } from "../../../Components/QAForm";
 
 const ProjectView = (props) => {
     const Project = props.project;
@@ -58,12 +58,11 @@ const ViewOneAnswer = (props) => {
         return <></>;
     }
     const handleClose = () => props.close();
-    console.log(props);
     const { user = {}, answers = {} } = props.answers[props.idx];
 
-    const response = Object.keys(answers).map((key) => {
+    const response = Object.keys(answers).map((key, i) => {
         return (
-            <div>
+            <div key={i}>
                 {key + ": " + answers[key]}
                 <br />
             </div>
@@ -107,17 +106,15 @@ const ViewAnswerSection = (props) => {
                 <tbody>
                     {answers.map((elem, idx) => {
                         return (
-                            <>
-                                <tr>
-                                    <td>{idx + 1}</td>
-                                    <td>{elem.user.fullname}</td>
-                                    <td>
-                                        <Button onClick={() => setModal(idx)}>
-                                            show
-                                        </Button>
-                                    </td>
-                                </tr>
-                            </>
+                            <tr key={idx}>
+                                <td>{idx + 1}</td>
+                                <td>{elem.user.fullname}</td>
+                                <td>
+                                    <Button onClick={() => setModal(idx)}>
+                                        show
+                                    </Button>
+                                </td>
+                            </tr>
                         );
                     })}
                 </tbody>
@@ -133,7 +130,6 @@ const ViewAnswerSection = (props) => {
     }, [props.id, show]);
 
     const handleClick = () => setShow(!show);
-
     const handleClose = () => setShowModal(false);
 
     const setModal = (idx) => {
@@ -144,7 +140,10 @@ const ViewAnswerSection = (props) => {
 
     return (
         <>
-            <Button variant="primary" onClick={handleClick}>
+            <Button
+                variant="info"
+                onClick={handleClick}
+            >
                 Show answers
             </Button>
             <ViewOneAnswer
@@ -265,7 +264,8 @@ const View = (props) => {
         setAnswer(value);
     };
 
-    const handleSubmitAnswer = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
         axios
             .post(
                 `/app/projects/${props.match.params.user}/${props.match.params.project}/answer`,
@@ -275,7 +275,6 @@ const View = (props) => {
     };
 
     const haveQuestion = () => {
-        console.log(Project);
         return Project.questions.length > 0;
     };
 
@@ -286,16 +285,13 @@ const View = (props) => {
                     <Link to="/projects">Back</Link>
                     <h1>{Project.name}</h1>
                     <ProjectView project={Project} />
-                    <QAForm
-                        type="view"
-                        questions={Project.questions}
-                        onChange={handleAnswer}
-                    />
                     {haveQuestion() ? (
                         <>
-                            <Button onClick={handleSubmitAnswer}>
-                                Submit answer
-                            </Button>
+                            <QAForm
+                                questions={Project.questions}
+                                onChange={handleAnswer}
+                                onSubmit={handleSubmit}
+                            />
                         </>
                     ) : (
                         <></>

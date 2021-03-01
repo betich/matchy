@@ -76,7 +76,7 @@ class Edit extends React.Component {
                             <ProjectForm inputChange={this.handleInputChange} oldData={this.state.oldProject} />
                             <Error errors={this.state.errors} />
                 
-                            <Button variant="primary" type="submit">
+                            <Button variant="info" type="submit">
                                 Save Edit
                             </Button>
                         </Form>
