@@ -119,7 +119,8 @@ router
 })
 
 .get('/:user/:project', (req, res) => {
-    User.findOne({ username: req.params.user }).populate("projects.info")
+    User.findOne({ username: req.params.user })
+        .populate("projects.info")
         .then((foundUser) => {
             if (foundUser) {
                 return foundUser;
@@ -153,48 +154,39 @@ router
                         if (err) sendError(req, res, err);
                         else res.status(200).json(populatedProject);
                     });
-            } 
+            }
         })
         .catch((err) => {
             sendError(req, res, err);
         })
 })
 
-.post('/:user/:project/answer', (req, res) => {
-    User.findOne({ username: req.params.user }).populate("projects.info")
-        .then((foundUser) => {
-            if (foundUser) {
-                return foundUser;
-            } else {
-                let Err = new Error("unable to find a user with that username");
-                Err.status = 404;
-                throw Err;
-            }
-        })
-        .then((foundUser) => {
-            if (!foundUser) return null;
-            let foundProject = null;
-            
-            foundUser.projects.forEach((project) => {
-                if (project.info.url === req.params.project) {
-                    foundProject = project.info;
+.post('/answer/:id', (req, res) => {
+    Project.findById(req.params.id)
+        .populate("responses")
+        .then((foundProject) => {
+            let alreadyReponded = false;
+            foundProject.responses.forEach((response) => {
+                if (response.user.equals(req.user._id)) {
+                    alreadyReponded = true;
                 }
             })
 
-            return foundProject;
-        })
-        .then((foundProject) => {
-            let response = {};
-            response.answers = req.body;
-            response.user = req.user;
-            response.project = foundProject;
-            Response.create(response, async (err, response) => {
-                if (err) throw err;
-                foundProject.responses.push(response);
-                foundProject.save();
-                res.status(200).json({});
-                console.info('new response added');
-            })
+            if (alreadyReponded) {
+                res.status(409).send("duplicate project");
+            } else {
+                let response = {};
+                response.answers = req.body;
+                response.user = req.user._id;
+                response.project = foundProject._id;
+                Response.create(response, async (err, response) => {
+                    if (err) throw err;
+                    foundProject.responses.push(response);
+                    foundProject.save();
+                    res.status(200).json(foundProject);
+                    console.info('new response added');
+                })
+            }
         })
         .catch((err) => {
             sendError(req, res, err);

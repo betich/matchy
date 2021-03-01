@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Card, Form, Modal, Table } from "react-bootstrap";
+import { Button, Card, Form } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
-import { FillQA as QAForm } from "../../../Components/QAForm";
+import { FillQA } from "../../../Components/QAForm";
+import ViewAnswerSection from "../../../Components/ViewAnswers";
 
 const ProjectView = (props) => {
     const Project = props.project;
@@ -53,110 +54,6 @@ const EditSection = (props) => {
     );
 };
 
-const ViewOneAnswer = (props) => {
-    if (props.idx === -1) {
-        return <></>;
-    }
-    const handleClose = () => props.close();
-    const { user = {}, answers = {} } = props.answers[props.idx];
-
-    const response = Object.keys(answers).map((key, i) => {
-        return (
-            <div key={i}>
-                {key + ": " + answers[key]}
-                <br />
-            </div>
-        );
-    });
-
-    return (
-        <>
-            <Modal show={props.on} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>{user.fullname + "'s Answer"}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>{response}</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Close
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        </>
-    );
-};
-
-const ViewAnswerSection = (props) => {
-    const [answers, setAnswers] = useState([]);
-    const [show, setShow] = useState(false);
-    const [showModal, setShowModal] = useState(false);
-    const [idx, setIdx] = useState(-1);
-    // rendered component
-
-    const viewtable = (
-        <>
-            <Table>
-                <thead>
-                    <tr>
-                        <th> # </th>
-                        <th> fullname </th>
-                        <th> view answer </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {answers.map((elem, idx) => {
-                        return (
-                            <tr key={idx}>
-                                <td>{idx + 1}</td>
-                                <td>{elem.user.fullname}</td>
-                                <td>
-                                    <Button onClick={() => setModal(idx)}>
-                                        show
-                                    </Button>
-                                </td>
-                            </tr>
-                        );
-                    })}
-                </tbody>
-            </Table>
-        </>
-    );
-
-    useEffect(() => {
-        axios
-            .get(`/app/projects/answer/${props.id}`)
-            .then((raw) => raw.data)
-            .then((responses) => setAnswers(responses));
-    }, [props.id, show]);
-
-    const handleClick = () => setShow(!show);
-    const handleClose = () => setShowModal(false);
-
-    const setModal = (idx) => {
-        setIdx(idx);
-
-        setShowModal(true);
-    };
-
-    return (
-        <>
-            <Button
-                variant="info"
-                onClick={handleClick}
-            >
-                Show answers
-            </Button>
-            <ViewOneAnswer
-                idx={idx}
-                answers={answers}
-                on={showModal}
-                close={handleClose}
-            />
-            {show && <>{viewtable}</>}
-        </>
-    );
-};
-
 const DeleteSection = (props) => {
     const history = useHistory();
     const [show, setShow] = useState(false);
@@ -190,7 +87,7 @@ const DeleteSection = (props) => {
         }
     };
     return (
-        <div>
+        <>
             <Button
                 onClick={handleClick}
                 disabled={disable}
@@ -212,7 +109,7 @@ const DeleteSection = (props) => {
                     </Form.Group>
                 </div>
             )}
-        </div>
+        </>
     );
 };
 
@@ -221,7 +118,6 @@ const View = (props) => {
     const [loaded, setLoad] = useState(false);
     const [error, setError] = useState(null);
     const [authorized, setAuthorized] = useState(false);
-    const [answer, setAnswer] = useState({});
 
     useEffect(() => {
         const handleError = (err) => {
@@ -260,20 +156,6 @@ const View = (props) => {
             .finally(() => setLoad(true));
     }, [props.match.params.project, props.match.params.user]);
 
-    const handleAnswer = (value) => {
-        setAnswer(value);
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        axios
-            .post(
-                `/app/projects/${props.match.params.user}/${props.match.params.project}/answer`,
-                answer
-            )
-            .then((res) => res.data);
-    };
-
     const haveQuestion = () => {
         return Project.questions.length > 0;
     };
@@ -285,31 +167,22 @@ const View = (props) => {
                     <Link to="/projects">Back</Link>
                     <h1>{Project.name}</h1>
                     <ProjectView project={Project} />
-                    {haveQuestion() ? (
-                        <>
-                            <QAForm
-                                questions={Project.questions}
-                                onChange={handleAnswer}
-                                onSubmit={handleSubmit}
-                            />
-                        </>
-                    ) : (
-                        <></>
-                    )}
                     {authorized && (
                         <>
-                            <EditSection id={Project._id} />
-                            <DeleteSection
-                                id={Project._id}
-                                confirmationText={Project.name}
-                            />
                             {haveQuestion() ? (
-                                <>
+                                <div>
                                     <ViewAnswerSection id={Project._id} />
-                                </>
+                                </div>
                             ) : (
                                 <></>
                             )}
+                            <div>
+                                <EditSection id={Project._id} />
+                                <DeleteSection
+                                    id={Project._id}
+                                    confirmationText={Project.name}
+                                />
+                            </div>
                         </>
                     )}
                 </>

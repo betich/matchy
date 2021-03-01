@@ -27,55 +27,46 @@ router
                     res.status(200).json(foundProject[0]);
                 });
         });
-        
-        /*
-        Project.estimatedDocumentCount().exec((err, count) => {
-            if (err) throw err;
-            const random = Math.floor(Math.random() * count);
-            Project.findOne({ owner: { $ne: req.user._id }, workers: { $ne: req.user._id }})
-                .populate("owner")
-                .populate("workers")
-                .skip(random)
-                .exec((err, result) => {
-                    if (err) throw err;
-                    res.status(200).send(result);
-                });
-        });
-        */
     } catch (err) {
         sendError(req, res, err);
     }
 })
 
-.post('/', auth.checkLogin, (req, res) => {
-    Project.findById(req.query.p)
-        .populate("owner", "_id").populate("workers", "_id")
+.get('/questions/:id', auth.checkLogin, (req, res) => {
+    Project.findById(req.params.id)
+        .populate("responses").populate("owner", "_id").populate("workers", "_id")
         .then((foundProject) => {
-            if (foundProject) {
-                return foundProject;
-            } else {
-                res.status(404).send("can't find the project you're looking for");
+            if (!foundProject) {
+                let Err = new Error("unable to the project");
+                Err.status = 404;
+                throw Err;
             }
+            else {
+                // if there are no questions, continue
+                if (foundProject.questions.length > 0) {
+                    res.status(202).json(foundProject.questions);
+                } else {
+                    let alreadyJoined = false;
+
+                    if (foundProject.owner._id.equals(req.user._id)) alreadyJoined = true;
+                    foundProject.workers.forEach((worker) => {
+                        if (worker._id.equals(foundUser._id)) {
+                            alreadyJoined = true;
+                        }
+                    })
+
+                    if (alreadyJoined) {
+                        let Err = new Error("duplicate project");
+                        Err.status = 404;
+                        throw Err;
+                    }
+                    else return foundProject
+                }
+            } 
         })
         .then(async (foundProject) => {
-            let alreadyJoined = false;
+            if (!foundProject) return null;
             let foundUser = await User.findById(req.user._id);
-            
-            if (foundProject.owner._id.equals(foundUser._id)) alreadyJoined = true;
-            foundProject.workers.forEach((worker) => {
-                if (worker._id.equals(foundUser._id)) {
-                    alreadyJoined = true;
-                }
-            })
-
-            if (alreadyJoined) res.status(409).send("duplicate project");
-            else {
-                return [foundUser, foundProject];
-            }
-        })
-        .then(async (results) => {
-            if (!results) return null;
-            let [foundUser, foundProject] = results;
             foundProject.workers.push(req.user._id);
 
             foundUser.projects.push({
@@ -86,7 +77,9 @@ router
             const [user, project] = await Promise.all([foundUser.save(), foundProject.save()])
             res.status(200).send(project);
         })
-        .catch((err) => sendError(req, res, err))
+        .catch((err) => {
+            sendError(req, res, err);
+        })
 })
 
 module.exports = router;

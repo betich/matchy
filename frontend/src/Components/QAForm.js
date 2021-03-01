@@ -1,5 +1,6 @@
 import { Button, Form } from "react-bootstrap";
 import { useState, useEffect } from "react";
+import axios from "axios";
 
 /* ==============================================================
     <Error errors=Object />
@@ -54,16 +55,32 @@ const CreateOneForm = (props) => {
 
 const FillQA = (props) => {
     const [answers, setAnswers] = useState({});
+
+    const Project = props.project;
+    const Questions = Project.questions;
     
     const handleChange = (key, value) => {
         const newAnswers =  { ...answers, [ key ]: value};
         setAnswers(newAnswers);
-        props.onChange(newAnswers);
     }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        axios
+            .post(
+                `/app/projects/answer/${Project._id}`,
+                answers
+            )
+            .then((res) => res.data)
+            .catch((err) => console.error(err))
+            .finally(() => {
+                if (props.onSubmit) props.onSubmit();
+            });
+    };
 
     return <>
         <Form>
-            {props.questions.map((elem, idx) => {
+            {Questions.map((elem, idx) => {
                 return <ViewOneForm
                     key={idx}
                     question={elem}
@@ -71,7 +88,7 @@ const FillQA = (props) => {
                 />
             })}
             <Button
-                onClick={props.onSubmit}
+                onClick={handleSubmit}
                 variant="info"
             >
                 Submit answer
@@ -102,12 +119,12 @@ const CreateQA = (props) => {
     }, [QuestionList, props.onChange]);
 
     const Questions = QuestionList.map((elem, idx) => {
-            return (
-                <CreateOneForm
-                    key={idx}
-                    value={elem}
-                    onChange={(value) => handleChange(idx, value)}
-                />
+        return (
+            <CreateOneForm
+                key={idx}
+                value={elem}
+                onChange={(value) => handleChange(idx, value)}
+            />
     )});
 
     return (
