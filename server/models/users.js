@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 const project = mongoose.Schema({
     info: { type: mongoose.Schema.Types.ObjectId, ref: 'Project' },
-    response: { type: mongoose.Schema.Types.ObjectId, ref: 'Response' },
     role: String
 }, { _id : false });
 
@@ -23,6 +22,7 @@ const userSchema = new mongoose.Schema({
     experiences: { type: Object },
     email: { type: String, required: true, unique: true },
     interests: [{ type: String }],
+    responses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Response' }],
     projects: [ project ],
     archive: [ project ]
 }, options);

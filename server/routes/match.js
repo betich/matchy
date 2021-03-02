@@ -8,23 +8,39 @@ const sendError = require('../helpers/sendError');
 router
 .get('/', auth.checkLogin, async (req, res) => {
     try {
-        // estimatedDocumentCount() - O(1)
-        // countDocuments({}) - O(n)
+        // check if project responses already contain responses made by user
         await Project.aggregate([
             { $match: {
                 $and: [
                     {owner: { $ne: req.user._id }},
                     {workers: { $ne: req.user._id }}
                 ]
-            }},
-            { $sample: { size: 1 } }
+            }}
         ])
-        .exec((err, result) => {
+        .exec((err, results) => {
             if (err) throw err;
-            Project.populate(result, ['owner', 'workers'],
-                (err, foundProject) => {
+            Project.populate(results, ['owner', 'workers', 'responses'],
+                (err, foundProjects) => {
                     if (err) throw err;
-                    res.status(200).json(foundProject[0]);
+                    // save rsponse to user
+                    // delete response from user when owner responds
+                    // fix below
+
+                    foundProjects = foundProjects.filter((oneProject) => {
+                        let userAlreadyResponed = false;
+                        if (oneProject.responses) {
+                            oneProject.responses.forEach((prResponse) => {
+                                if (prResponse.user.equals(req.user._id)) {
+                                    userAlreadyResponed = true;
+                                }
+                            })
+                        }
+
+                        return !userAlreadyResponed
+                    })
+
+                    let randIdx = Math.floor(Math.random() * foundProjects.length);
+                    res.status(200).json(foundProjects[randIdx]);
                 });
         });
     } catch (err) {

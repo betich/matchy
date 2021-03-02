@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, Card, Form } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
-import { FillQA } from "../../../Components/QAForm";
 import ViewAnswerSection from "../../../Components/ViewAnswers";
 
 const ProjectView = (props) => {
