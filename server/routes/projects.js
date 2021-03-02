@@ -133,7 +133,9 @@ router
             })
 
             if (alreadyReponded) {
-                res.status(409).send("duplicate project");
+                let Err = new Error("duplicate project");
+                Err.status = 409;
+                throw Err;
             } else {
                 let response = {};
                 response.answers = req.body;

@@ -1,6 +1,8 @@
 import { Button, Form } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import validate from "../Services/Validate";
+import Error from './Error';
 
 /* ==============================================================
     <Error errors=Object />
@@ -54,7 +56,13 @@ const CreateOneForm = (props) => {
 };
 
 const FillQA = (props) => {
-    const [answers, setAnswers] = useState({});
+    const emptyAnswers = props.project.questions.reduce((map, obj) => {
+        map[obj.value] = "";
+        return map;
+    }, {});
+
+    const [answers, setAnswers] = useState(emptyAnswers);
+    const [errors, setError] = useState({});
 
     const Project = props.project;
     const Questions = Project.questions;
@@ -66,16 +74,37 @@ const FillQA = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios
-            .post(
-                `/app/projects/answer/${Project._id}`,
-                answers
-            )
-            .then((res) => res.data)
-            .catch((err) => console.error(err))
-            .finally(() => {
-                if (props.onSubmit) props.onSubmit();
-            });
+
+        const data = { cucumber: Object.values((answers)) };
+        const { valid, invalidData } = validate(data);
+
+        if (valid) {
+            const options = {
+                headers: { "Content-Type": "application/json" },
+            };
+            
+            axios
+                .post(
+                    `/app/projects/answer/${Project._id}`,
+                    answers,
+                    options
+                )
+                .then((res) => res.data)
+                .catch((err) => {
+                    switch (err.response.status) {
+                        case 409:
+                            setError({ errors: {project: ['duplicate project']}});
+                            break;
+                        default:
+                            console.error(err);
+                    }
+                })
+                .finally(() => {
+                    if (props.onSubmit) props.onSubmit();
+                });
+        } else {
+            setError(invalidData);
+        }
     };
 
     return <>
@@ -87,6 +116,7 @@ const FillQA = (props) => {
                     onChange={handleChange}
                 />
             })}
+            <Error errors={errors} />
             <Button
                 onClick={handleSubmit}
                 variant="info"

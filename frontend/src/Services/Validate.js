@@ -76,6 +76,12 @@ const validate = (formData) => {
                 }
                 break;
 
+            case "cucumber":
+                if (value.some((e) => e === "")) {
+                    addToInvalid("formfield", "fill all the fields dumbass");
+                }
+                break;
+
             case "interests":
                 break;
 

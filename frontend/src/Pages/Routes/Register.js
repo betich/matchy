@@ -45,7 +45,7 @@ class Create extends React.Component {
                         this.setState({ errors: {username: ['username taken']}});
                         break;
                     default:
-                        console.log(err);
+                        console.error(err);
                 }
             });
         } else {
