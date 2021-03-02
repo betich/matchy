@@ -159,6 +159,35 @@ const View = (props) => {
         return Project.questions.length > 0;
     };
 
+    const reRender = () => {
+        setLoad(false);
+
+        const handleError = (err) => {
+            // 401, 403s are expected
+            if (err.response) {
+                if (err.response.status === 403) return;
+                else if (err.response.status === 500)
+                    return setError("internal server error");
+                else setError(err.response.data);
+            } else {
+                setError("an unknown error occured");
+            }
+            setAuthorized(false);
+            console.error("oh no", err);
+        };
+
+        axios
+            .get(
+                `/app/projects/${props.match.params.user}/${props.match.params.project}`
+            )
+            .then((response) => response.data)
+            .then((project) => {
+                setProject(project);
+            })
+            .catch(handleError)
+            .finally(() => setLoad(true));
+    }
+
     const renderComponents = () => {
         const ViewProject = () => {
             return (
@@ -170,7 +199,7 @@ const View = (props) => {
                         <>
                             {haveQuestion() ? (
                                 <div>
-                                    <ViewAnswerSection id={Project._id} />
+                                    <ViewAnswerSection onChange={reRender} id={Project._id} />
                                 </div>
                             ) : (
                                 <></>

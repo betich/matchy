@@ -59,12 +59,12 @@ const ViewAnswerSection = (props) => {
     };
 
     const acceptUser = (responseId) => {
-        // setAnswers(response)
         axios
             .get(`/app/projects/accept/${props.id}?r=${responseId}`)
             .then((raw) => raw.data)
             .then((responses) => setAnswers(responses))
-            .catch((err) => console.error(err));
+            .catch((err) => console.error(err))
+            .finally(() => props.onChange())
     }
 
     const rejectUser = (responseId) => {
@@ -72,7 +72,8 @@ const ViewAnswerSection = (props) => {
             .get(`/app/projects/reject/${props.id}?r=${responseId}`)
             .then((raw) => raw.data)
             .then((responses) => setAnswers(responses))
-            .catch((err) => console.error(err));
+            .catch((err) => console.error(err))
+            .finally(() => props.onChange())
     }
 
     const viewtable = (
