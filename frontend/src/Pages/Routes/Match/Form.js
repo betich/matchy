@@ -6,6 +6,7 @@ const FormProject = (props) => {
 
     return (
         <>
+            <h2>Apply to {Project.name}</h2>
             <FillQA project={Project} onSubmit={props.onSubmit} />
         </>
     )

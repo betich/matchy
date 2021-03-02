@@ -22,10 +22,7 @@ router
             Project.populate(results, ['owner', 'workers', 'responses'],
                 (err, foundProjects) => {
                     if (err) throw err;
-                    // save rsponse to user
-                    // delete response from user when owner responds
-                    // fix below
-
+                    
                     foundProjects = foundProjects.filter((oneProject) => {
                         let userAlreadyResponed = false;
                         oneProject.responses.forEach((prResponse) => {

@@ -20,7 +20,9 @@ router
             if (allProjects) {
                 res.status(200).json(allProjects);
             } else {
-                res.status(404).send("unable to find projects");
+                let Err = new Error("unable to find the project");
+                Err.status = 404;
+                throw Err;
             }
         })
         .catch((err) => sendError(req, res, err))
@@ -30,8 +32,9 @@ router
     Project.findOne({ name: req.body.projectname })
         .then((foundProject) => {
             if (foundProject) {
-                res.status(409).send('duplicate project');
-                return null;
+                let Err = new Error("duplicate project");
+                Err.status = 409;
+                throw Err;
             } else {
                 let newProject = Object.assign({}, req.body);
                 
@@ -47,7 +50,6 @@ router
             }
         })
         .then((newProject) => {
-            if (!newProject) return null;
             Project.create(filterFalsy(newProject), async (err, newProject) => {
                 if (err) sendError(req, res, err);
                 else {
@@ -65,7 +67,9 @@ router
                             if (populatedProject) {
                                 res.status(200).json(populatedProject);
                             } else {
-                                res.status(404).send("can't find the project");
+                                let Err = new Error("can't find the project you're looking for!");
+                                Err.status = 404;
+                                throw Err;
                             }
                         })
                         .catch((err) => sendError(req, res, err))
@@ -77,6 +81,20 @@ router
 
 .get('/checkownership/:id', auth.checkProjectOwnership, (req,res) => {
     res.status(200).send(req.user);
+})
+
+.get('/i/:id', (req, res) => {
+    Project.findById(req.params.id).populate("owner").populate("workers")
+        .then((foundProject) => {
+            if (foundProject) {
+                res.status(200).json(foundProject);
+            } else {
+                let Err = new Error("can't find the project you're looking for");
+                Err.status = 404;
+                throw Err;
+            }
+        })
+        .catch((err) => sendError(req, res, err))
 })
 
 .get('/answer/:id', auth.checkProjectOwnership, (req,res) => {
@@ -100,61 +118,6 @@ router
             })
         })
         .catch((err) => sendError(req, res, err))
-})
-
-.get('/i/:id', (req, res) => {
-    Project.findById(req.params.id).populate("owner").populate("workers")
-        .then((foundProject) => {
-            if (foundProject) {
-                res.status(200).json(foundProject);
-            } else {
-                res.status(404).send("unable to find a project with that id");
-            }
-        })
-        .catch((err) => sendError(req, res, err))
-})
-
-.get('/:user/:project', (req, res) => {
-    User.findOne({ username: req.params.user })
-        .populate("projects.info")
-        .then((foundUser) => {
-            if (foundUser) {
-                return foundUser;
-            } else {
-                let Err = new Error("unable to find a user with that username2");
-                Err.status = 404;
-                throw Err;
-            }
-        })
-        .then((foundUser) => {
-            if (!foundUser) return null;
-            let foundProject = null;
-            
-            foundUser.projects.forEach((project) => {
-                if (project.info.url === req.params.project) {
-                    foundProject = project.info;
-                }
-            })
-
-            return foundProject;
-        })
-        .then((foundProject) => {
-            if (!foundProject) {
-                let Err = new Error("unable to the project");
-                Err.status = 404;
-                throw Err;
-            }
-            else {
-                Project.populate(foundProject, ['owner', 'workers'],
-                    (err, populatedProject) => {
-                        if (err) sendError(req, res, err);
-                        else res.status(200).json(populatedProject);
-                    });
-            }
-        })
-        .catch((err) => {
-            sendError(req, res, err);
-        })
 })
 
 .post('/answer/:id', auth.checkLogin, (req, res) => {
@@ -182,7 +145,7 @@ router
                     foundProject.responses.push(response);
                     foundUser.responses.push(response);
 
-                    const [user, project] = await Promise.all([foundUser.save(), newProject.save()]);
+                    const [user, project] = await Promise.all([foundUser.save(), foundProject.save()]);
                     
                     res.status(200).json(project);
                     console.info('new response added');
@@ -194,7 +157,112 @@ router
         })
 })
 
-.put('/:id', [upload.none(), auth.checkProjectOwnership], (req,res) => {
+.get('/accept/:id', auth.checkProjectOwnership, (req, res) => {
+    // query = r: response id
+    if (!req.query.r) return res.status(404).send("please specify the response id");
+    Project.findById(req.params.id)
+        .populate("responses")
+        .then(async (foundProject) => {
+            let foundUser = await User.findById(req.user._id);
+            const respIdx = foundProject.responses.findIndex((resp) => {
+                return resp._id.equals(req.query.r);
+            })
+
+            if (respIdx !== -1) {
+                foundProject.responses.splice(respIdx, 1);
+                foundProject.workers.push(req.user._id);
+
+                foundUser.projects.push({
+                    info: foundProject._id,
+                    role: "worker"
+                })
+
+                const [user, project] = await Promise.all([foundUser.save(), foundProject.save()])
+                
+                Response.populate(project.responses, ['user', 'project'], (err, populatedResponses) => {
+                    if (err) throw err;
+                    res.status(200).send(populatedResponses);
+                })
+            } else {
+                let Err = new Error("can't any responses from this user");
+                Err.status = 404;
+                throw Err;
+            }
+        })
+        .catch((err) => sendError(req, res, err))
+})
+
+.get('/reject/:id', auth.checkProjectOwnership, (req, res) => {
+    if (!req.query.r) return res.status(404).send("please specify the response id");
+    Project.findById(req.params.id)
+        .populate("responses")
+        .then(async (foundProject) => {
+            const respIdx = foundProject.responses.findIndex((resp) => {
+                return resp._id.equals(req.query.r);
+            })
+
+            if (respIdx !== -1) {
+                foundProject.responses.splice(respIdx, 1);
+
+                const project = await foundProject.save();
+                
+                Response.populate(project.responses, ['user', 'project'], (err, populatedResponses) => {
+                    if (err) throw err;
+                    res.status(200).send(populatedResponses);
+                })
+            } else {
+                let Err = new Error("can't any responses from this user");
+                Err.status = 404;
+                throw Err;
+            }
+        })
+        .catch((err) => sendError(req, res, err))
+})
+
+.get('/:user/:project', (req, res) => {
+    User.findOne({ username: req.params.user })
+        .populate("projects.info")
+        .then((foundUser) => {
+            if (foundUser) {
+                return foundUser;
+            } else {
+                let Err = new Error("unable to find a user with that username");
+                Err.status = 404;
+                throw Err;
+            }
+        })
+        .then((foundUser) => {
+            if (!foundUser) return null;
+            let foundProject = null;
+            
+            foundUser.projects.forEach((project) => {
+                if (project.info.url === req.params.project) {
+                    foundProject = project.info;
+                }
+            })
+
+            return foundProject;
+        })
+        .then((foundProject) => {
+            if (!foundProject) {
+                let Err = new Error("unable to find the project");
+                Err.status = 404;
+                throw Err;
+            }
+            else {
+                Project.populate(foundProject, ['owner', 'workers'],
+                    (err, populatedProject) => {
+                        if (err) sendError(req, res, err);
+                        else res.status(200).json(populatedProject);
+                    });
+            }
+        })
+        .catch((err) => {
+            sendError(req, res, err);
+        })
+})
+
+.put('/:id', auth.checkProjectOwnership, (req, res) => {
     let newProject = Object.assign({}, req.body);
     newProject.name = req.body.projectname;
     newProject.url = slug(req.body.projectname, '_', {lower: false});
@@ -207,13 +275,15 @@ router
                 console.info(`Project ${foundProject.name} has been updated`);
                 res.status(200).json({newurl: newProject.url, owner: foundProject.owner.username});
             } else {
-                res.status(404).send("unable to find the project");
+                let Err = new Error("can't find the project you're looking for");
+                Err.status = 404;
+                throw Err;
             }
         })
         .catch((err) => sendError(req, res, err))
 })
 
-.delete('/:id', auth.checkProjectOwnership, (req,res) => {
+.delete('/:id', auth.checkProjectOwnership, (req, res) => {
     Project.findById(
             req.params.id,
             { useFindAndModify: false }
@@ -222,12 +292,12 @@ router
             if (foundProject) {
                 return foundProject;
             } else {
-                res.status(404).send("unable to find the project");
-                return null;
+                let Err = new Error("can't find the project you're looking for!");
+                Err.status = 404;
+                throw Err;
             }
         })
         .then((foundProject) => {
-            if (!foundProject) return null;
             foundProject.remove((err, deletedProject) => {
                 if (err) sendError(req, res, err);
                 else {

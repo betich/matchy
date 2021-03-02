@@ -46,7 +46,8 @@ const ViewAnswerSection = (props) => {
         axios
             .get(`/app/projects/answer/${props.id}`)
             .then((raw) => raw.data)
-            .then((responses) => setAnswers(responses));
+            .then((responses) => setAnswers(responses))
+            .catch((err) => console.error(err));
     }, [props.id, show]);
 
     const handleClick = () => setShow(!show);
@@ -57,12 +58,21 @@ const ViewAnswerSection = (props) => {
         setShowModal(true);
     };
 
-    const acceptUser = (idx) => {
+    const acceptUser = (responseId) => {
         // setAnswers(response)
+        axios
+            .get(`/app/projects/accept/${props.id}?r=${responseId}`)
+            .then((raw) => raw.data)
+            .then((responses) => setAnswers(responses))
+            .catch((err) => console.error(err));
     }
 
-    const rejectUser = (idx) => {
-
+    const rejectUser = (responseId) => {
+        axios
+            .get(`/app/projects/reject/${props.id}?r=${responseId}`)
+            .then((raw) => raw.data)
+            .then((responses) => setAnswers(responses))
+            .catch((err) => console.error(err));
     }
 
     const viewtable = (
@@ -78,11 +88,11 @@ const ViewAnswerSection = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {answers.map((elem, idx) => {
+                    {answers.map((ans, idx) => {
                         return (
-                            <tr key={idx}>
+                            <tr key={ans._id}>
                                 <td>{idx + 1}</td>
-                                <td>{elem.user.fullname}</td>
+                                <td>{ans.user.fullname}</td>
                                 <td>
                                     <Button
                                         variant="info"
@@ -94,7 +104,7 @@ const ViewAnswerSection = (props) => {
                                 <td>
                                     <Button
                                         variant="success"
-                                        onClick={() => acceptUser(idx)}
+                                        onClick={() => acceptUser(ans._id)}
                                     >
                                         Accept
                                     </Button>
@@ -102,7 +112,7 @@ const ViewAnswerSection = (props) => {
                                 <td>
                                     <Button
                                         variant="danger"
-                                        onClick={() => rejectUser(idx)}
+                                        onClick={() => rejectUser(ans._id)}
                                     >
                                         Reject
                                     </Button>
