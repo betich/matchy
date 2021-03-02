@@ -1,35 +1,29 @@
-import { useState } from 'react';
 import { Button } from 'react-bootstrap';
-import { FaGoogle, FaFacebookF, FaLine, FaApple } from 'react-icons/fa';
-import isLoggedIn from '../../../Services/isLoggedIn';
+import { FaFacebookF, FaLine } from 'react-icons/fa';
 
 const About = () => {
-    const [data, setData] = useState('');
-    
-    const getBackend = async () => {
-        const [loggedIn, status, user] = await isLoggedIn();
-        if (loggedIn && status === 200) {
-            setData(user.username);
-        } else {
-            setData('you\'re not logged in');
-        }
-    };
-
     return (
     <>
-        <pre>{data}</pre>
-        <Button variant="outline-danger" onClick={getBackend}>
-        <FaGoogle size={28} />
-        </Button>
-        <Button variant="outline-primary" onClick={getBackend}>
-        <FaFacebookF size={28} />
-        </Button>
-        <Button variant="outline-success" onClick={getBackend}>
-        <FaLine size={28} />
-        </Button>
-        <Button variant="outline-secondary" onClick={getBackend}>
-        <FaApple size={28} />
-        </Button>
+        <h2>About Us</h2>
+        <p>who cares feck off</p>
+        <a
+            href="https://www.facebook.com/Planty-102827135112130/?__tn__=%3C"
+            target="_blank"
+            rel="noreferrer"
+        >
+            <Button variant="outline-primary">
+                <FaFacebookF size={28} />
+            </Button>
+        </a>
+        <a
+            href="https://line.me/ti/g2/hFWEKeaGSa9R5Oh7hZm2Ag?utm_source=invitation&utm_medium=link_copy&utm_campaign=default"
+            target="_blank"
+            rel="noreferrer"
+        >
+            <Button variant="outline-success">
+                <FaLine size={28} />
+            </Button>
+        </a>
     </>
     );
   }
