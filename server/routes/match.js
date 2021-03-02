@@ -28,13 +28,11 @@ router
 
                     foundProjects = foundProjects.filter((oneProject) => {
                         let userAlreadyResponed = false;
-                        if (oneProject.responses) {
-                            oneProject.responses.forEach((prResponse) => {
-                                if (prResponse.user.equals(req.user._id)) {
-                                    userAlreadyResponed = true;
-                                }
-                            })
-                        }
+                        oneProject.responses.forEach((prResponse) => {
+                            if (prResponse.user.equals(req.user._id)) {
+                                userAlreadyResponed = true;
+                            }
+                        })
 
                         return !userAlreadyResponed
                     })
