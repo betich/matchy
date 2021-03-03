@@ -150,6 +150,7 @@ const View = (props) => {
             .then((project) => {
                 setProject(project);
                 checkOwnership(project._id);
+                window.flash('fuck you', 'success')
             })
             .catch(handleError)
             .finally(() => setLoad(true));

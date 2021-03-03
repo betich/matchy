@@ -82,7 +82,7 @@ const ViewAnswerSection = (props) => {
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Name</th>
+                        <th>Username</th>
                         <th>Answer</th>
                         <th>Accept</th>
                         <th>Reject</th>
@@ -93,7 +93,7 @@ const ViewAnswerSection = (props) => {
                         return (
                             <tr key={ans._id}>
                                 <td>{idx + 1}</td>
-                                <td>{ans.user.fullname}</td>
+                                <td>{ans.user.username}</td>
                                 <td>
                                     <Button
                                         variant="info"
