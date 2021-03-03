@@ -1,13 +1,11 @@
 const User = require('../models/users');
 const express = require('express');
-const multer = require('multer');
 const filterFalsy = require('../helpers/filterFalsy');
 const auth = require('../middleware/index');
 const passport = require('passport');
 const hash = require('../helpers/hash');
 const sendError = require('../helpers/sendError');
 const router = express.Router();
-const upload = multer();
 
 router
 .get('/checkLogin', auth.checkLogin, (req, res) => {

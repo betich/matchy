@@ -14,7 +14,7 @@ async function isLoggedIn () {
         if (err.response) {
             status = err.response.status
         }
-        console.error("oh no", err);
+        console.error(err);
         Result = [false, status, null];
     }
 

@@ -1,15 +1,25 @@
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import getUser from '../../../Services/getUser';
 import axios from 'axios';
 import ProjectCard from '../../../Components/ProjectCard';
 
 const Index = (props) => {
     const [Projects, setProjects] = useState([]);
+    const [currentUser, setUser] = useState(null);
     const [loaded, setLoad] = useState(false);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(null); 
     
     useEffect(() => {
+        const reqUser = async () => {
+            let user = await getUser();
+            if (user) setUser(user);
+            else setError("You have to be logged in first"); 
+        }
+
+        reqUser();
+
         axios.get(`/app/projects`)
             .then((res) => res.data)
             .then((projects) => {
@@ -27,8 +37,14 @@ const Index = (props) => {
             })
             .finally(() => setLoad(true))
     }, []);
-    
-    let ProjectLinks = Projects.map((project) => <ProjectCard project={project} key={project._id} />);
+
+    let MyProjects = Projects.filter((project) => project.owner.username === currentUser.username);
+    let WorkingProjects = Projects.filter((project) => project.workers.some((worker) => {
+        return worker.username === currentUser.username
+    }));
+
+    MyProjects = MyProjects.map((project) => <ProjectCard project={project} key={project._id} />);
+    WorkingProjects = WorkingProjects.map((project) => <ProjectCard project={project} key={project._id} />);
     
     const renderComponents = () => {
         const HomeProject = () => {
@@ -41,9 +57,13 @@ const Index = (props) => {
                         </Button>
                     </Link>
                     <div id="projectLinks">
-                        <h4>My Projects</h4>
+                        <h4>Your Projects</h4>
                         <div className="d-flex flex-wrap">
-                            {ProjectLinks}
+                            {MyProjects}
+                        </div>
+                        <h4>Projects you're working with</h4>
+                        <div className="d-flex flex-wrap">
+                            {WorkingProjects}
                         </div>
                     </div>
                 </>

@@ -132,7 +132,7 @@ class Match extends React.Component {
     }
 
     onFormSubmit() {
-        this.setState({ page: 'index' })
+        this.setState({ page: 'index', Project: null })
         this.getRandomProject();
     }
 

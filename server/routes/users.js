@@ -2,8 +2,6 @@ const express = require('express');
 const User = require('../models/users');
 const Project = require('../models/projects');
 const router = express.Router();
-const multer = require('multer');
-const upload = multer();
 const filterFalsy = require('../helpers/filterFalsy');
 const auth = require('../middleware/index');
 const usernameRegex = require('../helpers/usernameRegex');
@@ -14,7 +12,23 @@ router
             if (foundUsers) {
                 res.status(200).json(foundUsers);
             } else {
-                res.status(404).send('unable to find any users');
+                let Err = new Error("unable to find any users");
+                Err.status = 404;
+                throw Err;
+            }
+        })
+        .catch((err) => sendError(req, res, err));
+})
+
+.get('/me', auth.checkLogin, (req, res) => {
+    User.findById(req.user._id).populate('projects').populate('archive')
+        .then((foundUser) => {
+            if (foundUser) {
+                res.status(200).json(foundUser);
+            } else {
+                let Err = new Error("unable to find any user");
+                Err.status = 404;
+                throw Err;
             }
         })
         .catch((err) => sendError(req, res, err));
@@ -30,7 +44,9 @@ router
             if (foundUser) {
                 res.status(200).json(foundUser);
             } else {
-                res.status(404).send("unable to find a user with that id");
+                let Err = new Error("can't find that user");
+                Err.status = 404;
+                throw Err;
             }
         })
         .catch((err) => sendError(req, res, err))
@@ -42,7 +58,9 @@ router
             if (foundUser) {
                 res.status(200).send(foundUser);
             } else {
-                res.status(400).send("unable to find a user with that username")
+                let Err = new Error("can't find that user");
+                Err.status = 404;
+                throw Err;
             }
         })
         .catch((err) => sendError(req, res, err))
@@ -58,17 +76,19 @@ router
                     if (err) throw err;
                     else {
                         res.status(200).send('deleted ' + deletedUser.username);
-                        console.log('deleted '+ deletedUser.username);
+                        console.info('deleted '+ deletedUser.username);
                     }
                 });
             } else {
-                res.status(404).send("unable to find a user with that username");
+                let Err = new Error("can't find that user");
+                Err.status = 404;
+                throw Err;
             }
         })
         .catch((err) => sendError(req, res, err))
 })
 
-.put('/:username', [auth.checkUserByUsername, upload.none()] , (req,res) => {
+.put('/:username', auth.checkUserByUsername , (req,res) => {
     let newUser = req.body;
     const exp = newUser.experiences;
     for (const e in exp) {
@@ -83,7 +103,9 @@ router
             if (foundUser) {
                 res.status(200).send("updated sucessfully");
             } else {
-                res.status(404).send("no project found");
+                let Err = new Error("can't find that user");
+                Err.status = 404;
+                throw Err;
             }
         })
         .catch((err) => sendError(req, res, err))

@@ -4,8 +4,6 @@ const Project = require('../models/projects');
 const Response = require('../models/responses');
 const router = express.Router();
 const slug = require('slug');
-const multer = require('multer');
-const upload = multer();
 const auth = require('../middleware/index');
 const filterFalsy = require('../helpers/filterFalsy');
 const sendError = require('../helpers/sendError');
@@ -172,7 +170,7 @@ router
 
             if (respIdx !== -1) {
                 foundProject.responses.splice(respIdx, 1);
-                foundProject.workers.push(req.user._id);
+                foundProject.workers.push(foundUser._id);
 
                 foundUser.projects.push({
                     info: foundProject._id,
