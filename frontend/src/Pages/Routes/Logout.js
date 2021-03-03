@@ -7,9 +7,13 @@ const Logout = (props) => {
 
     useEffect(() => {
         axios.get('/app/logout/')
-            .then((res) => history.push('/'))
+            .then((res) => {
+                window.flash('Logged you out', 'success');
+                history.push('/')
+            })
             .catch((err) => {
                 console.error(err);
+                window.flash('An error occured', 'error');
                 history.push('/');
             })
 

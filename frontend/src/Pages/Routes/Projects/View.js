@@ -123,14 +123,15 @@ const View = (props) => {
             // 401, 403s are expected
             if (err.response) {
                 if (err.response.status === 403) return;
-                else if (err.response.status === 500)
-                    return setError("internal server error");
+                else if (err.response.status === 500) {
+                    return setError("Internal server error");
+                }
                 else setError(err.response.data);
             } else {
-                setError("an unknown error occured");
+                setError("An unknown error occured");
             }
             setAuthorized(false);
-            console.error("oh no", err);
+            console.error(err);
         };
 
         const checkOwnership = (id) => {
@@ -150,7 +151,6 @@ const View = (props) => {
             .then((project) => {
                 setProject(project);
                 checkOwnership(project._id);
-                window.flash('fuck you', 'success')
             })
             .catch(handleError)
             .finally(() => setLoad(true));
@@ -168,13 +168,13 @@ const View = (props) => {
             if (err.response) {
                 if (err.response.status === 403) return;
                 else if (err.response.status === 500)
-                    return setError("internal server error");
+                    return setError("Internal server error");
                 else setError(err.response.data);
             } else {
-                setError("an unknown error occured");
+                setError("An unknown error occured");
             }
             setAuthorized(false);
-            console.error("oh no", err);
+            console.error(err);
         };
 
         axios

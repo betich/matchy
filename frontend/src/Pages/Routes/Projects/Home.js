@@ -17,13 +17,13 @@ const Index = (props) => {
             })
             .catch((err) => {
                 if (err.response) {
-                    if (err.response.status === 500) setError("internal server error");
+                    if (err.response.status === 500) setError("Internal server error");
                     else setError(err.response.data);
                 } else {
-                    setError("an unknown error occured");
+                    setError("An error occured");
                 }
 
-                console.error("oh no", err)
+                console.error(err)
             })
             .finally(() => setLoad(true))
     }, []);

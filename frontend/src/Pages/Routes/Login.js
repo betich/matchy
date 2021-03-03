@@ -33,6 +33,7 @@ class Login extends React.Component {
             axios.post('/app/login', JSON.stringify(request), options)
             .then((response) => {
                 if (response.status === 200) {
+                    window.flash('Login successful', 'success');
                     this.props.history.push("/");
                 }
             }, (err) => {
@@ -42,9 +43,11 @@ class Login extends React.Component {
                         break;
                     case 404:
                         this.setState({ errors: { login: ["Can't make the request now"] } });
+                        window.flash('An unknown error occured', 'error');
                         break;
                     default:
                         this.setState({ errors: { login: ["An unknown error occured"] } });
+                        window.flash('An unknown error occured', 'success');
                 }
             });
         } else {

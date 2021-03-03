@@ -63,18 +63,28 @@ class Match extends React.Component {
 
     handleError(err) {
         if (err.response) {
-            if (err.response.status === 500) this.setState({ error: "internal server error" });
-            else this.setState({ error: err.response.data });
+            this.setState({ error: "Internal server error" });
         } else {
-            this.setState({ error: "an unknown error occured" });
+            this.setState({ error: "An unknown error occured" });
         }
-        console.error("oh no", err);
+        window.flash('An error occured', 'error');
+        console.error(err);
     }
 
     getRandomProject() {
         axios.get("/app/match")
-            .then((raw) => raw.data)
-            .then((project) => this.setState({ Project: project }))
+            .then((res) => {
+                switch (res.status) {
+                    case 200:
+                        this.setState({ Project: res.data })
+                        break;
+                    case 204:
+                        this.setState({ error: "There are no projects left to display" });
+                        break;
+                    default:
+                        this.getRandomProject();
+                }
+            })
             .catch((err) => this.handleError(err))
             .finally(() => {
                 this.setState({ clickable: true, loaded: true});
@@ -129,7 +139,11 @@ class Match extends React.Component {
     render() {
         const errorMessage = () => {
             if (this.state.error) {
-                return (<span>{JSON.stringify(this.state.error)}</span>);
+                let error = (typeof this.state.error === 'object' && this.state.error !== null)
+                    ? JSON.stringify(this.state.error)
+                    : this.state.error
+                
+                return (<span>{error}</span>);
             } else {
                 return (<></>);
             }
@@ -186,8 +200,7 @@ class Match extends React.Component {
             }
 
             if (this.state.loaded) {
-                if (!this.state.Project) return (<span>There are no projects left to display</span>)
-                else return (<> { MatchApp() } </>);
+                if (this.state.Project) return (<> { MatchApp() } </>);
             } else {
                 return (<span>loading...</span>)
             }

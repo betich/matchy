@@ -51,12 +51,14 @@ class Edit extends React.Component {
             axios.put(`/app/projects/${this.props.match.params.id}`, data, options).then(
                 (res) => {
                     if (res.status === 200) {
+                        window.flash(`Edited ${res.data.name}`, 'success');
                         this.props.history.push(
                             `/projects/${res.data.owner}/${res.data.newurl}`
                         );
                     }
                 },
                 (err) => {
+                    window.flash('An error occured', 'error');
                     console.error(err);
                 }
             );

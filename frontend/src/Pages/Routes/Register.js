@@ -37,6 +37,7 @@ class Create extends React.Component {
             axios.post('/app/register', data, options)
             .then((response) => {
                 if (response.status === 200) {
+                    window.flash(`Successfully registered ${response.data.username}`, 'success');
                     this.props.history.push(`/users/${response.data.username}`);
                 }
             }, (err) => {
@@ -45,7 +46,7 @@ class Create extends React.Component {
                         this.setState({ errors: {username: ['username taken']}});
                         break;
                     default:
-                        console.error(err);
+                        window.flash('An error occured', 'error');
                 }
             });
         } else {

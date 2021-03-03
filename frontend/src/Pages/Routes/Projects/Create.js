@@ -36,6 +36,7 @@ class Create extends React.Component {
             axios.post('/app/projects', data, options)
                 .then((res) => {
                     if (res.status === 200) {
+                        window.flash(`Created ${res.data.name}`, 'success');
                         this.props.history.push(
                             `/projects/${res.data.owner.username}/${res.data.url}`
                         );
@@ -47,6 +48,7 @@ class Create extends React.Component {
                             this.setState({ errors: {projectname: ['project name taken']}});
                             break;
                         default:
+                            window.flash('An error occured', 'error');
                             console.error(err);
                     }
                 });

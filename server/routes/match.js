@@ -34,8 +34,11 @@ router
                         return !userAlreadyResponed
                     })
 
-                    let randIdx = Math.floor(Math.random() * foundProjects.length);
-                    res.status(200).json(foundProjects[randIdx]);
+                    if (foundProjects.length === 0) res.status(204).send("There are no projects left to display");
+                    else {
+                        let randIdx = Math.floor(Math.random() * foundProjects.length);
+                        res.status(200).json(foundProjects[randIdx]);
+                    }
                 });
         });
     } catch (err) {
