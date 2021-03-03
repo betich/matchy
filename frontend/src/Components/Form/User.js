@@ -121,7 +121,7 @@ class UserForm extends React.Component {
                 { UserNamePassword() }
 
                 <Form.Row>
-                    <Form.Group as={Col} sm={6} controlId="fullname">
+                    <Form.Group as={Col} sm={12} controlId="fullname">
                         <Form.Label>Full name</Form.Label>
                         <Form.Control
                             required
@@ -131,7 +131,10 @@ class UserForm extends React.Component {
                             value={this.state.fullname}
                         />
                     </Form.Group>
-                    <Form.Group as={Col} sm={6} controlId="email">
+                </Form.Row>
+
+                <Form.Row>
+                    <Form.Group as={Col} sm={12} controlId="email">
                         <Form.Label>Email</Form.Label>
                         <Form.Control
                             required
