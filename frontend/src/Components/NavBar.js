@@ -32,10 +32,10 @@ const NavigationBar = (props) => {
             <div className={show ? "sidebar expand" : "sidebar"}>
                 <Nav>
                     <ul>
-                        {NavList.map((elem) => {
+                        {NavList.map((elem, i) => {
                             return (
                                 <>
-                                    <NavElement elem={elem} />
+                                    <NavElement key={i} elem={elem} />
                                 </>
                             );
                         })}

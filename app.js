@@ -22,7 +22,8 @@ const Routes = {
     match: require('./server/routes/match')
 };
 
-mongoose.connect(process.env.DATABASEURL || "mongodb://localhost:27017/planty",
+const DBURL = (process.env.NODE_ENV === 'production') ? process.env.DATABASEURL : process.env.LOCALDB;
+mongoose.connect(DBURL || "mongodb://localhost:27017/matchy",
 { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true /* autoIndex: false */}
 ).then(() => {
 	console.log("DB connected");
@@ -42,7 +43,7 @@ app.use(helmet());
 
 const sessionStore = new MongoStore({ mongooseConnection: mongoose.connection })
 app.use(session({
-    secret: process.env.SECRET,
+    secret: process.env.SECRET || "secret",
 	resave: true,
 	saveUninitialized: true,
 	store: sessionStore
