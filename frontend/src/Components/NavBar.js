@@ -33,11 +33,7 @@ const NavigationBar = (props) => {
                 <Nav>
                     <ul>
                         {NavList.map((elem, i) => {
-                            return (
-                                <>
-                                    <NavElement key={i} elem={elem} />
-                                </>
-                            );
+                            return (<NavElement key={i} elem={elem} />);
                         })}
                     </ul>
                 </Nav>
