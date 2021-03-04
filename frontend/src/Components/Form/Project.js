@@ -1,6 +1,7 @@
 import React from "react";
 import { Form, Col } from "react-bootstrap";
 import Tags from "../Tag";
+import Required from '../Required';
 import { TagsList } from "../../Services/Mock";
 import { CreateQA } from "../../Components/QAForm";
 
@@ -58,7 +59,7 @@ class ProjectForm extends React.Component {
             <>
                 <Form.Row>
                     <Form.Group as={Col} sm={12}>
-                        <Form.Label>Project name</Form.Label>
+                        <Form.Label>Project name <Required /></Form.Label>
                         <Form.Control
                             name="projectname"
                             required
@@ -72,7 +73,7 @@ class ProjectForm extends React.Component {
 
                 <Form.Row>
                     <Form.Group as={Col} sm={12}>
-                        <Form.Label>Description</Form.Label>
+                        <Form.Label>Description <Required /></Form.Label>
                         <Form.Control
                             name="description"
                             placeholder="Description"
@@ -84,7 +85,7 @@ class ProjectForm extends React.Component {
 
                 <Form.Row>
                     <Form.Group as={Col} sm={12} className="mb-3">
-                        <Form.Label>Tags:</Form.Label>
+                        <Form.Label>Tags: <Required /></Form.Label>
                         <Tags
                             onChange={this.tagChange}
                             tags={TagsList}

@@ -1,9 +1,7 @@
 import axios from "axios";
 import React from "react";
-import { Form, Button } from "react-bootstrap";
-import { Link } from 'react-router-dom';
+import { Form } from "react-bootstrap";
 import validate from "../../../Services/Validate";
-import Error from "../../../Components/Error";
 import UserForm from "../../../Components/Form/User";
 
 class Edit extends React.Component {
@@ -18,6 +16,7 @@ class Edit extends React.Component {
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.validateData = this.validateData.bind(this);
     }
 
     componentDidMount() {
@@ -35,6 +34,18 @@ class Edit extends React.Component {
 
     handleInputChange(formData) {
         this.setState({ data: formData });
+    }
+
+    validateData(data) {
+        const { valid, invalidData } = validate(data);
+
+        if (valid) {
+            this.setState({ errors: {} });
+            return true;
+        } else {
+            this.setState({ errors: invalidData });
+            return false;
+        }
     }
 
     async handleSubmit(e) {
@@ -74,16 +85,15 @@ class Edit extends React.Component {
             const EditUser = () => {
                 return (
                     <>
-                        <Link to={`/users/${this.state.oldUserData.username}`}>back</Link>
                         <h1>Edit user information</h1>
                         <Form onSubmit={this.handleSubmit} noValidate>
-                            <UserForm inputChange={this.handleInputChange} oldData={this.state.oldUserData} edit={true} />
-
-                            <Error errors={this.state.errors} />
-
-                            <Button variant="info" type="submit">
-                                Save edit
-                            </Button>
+                            <UserForm
+                                inputChange={this.handleInputChange}
+                                oldData={this.state.oldUserData}
+                                edit={true}
+                                errors={this.state.errors}
+                                validate={this.validateData}
+                            />
                         </Form>
                     </>
                 );

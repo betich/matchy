@@ -21,8 +21,9 @@ router
     User.findOne({username: new RegExp('\\b' + req.body.username + '\\b', 'i')})
         .then((foundUser) => {
             if (foundUser) {
-                res.status(409).send('duplicate user');
-                return null;
+                let Err = new Error("duplicate user");
+                Err.status = 409;
+                throw Err;
             } else {
                 let newUser = Object.assign({}, req.body);
 
@@ -34,7 +35,6 @@ router
             }
         })
         .then((newUser) => {
-            if (!newUser) return null;
             User.create(filterFalsy(newUser), (err, User) => {
                 try {
                     if (err) throw err;
