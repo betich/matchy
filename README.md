@@ -1,5 +1,7 @@
-# matchy
+# Matchy
 
-yes.
+Tinder, but with freelancers.
 
-```npm run setup```
+1. Open Command Prompt
+2. Install [npm](https://nodejs.org/en/)
+3. Type ```npm run setup``` then ```npm run start```
