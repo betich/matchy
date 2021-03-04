@@ -197,7 +197,7 @@ class UserForm extends React.Component {
 
     setInfo(type, fields) {
         this.setState({
-            data: { ...this.state.data, experiences: { ...this.state.experiences, [type]: fields }},
+            data: { ...this.state.data, experiences: { ...this.state.data.experiences, [type]: fields }},
         }, () => {
             this.props.inputChange(this.state.data);
         });
