@@ -30,7 +30,7 @@ function App() {
 	return (
 	<React.Suspense fallback={<Loading />}>
 		<Router>
-			<div class="App">
+			<div className="App">
 				<div className="sidebar-wrapper">
 					<NavigationBar setExpanded={setSidebarexpanded} />
 				</div>
