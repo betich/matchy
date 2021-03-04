@@ -24,7 +24,7 @@ const ProjectView = (props) => {
                         <Card.Text>{Project.description}</Card.Text>
                         <Card.Text>
                             employees:{" "}
-                            {Workers.map((e) => e.username).join(", ")}
+                            {Workers.map((e) => <span key={e._id}><Link to={`/users/${e.username}`}>{e.username}</Link>, </span>)}
                         </Card.Text>
                         <Card.Text>tags:</Card.Text>
                         <Card.Text>
@@ -193,7 +193,6 @@ const View = (props) => {
         const ViewProject = () => {
             return (
                 <>
-                    <Link to="/projects">Back</Link>
                     <h1>{Project.name}</h1>
                     <ProjectView project={Project} />
                     {authorized && (

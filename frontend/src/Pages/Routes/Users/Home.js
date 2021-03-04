@@ -43,13 +43,15 @@ const Index = (props) => {
         .then(() => setLoad(true))
         .catch((err) => {
             if (err.response) {
-                if (err.response.status === 500) setError("internal server error");
+                if (err.response.status === 401) setError("You need to be logged in first");
+                else if (err.response.status === 500) setError("internal server error");
                 else setError(err.response.data);
             } else {
                 setError("an unknown error occured");
             }
+            setLoad(true);
 
-            console.error("oh no", err);
+            console.error(err);
         })
     }, []);
 

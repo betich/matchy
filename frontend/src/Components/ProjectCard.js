@@ -17,9 +17,8 @@ const ProjectCard = (props) => {
                     >
                     <Card.Body>
                         <Card.Title>{Project.name}</Card.Title>
-                        <Card.Text>by {Owner.username}</Card.Text>
+                        <Card.Text><i>by {Owner.username}</i></Card.Text>
                         <Card.Text>{Project.description}</Card.Text>
-                        <Card.Text>employees: { Workers.map((e) => e.username).join(', ') }</Card.Text>
                         <Card.Text>tags:</Card.Text>
                         <Card.Text>
                         {Project.tags.map((elem, i) => (

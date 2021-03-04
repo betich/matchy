@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import validate from "../../../Services/Validate";
 import Error from "../../../Components/Error";
 import ProjectForm from "../../../Components/Form/Project";
@@ -60,7 +59,6 @@ class Create extends React.Component {
     render() {
         return (
             <>
-                <Link to="/projects">back</Link>
                 <h1>Create a Project</h1>
                 <Form onSubmit={this.handleSubmit} noValidate>
                     <ProjectForm inputChange={this.handleInputChange} />

@@ -6,7 +6,7 @@ const filterFalsy = require('../helpers/filterFalsy');
 const auth = require('../middleware/index');
 const usernameRegex = require('../helpers/usernameRegex');
 router
-.get('/', (req, res) => {
+.get('/', auth.checkLogin, (req, res) => {
     User.find({}).populate('projects').populate('archive')
         .then((foundUsers) => {
             if (foundUsers) {
@@ -92,7 +92,7 @@ router
     let newUser = req.body;
     const exp = newUser.experiences;
     for (const e in exp) {
-        newUser.experiences[e] = JSON.parse(exp[e]);
+        newUser.experiences[e] = exp[e];
     }
 
     User.findOneAndUpdate(

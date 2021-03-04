@@ -91,7 +91,7 @@ class DatePicker extends React.Component {
                 <Form.Group as={Col} sm={4} md={2} lg={1} >
                     <Form.Control as="select" required onChange={this.inputChange} data-format="year" value={this.state.year} >
                     <option value="" disabled defaultValue>Year</option>
-                    {range(this.startYear,this.currentYear).map((year, i) => <option className="form-select" key={i} value={ year }>{ year }</option>)}
+                    {range(this.startYear, this.currentYear).reverse().map((year, i) => <option className="form-select" key={i} value={ year }>{ year }</option>)}
                     </Form.Control>
                 </Form.Group>
             </Form.Row>

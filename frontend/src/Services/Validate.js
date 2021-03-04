@@ -57,6 +57,7 @@ const validate = (formData) => {
                 break;
 
             case "password":
+                if (value === undefined) break;
                 const passwordRegex = /^(?=.*[a-z])(?=.*\d).{8,}$/;
                 const passwordMatch = value.match(passwordRegex);
 
@@ -106,11 +107,6 @@ const validate = (formData) => {
 
                 if (!day || !month || !year) {
                     addToInvalid("birthday", "fill out all fields")
-                }
-
-                //check month
-                if (month > 12 || month < 1) {
-                    addToInvalid("birthday", "invalid month");
                 }
 
                 //check day

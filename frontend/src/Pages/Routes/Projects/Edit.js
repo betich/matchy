@@ -1,6 +1,5 @@
 import axios from 'axios';
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Form, Button } from "react-bootstrap";
 import validate from "../../../Services/Validate";
 import Error from "../../../Components/Error";
@@ -72,7 +71,6 @@ class Edit extends React.Component {
             const EditProject = () => {
                 return (
                     <>
-                        <Link to={`/projects/i/${this.state.oldProject._id}`}>back</Link>
                         <h1>Edit Project</h1>
                         <Form onSubmit={this.handleSubmit}>
                             <ProjectForm inputChange={this.handleInputChange} oldData={this.state.oldProject} />
