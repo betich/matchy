@@ -7,9 +7,11 @@ import { MdClose } from "react-icons/md";
 import { useState } from "react";
 
 const NavElement = (props) => {
+    let icon = (props.elem.icon) ? props.elem.icon : '';
+
     return (
         <Nav.Link as={Link} to={props.elem.url} >
-            <li>{props.elem.icon}<span>{"   " + props.elem.name}</span></li>
+            <li>{icon}<span>{"   " + props.elem.name}</span></li>
         </Nav.Link>
     );
 };
@@ -18,7 +20,6 @@ const NavigationBar = (props) => {
     const [show, setShow] = useState(false);
 
     const handleClick = () => {
-        console.log("yo");
         setShow(!show);
         props.setExpanded(!show);
     };
@@ -30,15 +31,15 @@ const NavigationBar = (props) => {
             </div>
             <div className={show ? "sidebar expand" : "sidebar"}>
                 <Nav>
-                  <ul>
-                      {NavList.map((elem) => {
-                          return (
-                              <>
-                                  <NavElement elem={elem} />
-                              </>
-                          );
-                      })}
-                  </ul>
+                    <ul>
+                        {NavList.map((elem) => {
+                            return (
+                                <>
+                                    <NavElement elem={elem} />
+                                </>
+                            );
+                        })}
+                    </ul>
                 </Nav>
             </div>
         </>

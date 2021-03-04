@@ -1,5 +1,5 @@
 {
-  "name": "planty",
+  "name": "matchy",
   "version": "0.0.1",
   "description": "web app thing",
   "main": "app.js",
@@ -13,14 +13,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/betich/planty.git"
+    "url": "git+https://github.com/betich/matchy.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/betich/planty/issues"
+    "url": "https://github.com/betich/matchy/issues"
   },
-  "homepage": "https://github.com/betich/planty#readme",
+  "homepage": "https://github.com/betich/matchy#readme",
   "dependencies": {
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
