@@ -165,7 +165,6 @@ const View = (props) => {
         const DisplayUser = () => {
             return (
             <>
-                <Link to="/users">Back</Link>
                 <h1>View {User.username}</h1>
                 <UserCard user={User} />
                 { authorized && (

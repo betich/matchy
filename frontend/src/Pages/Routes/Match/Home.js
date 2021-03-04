@@ -107,6 +107,7 @@ class Match extends React.Component {
                 .then((res) => {
                     switch (res.status) {
                         case 200:
+                            this.setState({ page: 'index', Project: null })
                             this.getRandomProject();
                             break;
                         case 202:

@@ -161,12 +161,13 @@ class UserForm extends React.Component {
 
                 <Form.Row>
                     <Form.Group as={Col} sm={12} className="mb-3" controlId="education">
-                        <Form.Label>Education:</Form.Label>
+                        <Form.Label>Education</Form.Label>
                         <ExperienceGroup
                             type="select"
                             name="education"
                             onChange={this.setInfo}
                             options={EducationOptions}
+                            defaultValue={this.state.experiences.education}
                         />
                     </Form.Group>
                 </Form.Row>
@@ -178,6 +179,7 @@ class UserForm extends React.Component {
                             type="input"
                             name="work"
                             onChange={this.setInfo}
+                            defaultValue={this.state.experiences.work}
                         />
                     </Form.Group>
                 </Form.Row>

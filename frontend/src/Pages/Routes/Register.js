@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import validate from "../../Services/Validate";
 import Error from "../../Components/Error";
 import UserForm from "../../Components/Form/User";
@@ -57,7 +56,6 @@ class Create extends React.Component {
     render() {
         return (
             <>
-                <Link to="/">back</Link>
                 <h1>Create User</h1>
                 <Form onSubmit={this.handleSubmit} noValidate>
                     <UserForm inputChange={this.handleInputChange} />

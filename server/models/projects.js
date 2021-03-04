@@ -27,11 +27,9 @@ projectSchema.pre('remove', function() {
             $in: [this.owner, ...this.workers]
         }
     })
-    .populate("projects.info")
     .then((foundUsers) => {
         // foundUsers = [ User, User, User]
-        if (err) throw err;
-        else if (!foundUsers) throw 'no user found';
+        if (!foundUsers) throw 'no user found';
         else {
             let projectsToRemove = [];
             let projects = foundUsers.map((user) => user.projects);
@@ -41,14 +39,14 @@ projectSchema.pre('remove', function() {
                 let toRemove = [];
                 for (var i = 0; i < project.length; i++) {
                     // check for projects in 'User' that match current _id
-                    if (project[i].info._id.equals(this._id)) {
+                    if (project[i].info.equals(this._id)) {
                         toRemove.push(i);
                     }
                 }
                 
                 if (toRemove.length > 0) {
                     // add indexes of projects that will be removed
-                    projectsToRemove.push({ useridx:useridx, projectidx: toRemove });
+                    projectsToRemove.push({ useridx: useridx, projectidx: toRemove });
                 }
             });
 
