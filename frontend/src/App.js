@@ -14,6 +14,7 @@ function App() {
 	const [message, setMessage] = useState(null);
 	const [type, setType] = useState(null);
 	const [visible, setVisibility] = useState(false);
+	const [sidebarexpanded, setSidebarexpanded] = useState(false);
 
 	useEffect(() => {
         Bus.addListener('flash', ({message, type}) => {
@@ -29,20 +30,22 @@ function App() {
 	return (
 	<React.Suspense fallback={<Loading />}>
 		<Router>
-			<div className="App">
-				<header className="App-header">
-					<NavigationBar />
-				</header>
-				<Container>
-					{ visible &&
-						<Flash
+			<div class="App">
+				<div className="sidebar-wrapper">
+					<NavigationBar setExpanded={setSidebarexpanded} />
+				</div>
+				<div className={sidebarexpanded ? 'main expanded' : 'main'}>
+					<Container>
+						{ visible &&
+							<Flash
 							type={type}
 							message={message}
 							onClose={() => setVisibility(false)}
-						/>
-					}
-					<Routing />
-				</Container>
+							/>
+						}
+						<Routing />
+					</Container>
+				</div>
 			</div>
 		</Router>
 	</React.Suspense>

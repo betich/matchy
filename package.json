@@ -8,7 +8,8 @@
     "setup": "npm i && cd frontend && npm i",
     "server": "nodemon",
     "frontend": "cd frontend && npm start",
-    "start": "concurrently --kill-others \"node app.js\" \"npm run frontend\""
+    "start": "concurrently --kill-others \"node app.js\" \"npm run frontend\"",
+    "scss": "sass --watch frontend/src/App.scss:frontend/src/App.css"
   },
   "repository": {
     "type": "git",
