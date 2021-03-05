@@ -17,7 +17,6 @@ const PageOne = (props) => {
                             <Form.Label>Username <Required /></Form.Label>
                             <Form.Control
                                 required
-                                autoFocus
                                 name="username"
                                 placeholder="Username"
                                 onChange={props.inputChange}
@@ -65,6 +64,7 @@ const PageOne = (props) => {
                         <Form.Label>Full name <Required /></Form.Label>
                         <Form.Control
                             required
+                            autoFocus
                             name="fullname"
                             placeholder="Full Name"
                             onChange={props.inputChange}

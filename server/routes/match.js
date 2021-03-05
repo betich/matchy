@@ -48,8 +48,6 @@ router
                         foundProjects.sort((element1, element2 ) => {
                             return matchscore(interests, element1.tags) < matchscore(interests, element2.tags);
                         })
-                        console.log(foundProjects.length);
-                        console.log(randIdx);
                         res.status(200).json(foundProjects[randIdx]);
                     }
                 });

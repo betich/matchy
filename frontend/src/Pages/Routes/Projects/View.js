@@ -29,7 +29,7 @@ const ProjectView = (props) => {
                         <Card.Text>tags:</Card.Text>
                         <Card.Text>
                             {Project.tags.map((elem, i) => (
-                                <Button key={i} variant="outline-danger">
+                                <Button key={i} variant="outline-earthbrown">
                                     {elem}
                                 </Button>
                             ))}
