@@ -1,6 +1,9 @@
 @import "../node_modules/bootstrap/scss/bootstrap"; // import bootstrap
 
 .main {
+    display: flex;
+    width: 80%;
+    justify-content: center;
     position: fixed;
     left: 100px;
     z-index: -2;

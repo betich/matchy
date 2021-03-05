@@ -9929,6 +9929,9 @@ h3 {
   }
 }
 .main {
+  display: flex;
+  width: 80%;
+  justify-content: center;
   position: fixed;
   left: 100px;
   z-index: -2;

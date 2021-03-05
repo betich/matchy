@@ -35,7 +35,7 @@ function App() {
 					<NavigationBar setExpanded={setSidebarexpanded} />
 				</div>
 				<div className={sidebarexpanded ? 'main expanded' : 'main'}>
-					<Container>
+					<Container fluid>
 						{ visible &&
 							<Flash
 							type={type}

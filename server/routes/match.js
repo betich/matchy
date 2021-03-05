@@ -4,9 +4,11 @@ const router = express.Router();
 const Project = require('../models/projects');
 const User = require('../models/users');
 const sendError = require('../helpers/sendError');
+const matchscore = require('../helpers/matchscore');
 
 router
 .get('/', auth.checkLogin, async (req, res) => {
+    console.log(req.user);
     try {
         // check if project responses already contain responses made by user
         await Project.aggregate([
@@ -36,7 +38,18 @@ router
 
                     if (foundProjects.length === 0) res.status(204).send("There are no projects left to display");
                     else {
-                        let randIdx = Math.floor(Math.random() * foundProjects.length);
+                        const interests = req.user.interests;
+                        const n = foundProjects.length;
+                        // be careful adjust this value
+                        const inequalityness = 3;
+                        const r = 1 - ( 1 / ( ( n / inequalityness ) + 1) );
+                        // .9 is to prevent precision error
+                        const randIdx = Math.floor( -inequalityness * ( ( 1 / ( (Math.random() * r) - 1 ) ) + 1) );
+                        foundProjects.sort((element1, element2 ) => {
+                            return matchscore(interests, element1.tags) < matchscore(interests, element2.tags);
+                        })
+                        console.log(foundProjects.length);
+                        console.log(randIdx);
                         res.status(200).json(foundProjects[randIdx]);
                     }
                 });
