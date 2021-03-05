@@ -14,7 +14,7 @@ const ProjectCard = (props) => {
         <Card
             bg="lightbrown"
             text="black"
-            style={{ width: '18rem' }}
+            id="projectcard"
             className="mb-2"
             >
             <Card.Body>

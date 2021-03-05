@@ -10729,6 +10729,12 @@ button.button-left {
   margin-left: 8px;
 }
 
+#projectcard {
+  width: 16rem;
+  margin-right: 1.25rem;
+  margin-bottom: 1rem;
+}
+
 #about h1 {
   font-size: 3rem;
 }
