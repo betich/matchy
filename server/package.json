@@ -9,7 +9,7 @@
     "server": "nodemon",
     "start": "node app.js",
     "frontend": "cd frontend && npm start",
-    "dev": "concurrently --kill-others \"node server/app.js\" \"npm run frontend\""
+    "dev": "concurrently --kill-others \"node app.js\" \"npm run frontend\""
   },
   "repository": {
     "type": "git",
