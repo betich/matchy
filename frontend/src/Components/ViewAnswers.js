@@ -3,7 +3,7 @@ import axios from "axios";
 import { Button, Modal, Table } from "react-bootstrap";
 
 const ViewOneAnswer = (props) => {
-    if (props.idx === -1) {
+    if (props.idx === -1 || !props.answers[props.idx]) {
         return <></>;
     }
     const handleClose = () => props.close();

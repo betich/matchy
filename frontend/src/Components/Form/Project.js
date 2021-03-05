@@ -73,7 +73,7 @@ class ProjectForm extends React.Component {
 
                 <Form.Row>
                     <Form.Group as={Col} sm={12}>
-                        <Form.Label>Description <Required /></Form.Label>
+                        <Form.Label>Description</Form.Label>
                         <Form.Control
                             name="description"
                             placeholder="Description"

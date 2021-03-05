@@ -12,7 +12,7 @@ const ProjectCard = (props) => {
     
     return (
         <Card
-            bg="white"
+            bg="lightbrown"
             text="black"
             style={{ width: '18rem' }}
             className="mb-2"
@@ -28,6 +28,7 @@ const ProjectCard = (props) => {
                     <Button
                         key={i}
                         variant="outline-danger"
+                        className="button-group"
                     >
                         {elem}
                     </Button>
@@ -170,15 +171,16 @@ class Match extends React.Component {
                     case "view":
                         return (
                             <>
-                                <p>
-                                    <Link to="#" onClick={this.changeToIndex}>back</Link>
-                                </p>
-                                <Button variant="outline-success" onClick={this.changeToForm} disabled={!this.state.clickable} className="mr-2">
+                                <Link to="#" onClick={this.changeToIndex}>
+                                    <Button variant="outline-secondary" disabled={!this.state.clickable} className="button-group">back</Button>
+                                </Link>
+                                <Button variant="outline-success" onClick={this.changeToForm} disabled={!this.state.clickable} className="button-group">
                                     {this.state.clickable ? "Request To Join" : "loading..."}
                                 </Button>
-                                <Button variant="outline-danger" onClick={this.handleNextClick} disabled={!this.state.clickable}>
+                                <Button variant="outline-danger" onClick={this.handleNextClick} disabled={!this.state.clickable} className="button-group">
                                     {this.state.clickable ? "Next" : "loading..."}
                                 </Button>
+                                <hr />
                                 <ViewProject project={this.state.Project} handleNext={this.handleNextClick} handleAccept={this.handleAcceptClick} />
                             </>
                         );
@@ -186,7 +188,9 @@ class Match extends React.Component {
                         return (
                             <>
                                 <p>
-                                    <Link to="#" onClick={this.changeToIndex}>back</Link>
+                                    <Link to="#" onClick={this.changeToIndex}>
+                                        <Button variant="outline-secondary" disabled={!this.state.clickable} className="button-group">back</Button>
+                                    </Link>
                                 </p>
                                 <FormProject onSubmit={this.onFormSubmit} project={this.state.Project} />
                             </>

@@ -10,7 +10,7 @@ const ProjectCard = (props) => {
         if (Project && Owner && Workers) {
             return (
                 <Card
-                    bg="white"
+                    bg="lightbrown"
                     text="black"
                     style={{ width: '18rem' }}
                     className="mb-2"

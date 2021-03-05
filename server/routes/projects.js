@@ -159,25 +159,32 @@ router
 
 .get('/accept/:id', auth.checkProjectOwnership, (req, res) => {
     // query = r: response id
+    console.log('a')
     if (!req.query.r) return res.status(404).send("please specify the response id");
     Project.findById(req.params.id)
         .populate("responses")
         .then(async (foundProject) => {
             let foundUser = await User.findById(req.user._id);
+
+            let foundResponse = await Response.findById(req.query.r);
+            console.log(foundResponse)
+            let foundWorker = await User.findById(foundResponse.user);
+            console.log(foundWorker)
+            
             const respIdx = foundProject.responses.findIndex((resp) => {
                 return resp._id.equals(req.query.r);
             })
 
             if (respIdx !== -1) {
                 foundProject.responses.splice(respIdx, 1);
-                foundProject.workers.push(foundUser._id);
-
-                foundUser.projects.push({
+                foundProject.workers.push(foundWorker._id);
+                
+                foundWorker.projects.push({
                     info: foundProject._id,
                     role: "worker"
                 })
 
-                const [user, project] = await Promise.all([foundUser.save(), foundProject.save()])
+                const [user, project, worker] = await Promise.all([foundUser.save(), foundProject.save(), foundWorker.save()])
                 
                 Response.populate(project.responses, ['user', 'project'], (err, populatedResponses) => {
                     if (err) throw err;
