@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import React from 'react';
+import { Switch, Route, withRouter } from 'react-router-dom';
 
 import { SideBar, NavigationBar } from '../Components/NavBar';
 import isLoggedIn from '../Services/isLoggedIn';
@@ -44,68 +44,94 @@ const Routing = (props) => {
     );
 }
 
-const Main = () => {
-    const [message, setMessage] = useState(null);
-	const [type, setType] = useState(null);
-	const [visible, setVisibility] = useState(false);
-	const [showExpand, setShow] = useState(true);
-	const [userLoggedIn, setLoggedIn] = useState(false);
-    const [User, setUser] = useState(null);
-    const [loaded, setLoad] = useState(false);
+class Page extends React.Component {
+    constructor(props) {
+        super(props);
 
-    useEffect(() => {
-        Bus.addListener('flash', ({message, type}) => {
-            setVisibility(true);
-            setMessage(message);
-			setType(type);
-            setTimeout(() => {
-                setVisibility(false);
-            }, 4000);
-		});
-		
-		const getUser = async () => {
-            let [loggedIn, user] = await isLoggedIn();
-            if (loggedIn) setUser(user);
-            setLoggedIn(loggedIn);
-            setLoad(true);
+        this.state = {
+            message: null,
+            type: null,
+            visible: false,
+            showExpand: true,
+            isLoggedIn: false,
+            User: null,
+            loaded: false
         }
+
+        this.requestUser = this.requestUser.bind(this);
+        this.onToggle = this.onToggle.bind(this);
+    }
+
+    requestUser() {
+        const getUser = async () => {
+            let [loggedIn, user] = await isLoggedIn();
+            if (loggedIn) this.setState({ User: user });
+            this.setState({ isLoggedIn: loggedIn, loaded: true });
+        }
+
         getUser();
-    }, []);
+    }
 
-    const onToggle = () => {
-		setShow(!showExpand);
+    onToggle() {
+		this.setState({ showExpand: !this.state.showExpand });
 	}
+
+    componentDidMount() {
+        Bus.addListener('flash', ({message, type}) => {
+            this.setState({
+                visible: true,
+                message: message,
+                type: type
+            }, () => {
+                setTimeout(() => {
+                    this.setState({
+                        visibility: false
+                    })
+                }, 4000);
+            })
+		});
+
+        this.requestUser();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.location.pathname !== prevProps.location.pathname) {
+            this.requestUser();
+        }
+    }
+
+    render() {
+        const renderComponents = () => {
+            if (this.state.loaded) {
+                return (
+                    <>
+                        <NavigationBar onToggle={this.onToggle} show={this.state.showExpand} isLoggedIn={this.state.isLoggedIn} />
+                        <article id="App">
+                            <header>
+                                <SideBar show={this.state.showExpand} />
+                            </header>
+                            <main id="main">
+                                <Container>
+                                    { this.state.visible &&
+                                        <Flash
+                                        type={this.state.type}
+                                        message={this.state.message}
+                                        onClose={() => this.setState({ visible: false })}
+                                        />
+                                    }
+                                    <Routing User={this.state.User} isLoggedIn={this.state.isLoggedIn} />
+                                </Container>
+                            </main>
+                        </article>
+                    </>
+                  );
+            } else {
+                return (<Loading />);
+            }
+        }
     
-    const renderComponents = () => {
-		if (loaded) {
-			return (
-				<>
-					<NavigationBar onToggle={onToggle} show={showExpand} isLoggedIn={userLoggedIn} />
-					<article id="App">
-						<header>
-							<SideBar show={showExpand} />
-						</header>
-						<main id="main">
-							<Container>
-								{ visible &&
-									<Flash
-									type={type}
-									message={message}
-									onClose={() => setVisibility(false)}
-									/>
-								}
-								<Routing User={User} isLoggedIn={userLoggedIn} />
-							</Container>
-						</main>
-					</article>
-				</>
-			  );
-		} else {
-			return (<Loading />);
-		}
-	}
-
-	return (<>{ renderComponents() }</>);
+        return (<>{ renderComponents() }</>);
+    }
 }
 
-export default Main;
+export default withRouter(props => <Page {...props}/>);
