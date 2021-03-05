@@ -163,6 +163,7 @@ class Match extends React.Component {
                                 <Button variant="outline-danger" onClick={this.handleNextClick} disabled={!this.state.clickable}>
                                     {this.state.clickable ? "Next" : "loading..."}
                                 </Button>
+                                <hr />
                                 <ProjectCard project={this.state.Project} viewProject={this.changeToView} />
                             </>
                         )

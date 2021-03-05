@@ -52,15 +52,17 @@ const Index = (props) => {
                 <>
                     <h1>Projects</h1>
                     <Link to="/projects/create">
-                        <Button variant="outline-danger button-block" type="submit">
+                        <Button variant="outline-earthbrown button-block" type="submit">
                             Create
                         </Button>
                     </Link>
+                    <hr />
                     <div id="projectLinks">
                         <h4>Your Projects</h4>
                         <div className="d-flex flex-wrap">
                             {MyProjects}
                         </div>
+                        <hr />
                         <h4>Projects you're working with</h4>
                         <div className="d-flex flex-wrap">
                             {WorkingProjects}

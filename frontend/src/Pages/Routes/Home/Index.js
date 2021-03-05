@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const Login = () => {
     return (
         <Link to="/login">
-            <Button variant="outline-danger" type="submit">
+            <Button variant="outline-danger" className="button-group" type="submit">
                 Login
             </Button>
         </Link>
@@ -14,7 +14,7 @@ const Login = () => {
 const SignUp = () => {
     return (
         <Link to="/signup">
-            <Button variant="outline-danger" type="submit">
+            <Button variant="outline-danger" className="button-group" type="submit">
                 Sign up
             </Button>
         </Link>
@@ -29,6 +29,7 @@ const Home = (props) => {
                 <h1 id="welcome">
                     Welcome, { props.User.username }
                 </h1>
+                <hr />
                 <Link to="/match">
                     <Button variant="info" className="button-group" type="submit">
                         Match

@@ -197,6 +197,7 @@ const View = (props) => {
                             ) : (
                                 <></>
                             )}
+                            <hr />
                             <div>
                                 <EditSection id={Project._id} />
                                 <DeleteSection

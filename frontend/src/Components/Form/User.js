@@ -255,10 +255,10 @@ class UserForm extends React.Component {
                             edit={this.props.edit}
                         />
                         <Error errors={this.props.errors} />
-                        <Button variant="outline-info" onClick={this._prev}>
+                        <Button variant="outline-info" className="button-group" onClick={this._prev}>
                             Back
                         </Button>
-                        <Button variant="info" type="submit">
+                        <Button variant="info" className="button-group" type="submit">
                             {(this.props.edit) ? "Save Edit" : "Create"}
                         </Button>
                     </>

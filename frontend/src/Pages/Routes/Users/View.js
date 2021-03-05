@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, Button, Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 
 const EditSection = (props) => {
@@ -88,9 +88,9 @@ const UserCard = (props) => {
         return (
         <>
             <p>Education:</p>
-            {expFields["education"].map((e, i) => <Card.Text key={i}>{`${e.title}: ${e.value}`}</Card.Text>)}
+            {expFields["education"].map((e, i) => <p key={i}>{`${e.title}: ${e.value}`}</p>)}
             <p>Work:</p>    
-            {expFields["work"].map((e, i) => <Card.Text key={i}>{`${e.title}: ${e.value}`}</Card.Text>)}
+            {expFields["work"].map((e, i) => <p key={i}>{`${e.title}: ${e.value}`}</p>)}
         </>
         )
     }
@@ -160,13 +160,14 @@ const View = (props) => {
             return (
             <>
                 <UserCard user={User} />
+                <hr />
                 { authorized && (
-                <>
+                <div>
                     <EditSection username={props.match.params.username} />
                     <DeleteSection
                         username={User.username}
                     />
-                </>
+                </div>
                 )}
             </>
             )

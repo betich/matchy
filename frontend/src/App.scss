@@ -1,8 +1,8 @@
 $theme-colors: (
-    "earthbrown": #824533,
+    "earthbrown": #b72f07,
     "darkbrown": #514540,
     "danger": #d05d2c,
-    "success": #75825a,
+    "success": #7d8c5e,
     "line": #67e467,
     "facebook": #2a2ada
 );
@@ -15,7 +15,7 @@ $sidebar-width: 15rem;
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 body {
-    background-color: #f8f4ef;
+    background-color: #fffaf6;
     padding-top: 50px;
     margin: 0;
     font-family: 'Kanit', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -162,6 +162,16 @@ button {
         line-height: 2rem;
         font-size: 1.15rem;
     }
+
+    & button {
+        margin-right: 15px;
+    }
+}
+
+#spinner {
+    position: absolute;
+    top: 35vh;
+    left: 49vw;
 }
 
 #main {
