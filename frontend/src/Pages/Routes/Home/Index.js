@@ -26,15 +26,25 @@ const Home = (props) => {
         if (props.isLoggedIn && props.User) {
             return (
             <>
-                <h1>
+                <h1 id="welcome">
                     Welcome, { props.User.username }
                 </h1>
+                <Link to="/match">
+                    <Button variant="info" className="button-group" type="submit">
+                        Match
+                    </Button>
+                </Link>
+                <Link to="/projects/create">
+                    <Button variant="outline-info" className="button-group" type="submit">
+                        Create a new project
+                    </Button>
+                </Link>
             </>
             );
         } else if (!props.isLoggedIn) {
             return (
             <>
-                <h1>
+                <h1 id="welcome">
                     Welcome, please sign in
                 </h1>
                 <Login />
@@ -44,7 +54,7 @@ const Home = (props) => {
         } else {
             return (
             <>
-                <h1>
+                <h1 id="welcome">
                     Welcome.
                 </h1>
             </>

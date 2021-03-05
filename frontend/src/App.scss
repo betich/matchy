@@ -2,7 +2,9 @@ $theme-colors: (
     "earthbrown": #824533,
     "darkbrown": #514540,
     "danger": #d05d2c,
-    "success": #75825a
+    "success": #75825a,
+    "line": #67e467,
+    "facebook": #2a2ada
 );
 
 $sidebar-width: 15rem;
@@ -150,12 +152,28 @@ button {
     }
 }
 
+#about {
+    & h1 {
+        font-size: 3rem;
+    }
+
+    & p {
+        font-weight: 300;
+        line-height: 2rem;
+        font-size: 1.15rem;
+    }
+}
+
 #main {
     position: relative;
     z-index: 3;
     transition: 0.25s ease-in;
     padding: 50px;
     width: 100%;
+}
+
+#welcome {
+    margin-bottom: 15px;
 }
 
 #hamburger {
