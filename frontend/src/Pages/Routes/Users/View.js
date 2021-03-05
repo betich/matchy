@@ -6,7 +6,7 @@ import { Link, useHistory } from "react-router-dom";
 const EditSection = (props) => {
     return (
         <Link to={`/users/${props.username}/edit`}>
-            <Button variant="outline-info">Edit</Button>
+            <Button className="button-group" variant="outline-success">Edit</Button>
         </Link>
     )
 } 
@@ -45,8 +45,8 @@ const DeleteSection = (props) => {
     };
 
     return (
-        <div>
-            <Button onClick={handleClick} disabled={disable} variant="outline-danger">
+        <>
+            <Button onClick={handleClick} className="button-group" disabled={disable} variant="outline-danger">
                 Delete
             </Button>
             {show ? (
@@ -65,7 +65,7 @@ const DeleteSection = (props) => {
             ) : (
                 <></>
             )}
-        </div>
+        </>
     );
 };
 
@@ -87,40 +87,34 @@ const UserCard = (props) => {
 
         return (
         <>
-            <Card.Text>education:</Card.Text>
+            <p>Education:</p>
             {expFields["education"].map((e, i) => <Card.Text key={i}>{`${e.title}: ${e.value}`}</Card.Text>)}
-            <Card.Text>work:</Card.Text>    
+            <p>Work:</p>    
             {expFields["work"].map((e, i) => <Card.Text key={i}>{`${e.title}: ${e.value}`}</Card.Text>)}
         </>
         )
     }
 
     return (
-        <Card
-            bg="white"
-            text="black"
-            style={{ width: "18rem" }}
-            className="mb-2"
-        >
-            <Card.Body>
-                <Card.Title>{user.username}</Card.Title>
-                <Card.Text>full name: {user.fullname}</Card.Text>
-                <Card.Text>email: {user.email}</Card.Text>
-                <Card.Text>birthday: {`${user.birthday.day}/${user.birthday.month}/${user.birthday.year}`}</Card.Text>
-                <Card.Text>interests:</Card.Text>
-                <Card.Text>
-                    {user.interests.map((elem, i) => (
-                        <Button
-                            key={i}
-                            variant="outline-earthbrown"
-                        >
-                            {elem}
-                        </Button>
-                    ))}
-                </Card.Text>
-                {displayExpFields()}
-            </Card.Body>
-        </Card>
+        <div className="info">
+            <h1>{user.username}</h1>
+            <p>Full Name: {user.fullname}</p>
+            <p>Email: {user.email}</p>
+            <p>Birthday: {`${user.birthday.day}/${user.birthday.month}/${user.birthday.year}`}</p>
+            <p>Interests:</p>
+            <div>
+            {user.interests.map((elem, i) => (
+                <Button
+                    key={i}
+                    variant="outline-earthbrown"
+                    className="button-group"
+                >
+                    {elem}
+                </Button>
+            ))}
+            </div>
+            {displayExpFields()}
+        </div>
     );
 }
 
@@ -165,7 +159,6 @@ const View = (props) => {
         const DisplayUser = () => {
             return (
             <>
-                <h1>View {User.username}</h1>
                 <UserCard user={User} />
                 { authorized && (
                 <>

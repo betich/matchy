@@ -85,7 +85,7 @@ class ProjectForm extends React.Component {
 
                 <Form.Row>
                     <Form.Group as={Col} sm={12} className="mb-3">
-                        <Form.Label>Tags: <Required /></Form.Label>
+                        <Form.Label className="display-block">Tags: <Required /></Form.Label>
                         <Tags
                             onChange={this.tagChange}
                             tags={TagsList}

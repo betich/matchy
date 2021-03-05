@@ -95,7 +95,7 @@ const PageTwo = (props) => {
         <>
             <Form.Row>
                 <Form.Group as={Col} sm={12} className="mb-3" controlId="education">
-                    <Form.Label>Education</Form.Label>
+                    <Form.Label className="display-block">Education:</Form.Label>
                     <ExperienceGroup
                         type="select"
                         name="education"
@@ -108,7 +108,7 @@ const PageTwo = (props) => {
 
             <Form.Row>
                 <Form.Group as={Col} sm={12} className="mb-3" controlId="work">
-                    <Form.Label>Work</Form.Label>
+                    <Form.Label className="display-block">Work:</Form.Label>
                     <ExperienceGroup
                         type="input"
                         name="work"
@@ -120,7 +120,7 @@ const PageTwo = (props) => {
 
             <Form.Row>
                 <Form.Group as={Col} sm={12} className="mb-3" controlId="interests">
-                    <Form.Label>Interests</Form.Label>
+                    <Form.Label className="display-block">Interests:</Form.Label>
                     <Tags
                         onChange={props.tagChange}
                         tags={Interests}

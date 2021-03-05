@@ -130,6 +130,7 @@ const ViewAnswerSection = (props) => {
         <>
             <Button
                 variant="info"
+                className="button-block"
                 onClick={handleClick}
             >
                 Show answers

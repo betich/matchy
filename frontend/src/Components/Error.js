@@ -13,7 +13,8 @@ const Error = (props) => {
         .map(([key, name], i) => {
             return (
                 <p key={i}>
-                    {`${key}:\n${name.join(',\n')}`}
+                    <p className="type">{key}</p>
+                    <p className="msg">{name.join(',\n')}</p>
                 </p>
             )
         });

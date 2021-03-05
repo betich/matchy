@@ -25,6 +25,7 @@ const ProjectCard = (props) => {
                             <Button
                                 key={i}
                                 variant="outline-earthbrown"
+                                className="button-group"
                             >
                                 {elem}
                             </Button>

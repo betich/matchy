@@ -52,7 +52,7 @@ const Index = (props) => {
                 <>
                     <h1>Projects</h1>
                     <Link to="/projects/create">
-                        <Button variant="outline-danger" type="submit">
+                        <Button variant="outline-danger button-block" type="submit">
                             Create
                         </Button>
                     </Link>

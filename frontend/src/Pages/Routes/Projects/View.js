@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Card, Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import ViewAnswerSection from "../../../Components/ViewAnswers";
 
@@ -12,30 +12,23 @@ const ProjectView = (props) => {
     const renderCard = () => {
         if (Project && Owner && Workers) {
             return (
-                <Card
-                    bg="white"
-                    text="black"
-                    style={{ width: "18rem" }}
-                    className="mb-2"
-                >
-                    <Card.Body>
-                        <Card.Title>{Project.name}</Card.Title>
-                        <Card.Text>by {Owner.username}</Card.Text>
-                        <Card.Text>{Project.description}</Card.Text>
-                        <Card.Text>
-                            employees:{" "}
-                            {Workers.map((e) => <span key={e._id}><Link to={`/users/${e.username}`}>{e.username}</Link>, </span>)}
-                        </Card.Text>
-                        <Card.Text>tags:</Card.Text>
-                        <Card.Text>
-                            {Project.tags.map((elem, i) => (
-                                <Button key={i} variant="outline-earthbrown">
-                                    {elem}
-                                </Button>
-                            ))}
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
+                <div className="info">
+                    <h1>{Project.name}</h1>
+                    <h6>by {Owner.username}</h6>
+                    <hr />
+                    <p>{Project.description}</p>
+                    <p>
+                        Employees: {Workers.map((e) => <span key={e._id}><Link to={`/users/${e.username}`}>{e.username}</Link>, </span>)}
+                    </p>
+                    <p>Projects: </p>
+                    <div>
+                    {Project.tags.map((elem, i) => (
+                        <Button key={i} className="button-group" variant="outline-earthbrown">
+                            {elem}
+                        </Button>
+                    ))}
+                    </div>
+                </div>
             );
         } else {
             return <span>can't display the project</span>;
@@ -48,7 +41,7 @@ const ProjectView = (props) => {
 const EditSection = (props) => {
     return (
         <Link to={`/projects/edit/${props.id}`}>
-            <Button variant="outline-info">Edit</Button>
+            <Button variant="outline-success" className="button-group">Edit</Button>
         </Link>
     );
 };
@@ -91,6 +84,7 @@ const DeleteSection = (props) => {
                 onClick={handleClick}
                 disabled={disable}
                 variant="outline-danger"
+                className="button-group"
             >
                 Delete
             </Button>
@@ -193,7 +187,6 @@ const View = (props) => {
         const ViewProject = () => {
             return (
                 <>
-                    <h1>{Project.name}</h1>
                     <ProjectView project={Project} />
                     {authorized && (
                         <>

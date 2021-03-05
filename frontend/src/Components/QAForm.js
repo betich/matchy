@@ -159,7 +159,7 @@ const CreateQA = (props) => {
 
     return (
         <>
-            <Button onClick={createForm} variant="outline-info">Create</Button>
+            <Button onClick={createForm} variant="outline-info" className="button-left">Create a new question</Button>
             {Questions}
         </>
     );
