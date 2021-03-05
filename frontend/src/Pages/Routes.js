@@ -36,7 +36,7 @@ const Routing = (props) => {
             <Route path="/match" exact component={Match} />
             <Route path="/login" exact component={Login} />
             <Route path="/logout" exact component={Logout} />
-            <Route path="/signup" exact component={Register} />
+            <Route path="/(signup|register)" exact component={Register} />
             <Route path="/users" component={Users} />
             <Route path="/projects" component={Projects} />
             <Route path="*" component={() =><span>not found</span>} />
