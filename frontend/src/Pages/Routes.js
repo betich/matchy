@@ -85,7 +85,7 @@ class Page extends React.Component {
             }, () => {
                 setTimeout(() => {
                     this.setState({
-                        visibility: false
+                        visible: false
                     })
                 }, 4000);
             })
