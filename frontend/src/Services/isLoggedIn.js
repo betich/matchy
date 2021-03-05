@@ -7,15 +7,11 @@ async function isLoggedIn () {
 
     try {
         let res = await axios.get('/app/checkLogin');
-        Result = [true, res.status, res.data]
+        Result = [true, res.data]
     }
     catch (err) {
-        let status = 500;
-        if (err.response) {
-            status = err.response.status
-        }
         console.error(err);
-        Result = [false, status, null];
+        Result = [false, null];
     }
 
     return Result;

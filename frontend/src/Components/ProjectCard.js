@@ -24,7 +24,7 @@ const ProjectCard = (props) => {
                         {Project.tags.map((elem, i) => (
                             <Button
                                 key={i}
-                                variant="outline-danger"
+                                variant="outline-earthbrown"
                             >
                                 {elem}
                             </Button>

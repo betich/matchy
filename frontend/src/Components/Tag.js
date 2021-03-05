@@ -32,7 +32,7 @@ const Tag = (props) => {
     return (
         <Button
             className="m-1"
-            variant={!clicked ? "outline-danger" : "danger"}
+            variant={!clicked ? "outline-earthbrown" : "earthbrown"}
             onClick={handleClick}
         >
             {props.label}

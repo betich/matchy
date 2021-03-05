@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React from 'react';
-import { Container, Form, Button } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import validate from "../../Services/Validate";
 import Error from "../../Components/Error";
 
@@ -57,7 +57,7 @@ class Login extends React.Component {
 
     render() {
         return (
-            <Container className="mt-3">
+            <>
                 <h1>Login</h1>
                 <Form onSubmit={this.handleSubmit} noValidate>
                     <Form.Group controlId="login">
@@ -74,7 +74,7 @@ class Login extends React.Component {
                         Login
                     </Button>
                 </Form>
-            </Container>
+            </>
         );
     }
 }

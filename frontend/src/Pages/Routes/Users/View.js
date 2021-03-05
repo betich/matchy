@@ -112,7 +112,7 @@ const UserCard = (props) => {
                     {user.interests.map((elem, i) => (
                         <Button
                             key={i}
-                            variant="outline-danger"
+                            variant="outline-earthbrown"
                         >
                             {elem}
                         </Button>

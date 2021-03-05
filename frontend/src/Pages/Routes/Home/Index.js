@@ -1,7 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
-import isLoggedIn from '../../../Services/isLoggedIn';
+import { Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const Login = () => {
     return (
@@ -13,62 +11,49 @@ const Login = () => {
     )
 }
 
-const Logout = () => {
+const SignUp = () => {
     return (
-        <Link to="/logout">
+        <Link to="/signup">
             <Button variant="outline-danger" type="submit">
-                Logout
+                Sign up
             </Button>
         </Link>
-    )
+    );
 }
 
-const LoggedIn = (props) => {
-    const [status, setStatus] = useState(null);
-    const [User, setUser] = useState(null);
-    const [loaded, setLoad] = useState(false);
-
-    useEffect(() => {
-        const getUser = async () => {
-            let [loggedIn, status, user] = await isLoggedIn();
-            if (loggedIn) setUser(user);
-            setStatus(status);
-            setLoad(true);
+const Home = (props) => {
+    const renderComponents = () => {
+        if (props.isLoggedIn && props.User) {
+            return (
+            <>
+                <h1>
+                    Welcome, { props.User.username }
+                </h1>
+            </>
+            );
+        } else if (!props.isLoggedIn) {
+            return (
+            <>
+                <h1>
+                    Welcome, please sign in
+                </h1>
+                <Login />
+                <SignUp />
+            </>
+            );
+        } else {
+            return (
+            <>
+                <h1>
+                    Welcome.
+                </h1>
+            </>
+            );
         }
-        getUser();
-    }, [])
-
-    const AuthButton = () => {
-        if (status === 200) return <Logout />;
-        else if (status === 401) return <Login />;
-        else return (<span></span>);
     }
 
     return (
-        <>
-        { loaded && (
-            <>
-                <h1>
-                    Welcome, {User ? User.username : "please sign in"}
-                </h1>
-                {AuthButton()}
-            </>
-            )
-        }
-        </>
-    )
-}
-
-const Home = () => {
-    return (
-        <div className="mt-3 ml-3">
-            <LoggedIn />
-            <Link to="/signup">
-                <Button variant="outline-danger" type="submit">
-                    Sign up
-                </Button>
-            </Link>
-        </div>
+        <>{ renderComponents() }</>
     )
 }
 
