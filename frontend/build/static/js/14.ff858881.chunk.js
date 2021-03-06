@@ -1,0 +1,2 @@
+(this.webpackJsonpfrontend=this.webpackJsonpfrontend||[]).push([[14],{132:function(n,e,o){"use strict";o.r(e);var t=o(2),c=o(1),r=o(7),s=o(42),u=o.n(s);e.default=function(n){var e=Object(r.f)();return Object(c.useEffect)((function(){u.a.get("/app/logout/").then((function(n){window.flash("Logged you out","success"),e.push("/")})).catch((function(n){console.error(n),window.flash("An error occured","error"),e.push("/")}))}),[e]),Object(t.jsx)("span",{children:"s"})}}}]);
+//# sourceMappingURL=14.ff858881.chunk.js.map

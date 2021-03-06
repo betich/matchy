@@ -23,19 +23,19 @@
     "frontend": "cd frontend && npm start",
     "dev": "concurrently --kill-others \"node server/app.js\" \"npm run frontend\"",
     "scss": "sass --watch frontend/src/App.scss:frontend/src/App.css",
-    "start": "cd server && npm i && node app.js",
+    "start": "cd frontend && npm run build && cd ../server && npm i && node app.js",
     "heroku-postbuild": "cd frontend && npm install && npm run build",
     "postinstall": "npm install --prefix ./server"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/betich/planty.git"
+    "url": "git+https://github.com/betich/matchy.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/betich/planty/issues"
+    "url": "https://github.com/betich/matchy/issues"
   },
-  "homepage": "https://github.com/betich/planty#readme"
+  "homepage": "https://github.com/betich/matchy#readme"
 }
