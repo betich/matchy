@@ -159,7 +159,6 @@ router
 
 .get('/accept/:id', auth.checkProjectOwnership, (req, res) => {
     // query = r: response id
-    console.log('a')
     if (!req.query.r) return res.status(404).send("please specify the response id");
     Project.findById(req.params.id)
         .populate("responses")
@@ -167,10 +166,8 @@ router
             let foundUser = await User.findById(req.user._id);
 
             let foundResponse = await Response.findById(req.query.r);
-            console.log(foundResponse)
             let foundWorker = await User.findById(foundResponse.user);
-            console.log(foundWorker)
-            
+                        
             const respIdx = foundProject.responses.findIndex((resp) => {
                 return resp._id.equals(req.query.r);
             })

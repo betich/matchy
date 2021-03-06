@@ -10,21 +10,24 @@ class ProjectForm extends React.Component {
         super(props);
 
         let oldData = this.props.oldData;
-        console.log(oldData.questions)
+        let questions = [];
+        if (oldData) {
+            questions = (oldData.questions) ? oldData.questions : []
+        }
         // prettier-ignore
         this.state = ( oldData )
             ? {
                   projectname: oldData.name,
                   description: oldData.description,
                   tags: oldData.tags,
-                  questions: oldData.questions,
+                  questions: questions,
               }
             : {
                   projectname: "",
                   description: "",
                   tags: [],
                   questions: [],
-              };
+            };
 
         this.tagChange = this.tagChange.bind(this);
         this.inputChange = this.inputChange.bind(this);
