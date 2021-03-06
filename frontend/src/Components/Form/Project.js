@@ -98,7 +98,6 @@ class ProjectForm extends React.Component {
                 <Form.Group>
                     <Form.Label>Question and Answer</Form.Label>
                     <CreateQA onChange={this.formQAChange} questions={this.state.questions}/>
-                    <Button onClick={() => console.log(this.state)}>Debug</Button>
                 </Form.Group>
             </>
         );
