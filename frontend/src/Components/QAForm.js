@@ -128,7 +128,7 @@ const FillQA = (props) => {
 };
 
 const CreateQA = (props) => {
-    const [QuestionList, setQuestionList] = useState([]);
+    const [QuestionList, setQuestionList] = useState(props.questions || []);
 
     const handleChange = (idx, value) => {
         var current = QuestionList;

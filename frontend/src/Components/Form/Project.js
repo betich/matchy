@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Col } from "react-bootstrap";
+import { Form, Col, Button } from "react-bootstrap";
 import Tags from "../Tag";
 import Required from '../Required';
 import { TagsList } from "../../Services/Mock";
@@ -10,6 +10,7 @@ class ProjectForm extends React.Component {
         super(props);
 
         let oldData = this.props.oldData;
+        console.log(oldData.questions)
         // prettier-ignore
         this.state = ( oldData )
             ? {
@@ -96,7 +97,8 @@ class ProjectForm extends React.Component {
                 </Form.Row>
                 <Form.Group>
                     <Form.Label>Question and Answer</Form.Label>
-                    <CreateQA onChange={this.formQAChange} />
+                    <CreateQA onChange={this.formQAChange} questions={this.state.questions}/>
+                    <Button onClick={() => console.log(this.state)}>Debug</Button>
                 </Form.Group>
             </>
         );
